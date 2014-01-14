@@ -1,9 +1,6 @@
 
 package cz.fel.cvut.adaptiverestfulapi.core;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 
 /**
  * Class that holds both HTTP request and response.
@@ -16,7 +13,7 @@ public final class Context {
     public static final String PUT    = "PUT";
     public static final String DELETE = "DELETE";
 
-    //input
+    // input
 
     private String method;
 
@@ -39,4 +36,5 @@ public final class Context {
     public void setStatusCode(int statusCode) {
         this.statusCode = statusCode;
     }
+
 }
