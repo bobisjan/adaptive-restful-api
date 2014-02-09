@@ -1,7 +1,7 @@
 
 package cz.cvut.fel.adaptiverestfulapi.caching;
 
-import cz.fel.cvut.adaptiverestfulapi.core.Context;
+import cz.cvut.fel.adaptiverestfulapi.core.Context;
 
 /**
  * In memory cache.

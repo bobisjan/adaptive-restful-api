@@ -1,8 +1,8 @@
 package cz.fel.cvut.adaptiverestfulapi.servlet;
 
-import cz.fel.cvut.adaptiverestfulapi.core.Context;
-import cz.fel.cvut.adaptiverestfulapi.core.Filter;
-import cz.fel.cvut.adaptiverestfulapi.core.FilterException;
+import cz.cvut.fel.adaptiverestfulapi.core.Context;
+import cz.cvut.fel.adaptiverestfulapi.core.Filter;
+import cz.cvut.fel.adaptiverestfulapi.core.FilterException;
 import cz.fel.cvut.adaptiverestfulapi.servlet.utils.RequestReader;
 import cz.fel.cvut.adaptiverestfulapi.servlet.utils.ResponseWriter;
 

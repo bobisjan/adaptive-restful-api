@@ -1,6 +1,6 @@
 package cz.fel.cvut.adaptiverestfulapi.servlet.utils;
 
-import cz.fel.cvut.adaptiverestfulapi.core.Context;
+import cz.cvut.fel.adaptiverestfulapi.core.Context;
 
 import javax.servlet.http.HttpServletRequest;
 

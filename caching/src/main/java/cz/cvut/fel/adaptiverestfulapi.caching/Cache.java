@@ -1,8 +1,8 @@
 package cz.cvut.fel.adaptiverestfulapi.caching;
 
-import cz.fel.cvut.adaptiverestfulapi.core.Context;
-import cz.fel.cvut.adaptiverestfulapi.core.Filter;
-import cz.fel.cvut.adaptiverestfulapi.core.FilterException;
+import cz.cvut.fel.adaptiverestfulapi.core.Context;
+import cz.cvut.fel.adaptiverestfulapi.core.Filter;
+import cz.cvut.fel.adaptiverestfulapi.core.FilterException;
 
 
 /**

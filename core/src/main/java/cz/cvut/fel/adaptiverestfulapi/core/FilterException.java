@@ -1,5 +1,5 @@
 
-package cz.fel.cvut.adaptiverestfulapi.core;
+package cz.cvut.fel.adaptiverestfulapi.core;
 
 
 public class FilterException extends Exception {

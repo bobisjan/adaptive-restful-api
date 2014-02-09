@@ -1,6 +1,6 @@
 package cz.cvut.fel.adaptiverestfulapi.security;
 
-import cz.fel.cvut.adaptiverestfulapi.core.Context;
+import cz.cvut.fel.adaptiverestfulapi.core.Context;
 
 
 /**
