@@ -1,10 +1,10 @@
-package cz.fel.cvut.adaptiverestfulapi.core.servlet;
+package cz.fel.cvut.adaptiverestfulapi.servlet;
 
 import cz.fel.cvut.adaptiverestfulapi.core.Context;
 import cz.fel.cvut.adaptiverestfulapi.core.Filter;
 import cz.fel.cvut.adaptiverestfulapi.core.FilterException;
-import cz.fel.cvut.adaptiverestfulapi.core.utils.RequestReader;
-import cz.fel.cvut.adaptiverestfulapi.core.utils.ResponseWriter;
+import cz.fel.cvut.adaptiverestfulapi.servlet.utils.RequestReader;
+import cz.fel.cvut.adaptiverestfulapi.servlet.utils.ResponseWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

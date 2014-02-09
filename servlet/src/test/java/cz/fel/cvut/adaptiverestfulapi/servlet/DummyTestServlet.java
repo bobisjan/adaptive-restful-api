@@ -1,8 +1,7 @@
-package cz.fel.cvut.adaptiverestfulapi.core;
+package cz.fel.cvut.adaptiverestfulapi.servlet;
 
 import cz.fel.cvut.adaptiverestfulapi.core.Context;
 import cz.fel.cvut.adaptiverestfulapi.core.Filter;
-import cz.fel.cvut.adaptiverestfulapi.core.servlet.FilteredServlet;
 
 
 public class DummyTestServlet extends FilteredServlet {

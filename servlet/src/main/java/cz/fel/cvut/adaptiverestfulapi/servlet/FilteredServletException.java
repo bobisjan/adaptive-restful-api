@@ -1,4 +1,4 @@
-package cz.fel.cvut.adaptiverestfulapi.core.servlet;
+package cz.fel.cvut.adaptiverestfulapi.servlet;
 
 import javax.servlet.ServletException;
 

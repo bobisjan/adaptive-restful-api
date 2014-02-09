@@ -1,4 +1,4 @@
-package cz.fel.cvut.adaptiverestfulapi.core.utils;
+package cz.fel.cvut.adaptiverestfulapi.servlet.utils;
 
 import cz.fel.cvut.adaptiverestfulapi.core.Context;
 
