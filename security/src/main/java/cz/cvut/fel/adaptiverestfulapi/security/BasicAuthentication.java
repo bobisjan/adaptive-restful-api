@@ -1,7 +1,6 @@
-package cz.fel.cvut.adaptiverestfulapi.security;
+package cz.cvut.fel.adaptiverestfulapi.security;
 
 import cz.fel.cvut.adaptiverestfulapi.core.Context;
-import cz.fel.cvut.adaptiverestfulapi.security.Authentication;
 
 
 /**
