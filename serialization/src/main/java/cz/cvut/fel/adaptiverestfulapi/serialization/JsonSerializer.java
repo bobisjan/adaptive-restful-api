@@ -9,12 +9,12 @@ import cz.cvut.fel.adaptiverestfulapi.core.Context;
 public class JsonSerializer extends Serializer {
 
     @Override
-    public void serialize(Context context) {
+    protected void serialize(Context context) {
 
     }
 
     @Override
-    public void deserialize(Context context) {
+    protected void deserialize(Context context) {
 
     }
 

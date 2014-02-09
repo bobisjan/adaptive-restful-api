@@ -12,8 +12,8 @@ public abstract class Serializer extends Filter {
         this.resign(context);
     }
 
-    public abstract void serialize(Context context);
+    protected abstract void serialize(Context context);
 
-    public abstract void deserialize(Context context);
+    protected abstract void deserialize(Context context);
 
 }
