@@ -5,15 +5,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>cz.cvut.fel</groupId>
-    <artifactId>adaptive-restful-api-core</artifactId>
+    <artifactId>adaptive-restful-api-serialization</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <dependencies>
         <dependency>
-            <groupId>org.easymock</groupId>
-            <artifactId>easymock</artifactId>
-            <version>3.1</version>
-            <scope>test</scope>
+            <groupId>cz.cvut.fel</groupId>
+            <artifactId>adaptive-restful-api-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
