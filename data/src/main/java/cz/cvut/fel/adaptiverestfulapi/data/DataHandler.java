@@ -1,4 +1,4 @@
-package cz.fel.cvut.adaptiverestfulapi.core.filters.model;
+package cz.cvut.fel.adaptiverestfulapi.data;
 
 import cz.fel.cvut.adaptiverestfulapi.core.Context;
 import cz.fel.cvut.adaptiverestfulapi.core.Filter;
