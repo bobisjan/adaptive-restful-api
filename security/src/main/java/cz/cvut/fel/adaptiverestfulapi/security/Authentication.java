@@ -11,7 +11,7 @@ import cz.cvut.fel.adaptiverestfulapi.core.FilterException;
 public abstract class Authentication extends Filter {
 
     @Override
-    public final void process(Context context) throws FilterException{
+    public final void process(Context context) throws FilterException {
         if (this.authenticate(context)) {
             this.resign(context);
 
@@ -26,4 +26,5 @@ public abstract class Authentication extends Filter {
      * @return true if user is authenticated
      */
     protected abstract boolean authenticate(Context context);
+
 }
