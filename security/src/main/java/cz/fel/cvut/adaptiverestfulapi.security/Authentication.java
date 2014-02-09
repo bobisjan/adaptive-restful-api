@@ -1,5 +1,4 @@
-
-package cz.fel.cvut.adaptiverestfulapi.core.filters.security;
+package cz.fel.cvut.adaptiverestfulapi.security;
 
 import cz.fel.cvut.adaptiverestfulapi.core.Context;
 import cz.fel.cvut.adaptiverestfulapi.core.Filter;
