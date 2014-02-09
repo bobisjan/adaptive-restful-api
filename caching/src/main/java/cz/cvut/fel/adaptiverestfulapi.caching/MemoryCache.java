@@ -9,17 +9,17 @@ import cz.cvut.fel.adaptiverestfulapi.core.Context;
 public class MemoryCache extends Cache {
 
     @Override
-    public boolean load(Context context) {
+    protected boolean load(Context context) {
         return false;
     }
 
     @Override
-    public void save(Context context) {
+    protected void save(Context context) {
 
     }
 
     @Override
-    public void clear(Context context) {
+    protected void clear(Context context) {
 
     }
 

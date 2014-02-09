@@ -20,18 +20,18 @@ public abstract class Cache extends Filter {
      * @param context
      * @return true if hit was made
      */
-    public abstract boolean load(Context context);
+    protected abstract boolean load(Context context);
 
     /**
      * Save data to the cache.
      * @param context
      */
-    public abstract void save(Context context);
+    protected abstract void save(Context context);
 
     /**
      * Remove data from the cache.
      * @param context
      */
-    public abstract void clear(Context context);
+    protected abstract void clear(Context context);
 
 }
