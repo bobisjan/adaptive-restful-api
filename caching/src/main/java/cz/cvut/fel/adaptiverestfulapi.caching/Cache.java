@@ -12,7 +12,10 @@ public abstract class Cache extends Filter {
 
     @Override
     public void process(Context context) throws FilterException {
-        this.resign(context);
+        if (!this.load(context)) { // try load data from cache
+            this.resign(context);  // ask for data someone else
+            this.save(context);    // finally save new data to cache
+        }
     }
 
     /**
@@ -27,11 +30,5 @@ public abstract class Cache extends Filter {
      * @param context
      */
     protected abstract void save(Context context);
-
-    /**
-     * Remove data from the cache.
-     * @param context
-     */
-    protected abstract void clear(Context context);
 
 }
