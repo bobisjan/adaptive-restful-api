@@ -13,7 +13,7 @@ public final class Context {
 
     // output
 
-    private int statusCode;
+    private Status statusCode;
 
     public void setMethod(Method method) {
         this.method = method;
@@ -23,11 +23,11 @@ public final class Context {
         return this.method;
     }
 
-    public int getStatusCode() {
+    public Status getStatusCode() {
         return this.statusCode;
     }
 
-    public void setStatusCode(int statusCode) {
+    public void setStatusCode(Status statusCode) {
         this.statusCode = statusCode;
     }
 
