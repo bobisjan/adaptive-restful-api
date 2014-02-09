@@ -10,23 +10,8 @@ public class RequestReader {
 
     public static Context context(HttpServletRequest request) {
         Context context = new Context();
-        context.setMethod(method(request.getMethod()));
+        context.setMethod(Method.valueOf(request.getMethod()));
         return context;
-    }
-
-    public static Method method(String string) {
-        if (string.equalsIgnoreCase("GET")) {
-            return Method.GET;
-        } else if (string.equalsIgnoreCase("POST")) {
-            return Method.POST;
-        } else if (string.equalsIgnoreCase("PUT")) {
-            return Method.PUT;
-        } else if (string.equalsIgnoreCase("DELETE")) {
-            return Method.DELETE;
-        } else {
-            // support for UNKNOWN?
-            return Method.GET;
-        }
     }
 
 }
