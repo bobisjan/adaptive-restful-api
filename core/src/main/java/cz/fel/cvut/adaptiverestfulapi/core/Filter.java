@@ -26,7 +26,7 @@ public abstract class Filter {
      * @param context
      * @throws FilterException
      */
-    public final void resign(Context context) throws FilterException {
+    protected final void resign(Context context) throws FilterException {
         if (this.next != null) {
             this.next.process(context);
         }
