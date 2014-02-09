@@ -1,4 +1,4 @@
-package cz.fel.cvut.adaptiverestfulapi.core.filters.serialization;
+package cz.cvut.fel.adaptiverestfulapi.serialization;
 
 import cz.fel.cvut.adaptiverestfulapi.core.Context;
 import cz.fel.cvut.adaptiverestfulapi.core.Filter;
