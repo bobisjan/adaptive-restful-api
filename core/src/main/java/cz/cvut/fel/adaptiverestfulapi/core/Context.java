@@ -7,25 +7,19 @@ package cz.cvut.fel.adaptiverestfulapi.core;
  */
 public final class Context {
 
-    // HTTP methods
-    public static final String GET    = "GET";
-    public static final String POST   = "POST";
-    public static final String PUT    = "PUT";
-    public static final String DELETE = "DELETE";
-
     // input
 
-    private String method;
+    private Method method;
 
     // output
 
     private int statusCode;
 
-    public void setMethod(String method) {
+    public void setMethod(Method method) {
         this.method = method;
     }
 
-    public String getMethod() {
+    public Method getMethod() {
         return this.method;
     }
 
