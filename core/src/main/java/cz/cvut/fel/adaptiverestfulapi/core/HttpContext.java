@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * Class that holds both HTTP request and response.
  */
-public final class HttpContext {
+public class HttpContext {
 
     private URL url;
     private HttpMethod httpMethod;
