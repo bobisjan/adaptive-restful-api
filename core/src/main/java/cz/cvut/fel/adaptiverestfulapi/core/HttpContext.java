@@ -10,44 +10,56 @@ import java.util.Map;
  */
 public class HttpContext {
 
+    // request
     private String uri;
-    private HttpMethod httpMethod;
-    private Map<String, String> headers;
-    private String content;
+    private HttpMethod method;
+    private Map<String, String> requestHeaders;
+    private String requestContent;
 
-    public HttpContext(String uri, HttpMethod httpMethod, Map<String, String> headers, String content) {
+    // response
+    private HttpStatus status;
+    private Map<String, String> responseHeaders;
+    private String responseContent;
+
+    public HttpContext(String uri, HttpMethod method, Map<String, String> headers, String content) {
         this.uri = uri;
-        this.httpMethod = httpMethod;
-        this.headers = headers;
-        this.content = content;
+        this.method = method;
+        this.requestHeaders = headers;
+        this.requestContent = content;
     }
 
     public String getUri() {
         return this.uri;
     }
 
-    public HttpMethod getHttpMethod() {
-        return this.httpMethod;
+    public HttpMethod getMethod() {
+        return this.method;
     }
 
-    public Map<String, String> getHeaders() {
-        return this.headers;
+    public Map<String, String> getRequestHeaders() {
+        return this.requestHeaders;
     }
 
-    public String getContent() {
-        return this.content;
+    public String getRequestContent() {
+        return this.requestContent;
     }
 
-    // output
-
-    private HttpStatus httpStatusCode;
-
-    public HttpStatus getHttpStatusCode() {
-        return this.httpStatusCode;
+    public void response(HttpStatus status, Map<String, String> headers, String content) {
+        this.status = status;
+        this.responseHeaders = headers;
+        this.responseContent = content;
     }
 
-    public void setHttpStatusCode(HttpStatus httpStatusCode) {
-        this.httpStatusCode = httpStatusCode;
+    public HttpStatus getStatus() {
+        return this.status;
+    }
+
+    public Map<String, String> getResponseHeaders() {
+        return this.responseHeaders;
+    }
+
+    public String getResponseContent() {
+        return this.responseContent;
     }
 
 }
