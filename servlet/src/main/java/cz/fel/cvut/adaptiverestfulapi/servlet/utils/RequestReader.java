@@ -15,25 +15,15 @@ import java.util.Map;
 public class RequestReader {
 
     public static HttpContext context(HttpServletRequest request) {
-        URL url = url(request);
+        String uri = request.getRequestURI();
         HttpMethod httpMethod = HttpMethod.valueOf(request.getMethod());
         Map<String, String> headers = headers(request);
         String content = content(request);
 
-        if (url == null || content == null) {
+        if (content == null) {
             return null;
         }
-        return new HttpContext(url, httpMethod, headers, content);
-    }
-
-    private static URL url(HttpServletRequest request) {
-        try {
-            return new URL(request.getRequestURL().toString());
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return new HttpContext(uri, httpMethod, headers, content);
     }
 
     private static Map<String, String> headers(HttpServletRequest request) {

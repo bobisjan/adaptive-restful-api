@@ -10,20 +10,20 @@ import java.util.Map;
  */
 public class HttpContext {
 
-    private URL url;
+    private String uri;
     private HttpMethod httpMethod;
     private Map<String, String> headers;
     private String content;
 
-    public HttpContext(URL url, HttpMethod httpMethod, Map<String, String> headers, String content) {
-        this.url = url;
+    public HttpContext(String uri, HttpMethod httpMethod, Map<String, String> headers, String content) {
+        this.uri = uri;
         this.httpMethod = httpMethod;
         this.headers = headers;
         this.content = content;
     }
 
-    public URL getUrl() {
-        return this.url;
+    public String getUri() {
+        return this.uri;
     }
 
     public HttpMethod getHttpMethod() {
