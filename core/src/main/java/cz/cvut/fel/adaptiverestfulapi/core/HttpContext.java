@@ -40,14 +40,14 @@ public final class HttpContext {
 
     // output
 
-    private Status statusCode;
+    private HttpStatus httpStatusCode;
 
-    public Status getStatusCode() {
-        return this.statusCode;
+    public HttpStatus getHttpStatusCode() {
+        return this.httpStatusCode;
     }
 
-    public void setStatusCode(Status statusCode) {
-        this.statusCode = statusCode;
+    public void setHttpStatusCode(HttpStatus httpStatusCode) {
+        this.httpStatusCode = httpStatusCode;
     }
 
 }

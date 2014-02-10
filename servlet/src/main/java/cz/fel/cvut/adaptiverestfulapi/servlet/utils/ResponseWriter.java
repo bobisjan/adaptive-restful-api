@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 public class ResponseWriter {
 
     public static void write(HttpContext httpContext, HttpServletResponse response) {
-        response.setStatus(httpContext.getStatusCode().getCode());
+        response.setStatus(httpContext.getHttpStatusCode().getCode());
     }
 
 }
