@@ -10,8 +10,8 @@ import java.util.Map;
 public class HttpContext {
 
     // request
-    private String uri;
-    private HttpMethod method;
+    private final String uri;
+    private final HttpMethod method;
     private Map<String, String> requestHeaders;
     private String requestContent;
 
