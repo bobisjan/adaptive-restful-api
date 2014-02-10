@@ -1,6 +1,6 @@
 package cz.cvut.fel.adaptiverestfulapi.security;
 
-import cz.cvut.fel.adaptiverestfulapi.core.Context;
+import cz.cvut.fel.adaptiverestfulapi.core.HttpContext;
 import cz.cvut.fel.adaptiverestfulapi.core.Filter;
 import cz.cvut.fel.adaptiverestfulapi.core.FilterException;
 
@@ -11,20 +11,20 @@ import cz.cvut.fel.adaptiverestfulapi.core.FilterException;
 public abstract class Authentication extends Filter {
 
     @Override
-    public final void process(Context context) throws FilterException {
-        if (this.authenticate(context)) {
-            this.resign(context);
+    public final void process(HttpContext httpContext) throws FilterException {
+        if (this.authenticate(httpContext)) {
+            this.resign(httpContext);
 
         } else {
-            // TODO unauthorized context
+            // TODO unauthorized httpContext
         }
     }
 
     /**
-     * Authenticate user in the context.
-     * @param context
+     * Authenticate user in the httpContext.
+     * @param httpContext
      * @return true if user is authenticated
      */
-    protected abstract boolean authenticate(Context context);
+    protected abstract boolean authenticate(HttpContext httpContext);
 
 }

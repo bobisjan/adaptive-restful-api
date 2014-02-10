@@ -1,6 +1,6 @@
 package cz.fel.cvut.adaptiverestfulapi.servlet.utils;
 
-import cz.cvut.fel.adaptiverestfulapi.core.Context;
+import cz.cvut.fel.adaptiverestfulapi.core.HttpContext;
 import cz.cvut.fel.adaptiverestfulapi.core.Method;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class RequestReader {
 
-    public static Context context(HttpServletRequest request) {
+    public static HttpContext context(HttpServletRequest request) {
         URL url = url(request);
         Method method = Method.valueOf(request.getMethod());
         Map<String, String> headers = headers(request);
@@ -23,7 +23,7 @@ public class RequestReader {
         if (url == null || content == null) {
             return null;
         }
-        return new Context(url, method, headers, content);
+        return new HttpContext(url, method, headers, content);
     }
 
     private static URL url(HttpServletRequest request) {

@@ -1,7 +1,7 @@
 
 package cz.cvut.fel.adaptiverestfulapi.caching;
 
-import cz.cvut.fel.adaptiverestfulapi.core.Context;
+import cz.cvut.fel.adaptiverestfulapi.core.HttpContext;
 
 /**
  * In memory cache.
@@ -9,17 +9,17 @@ import cz.cvut.fel.adaptiverestfulapi.core.Context;
 public class MemoryCache extends Cache {
 
     @Override
-    protected boolean load(Context context) {
+    protected boolean load(HttpContext httpContext) {
         return false;
     }
 
     @Override
-    protected void save(Context context) {
+    protected void save(HttpContext httpContext) {
 
     }
 
     @Override
-    protected void clear(Context context) {
+    protected void clear(HttpContext httpContext) {
 
     }
 

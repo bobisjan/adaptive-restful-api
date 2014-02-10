@@ -22,21 +22,21 @@ public abstract class Filter {
     }
 
     /**
-     * Resigns processing of the context to the next filter in the chain.
-     * @param context
+     * Resigns processing of the httpContext to the next filter in the chain.
+     * @param httpContext
      * @throws FilterException
      */
-    protected final void resign(Context context) throws FilterException {
+    protected final void resign(HttpContext httpContext) throws FilterException {
         if (this.next != null) {
-            this.next.process(context);
+            this.next.process(httpContext);
         }
     }
 
     /**
-     * Processes filter to change the context.
-     * @param context
+     * Processes filter to change the httpContext.
+     * @param httpContext
      * @throws FilterException
      */
-    public abstract void process(Context context) throws FilterException;
+    public abstract void process(HttpContext httpContext) throws FilterException;
 
 }

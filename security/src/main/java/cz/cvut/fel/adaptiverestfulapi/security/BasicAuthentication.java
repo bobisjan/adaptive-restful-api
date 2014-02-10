@@ -1,6 +1,6 @@
 package cz.cvut.fel.adaptiverestfulapi.security;
 
-import cz.cvut.fel.adaptiverestfulapi.core.Context;
+import cz.cvut.fel.adaptiverestfulapi.core.HttpContext;
 
 
 /**
@@ -9,7 +9,7 @@ import cz.cvut.fel.adaptiverestfulapi.core.Context;
 public class BasicAuthentication extends Authentication {
 
     @Override
-    protected boolean authenticate(Context context) {
+    protected boolean authenticate(HttpContext httpContext) {
         return true; // TODO implement
     }
 }

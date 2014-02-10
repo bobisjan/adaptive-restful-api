@@ -1,6 +1,6 @@
 package cz.fel.cvut.adaptiverestfulapi.servlet;
 
-import cz.cvut.fel.adaptiverestfulapi.core.Context;
+import cz.cvut.fel.adaptiverestfulapi.core.HttpContext;
 import cz.cvut.fel.adaptiverestfulapi.core.Filter;
 import cz.cvut.fel.adaptiverestfulapi.core.FilterException;
 import cz.fel.cvut.adaptiverestfulapi.servlet.utils.RequestReader;
@@ -26,17 +26,17 @@ public class FilteredServlet extends HttpServlet {
             throw new FilteredServletException("The filter's chain can not be null.");
         }
 
-        Context context = RequestReader.context(req);
+        HttpContext httpContext = RequestReader.context(req);
 
         try {
-            this.chain.process(context);
+            this.chain.process(httpContext);
 
         } catch (FilterException e) {
-            // TODO set context to 500 Server Error
+            // TODO set httpContext to 500 Server Error
             e.printStackTrace();
 
         } finally {
-            ResponseWriter.write(context, resp);
+            ResponseWriter.write(httpContext, resp);
         }
     }
 
