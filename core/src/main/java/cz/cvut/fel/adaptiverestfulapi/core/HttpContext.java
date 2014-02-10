@@ -11,13 +11,13 @@ import java.util.Map;
 public final class HttpContext {
 
     private URL url;
-    private Method method;
+    private HttpMethod httpMethod;
     private Map<String, String> headers;
     private String content;
 
-    public HttpContext(URL url, Method method, Map<String, String> headers, String content) {
+    public HttpContext(URL url, HttpMethod httpMethod, Map<String, String> headers, String content) {
         this.url = url;
-        this.method = method;
+        this.httpMethod = httpMethod;
         this.headers = headers;
         this.content = content;
     }
@@ -26,8 +26,8 @@ public final class HttpContext {
         return this.url;
     }
 
-    public Method getMethod() {
-        return this.method;
+    public HttpMethod getHttpMethod() {
+        return this.httpMethod;
     }
 
     public Map<String, String> getHeaders() {
