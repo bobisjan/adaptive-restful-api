@@ -2,7 +2,6 @@
 package cz.cvut.fel.adaptiverestfulapi.core;
 
 
-import java.net.URL;
 import java.util.Map;
 
 /**
