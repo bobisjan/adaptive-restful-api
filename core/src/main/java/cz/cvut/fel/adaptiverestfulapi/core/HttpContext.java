@@ -1,8 +1,8 @@
 
 package cz.cvut.fel.adaptiverestfulapi.core;
 
-
 import java.util.Map;
+
 
 /**
  * Class that holds both HTTP request and response.
