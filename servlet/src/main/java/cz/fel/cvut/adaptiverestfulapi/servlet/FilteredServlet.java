@@ -29,7 +29,7 @@ public class FilteredServlet extends HttpServlet {
         HttpContext httpContext = RequestReader.context(req);
 
         try {
-            this.chain.process(httpContext);
+            httpContext = this.chain.process(httpContext);
 
         } catch (FilterException e) {
             // TODO set httpContext to 500 Server Error

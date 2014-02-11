@@ -18,9 +18,4 @@ public class MemoryCache extends Cache {
 
     }
 
-    @Override
-    protected void clear(HttpContext httpContext) {
-
-    }
-
 }

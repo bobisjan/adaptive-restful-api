@@ -11,12 +11,13 @@ import cz.cvut.fel.adaptiverestfulapi.core.FilterException;
 public abstract class Authentication extends Filter {
 
     @Override
-    public final void process(HttpContext httpContext) throws FilterException {
+    public final HttpContext process(HttpContext httpContext) throws FilterException {
         if (this.authenticate(httpContext)) {
-            this.resign(httpContext);
+            return this.resign(httpContext);
 
         } else {
             // TODO unauthorized httpContext
+            return httpContext;
         }
     }
 

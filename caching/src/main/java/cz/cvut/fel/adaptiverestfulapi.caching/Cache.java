@@ -11,11 +11,13 @@ import cz.cvut.fel.adaptiverestfulapi.core.FilterException;
 public abstract class Cache extends Filter {
 
     @Override
-    public void process(HttpContext httpContext) throws FilterException {
+    public HttpContext process(HttpContext httpContext) throws FilterException {
         if (!this.load(httpContext)) { // try load data from cache
-            this.resign(httpContext);  // ask for data someone else
+            httpContext = this.resign(httpContext);  // ask for data someone else
             this.save(httpContext);    // finally save new data to cache
+            return httpContext;
         }
+        return httpContext;
     }
 
     /**
