@@ -1,6 +1,6 @@
 package cz.cvut.fel.adaptiverestfulapi.caching;
 
-import cz.cvut.fel.adaptiverestfulapi.core.Context;
+import cz.cvut.fel.adaptiverestfulapi.core.HttpContext;
 import cz.cvut.fel.adaptiverestfulapi.core.Filter;
 import cz.cvut.fel.adaptiverestfulapi.core.FilterException;
 
@@ -11,24 +11,24 @@ import cz.cvut.fel.adaptiverestfulapi.core.FilterException;
 public abstract class Cache extends Filter {
 
     @Override
-    public void process(Context context) throws FilterException {
-        if (!this.load(context)) { // try load data from cache
-            this.resign(context);  // ask for data someone else
-            this.save(context);    // finally save new data to cache
+    public void process(HttpContext httpContext) throws FilterException {
+        if (!this.load(httpContext)) { // try load data from cache
+            this.resign(httpContext);  // ask for data someone else
+            this.save(httpContext);    // finally save new data to cache
         }
     }
 
     /**
      * Load data from the cache.
-     * @param context
+     * @param httpContext
      * @return true if hit was made
      */
-    protected abstract boolean load(Context context);
+    protected abstract boolean load(HttpContext httpContext);
 
     /**
      * Save data to the cache.
-     * @param context
+     * @param httpContext
      */
-    protected abstract void save(Context context);
+    protected abstract void save(HttpContext httpContext);
 
 }

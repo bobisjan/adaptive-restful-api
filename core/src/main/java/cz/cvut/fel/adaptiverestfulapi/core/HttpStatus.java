@@ -4,7 +4,7 @@ package cz.cvut.fel.adaptiverestfulapi.core;
  * Enum for HTTP status codes.
  * <a href="http://en.wikipedia.org/wiki/List_of_HTTP_status_codes">http://en.wikipedia.org/wiki/List_of_HTTP_status_codes</a>
  */
-public enum Status {
+public enum HttpStatus {
 
     // 2xx Success
     S_200(200, "OK"),
@@ -27,7 +27,7 @@ public enum Status {
     private final int code;
     private final String message;
 
-    Status(int code, String message) {
+    HttpStatus(int code, String message) {
         this.code = code;
         this.message = message;
     }

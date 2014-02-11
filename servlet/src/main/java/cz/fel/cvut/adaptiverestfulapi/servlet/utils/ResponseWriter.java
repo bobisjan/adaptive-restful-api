@@ -1,14 +1,14 @@
 package cz.fel.cvut.adaptiverestfulapi.servlet.utils;
 
-import cz.cvut.fel.adaptiverestfulapi.core.Context;
+import cz.cvut.fel.adaptiverestfulapi.core.HttpContext;
 
 import javax.servlet.http.HttpServletResponse;
 
 
 public class ResponseWriter {
 
-    public static void write(Context context, HttpServletResponse response) {
-        response.setStatus(context.getStatusCode().getCode());
+    public static void write(HttpContext httpContext, HttpServletResponse response) {
+        response.setStatus(httpContext.getStatus().getCode());
     }
 
 }
