@@ -12,15 +12,15 @@ public class HttpContext {
     // request
     private final String uri;
     private final HttpMethod method;
-    private Map<String, String> requestHeaders;
+    private final HttpHeaders requestHeaders;
     private String requestContent;
 
     // response
     private HttpStatus status;
-    private Map<String, String> responseHeaders;
+    private HttpHeaders responseHeaders;
     private String responseContent;
 
-    public HttpContext(String uri, HttpMethod method, Map<String, String> headers, String content) {
+    public HttpContext(String uri, HttpMethod method, HttpHeaders headers, String content) {
         this.uri = uri;
         this.method = method;
         this.requestHeaders = headers;
@@ -43,7 +43,7 @@ public class HttpContext {
         return this.requestContent;
     }
 
-    public void response(HttpStatus status, Map<String, String> headers, String content) {
+    public void response(HttpStatus status, HttpHeaders headers, String content) {
         this.status = status;
         this.responseHeaders = headers;
         this.responseContent = content;
