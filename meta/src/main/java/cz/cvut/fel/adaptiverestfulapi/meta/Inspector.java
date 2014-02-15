@@ -35,32 +35,32 @@ public class Inspector {
     /**
      * Inspects given package for classes that extends passed class.
      * @param pack package to inspect
-     * @param klass base class
+     * @param clazz base class
      * @return model
      */
-    public Model inspect(String pack, Class klass) {
+    public Model inspect(String pack, Class clazz) {
         if (this.listener == null) {
             // TODO throw exception?
             System.err.println("There is no listener for inspector.");
             return null;
         }
-        if (pack == null || klass == null) {
+        if (pack == null || clazz == null) {
             // TODO throw exception?
             System.err.println("Package name, or base class are missing.");
             return null;
         }
 
-        Reflections reflections = this.reflections(pack, klass);
-        Set<Class<?>> klasses = reflections.getSubTypesOf(klass);
+        Reflections reflections = this.reflections(pack, clazz);
+        Set<Class<?>> clazzes = reflections.getSubTypesOf(clazz);
 
-        if (klasses.size() == 0) {
+        if (clazzes.size() == 0) {
             this.logger.warn("There are no classes in the package \"" + pack + "\"");
             return null;
         }
 
         Model model = new Model();
 
-        for (Class<?> k : klasses) {
+        for (Class<?> k : clazzes) {
             Entity entity = this.listener.inspect(k);
             if (entity != null) {
                 if (this.validate(entity)) {
@@ -76,8 +76,8 @@ public class Inspector {
         return model;
     }
 
-    private Reflections reflections(String pack, Class klass) {
-        if (klass.equals(Object.class)) {
+    private Reflections reflections(String pack, Class clazz) {
+        if (clazz.equals(Object.class)) {
             // @see http://stackoverflow.com/a/9571146
             List<ClassLoader> classLoadersList = new LinkedList<ClassLoader>();
             classLoadersList.add(ClasspathHelper.contextClassLoader());
@@ -88,7 +88,7 @@ public class Inspector {
                     .setUrls(ClasspathHelper.forClassLoader(classLoadersList.toArray(new ClassLoader[0])))
                     .filterInputsBy(new FilterBuilder().include(FilterBuilder.prefix(pack))));
         }
-        return new Reflections(klass);
+        return new Reflections(clazz);
     }
 
     protected boolean validate(Entity entity) {
