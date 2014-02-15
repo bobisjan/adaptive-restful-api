@@ -4,6 +4,7 @@ package cz.cvut.fel.adaptiverestfulapi.meta;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Set;
+import java.util.HashSet;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
 import org.reflections.scanners.SubTypesScanner;
@@ -44,7 +45,7 @@ public class Inspector {
         }
 
         Reflections reflections = this.reflections(pack, clazz);
-        Set<Class<?>> clazzes = reflections.getSubTypesOf(clazz);
+        Set<Class<?>> clazzes = this.leafs(reflections, clazz);
 
         if (clazzes.size() == 0) {
             this.logger.warn("There are no classes in the package \"" + pack + "\"");
@@ -82,6 +83,18 @@ public class Inspector {
                     .filterInputsBy(new FilterBuilder().include(FilterBuilder.prefix(pack))));
         }
         return new Reflections(clazz);
+    }
+
+    private Set<Class<?>> leafs(Reflections reflections, Class clazz) {
+        Set<Class<?>> all = reflections.getSubTypesOf(clazz);
+        Set<Class<?>> leaves = new HashSet<>();
+
+        for (Class<?> c : all) {
+            if (reflections.getSubTypesOf(c.getClass()).isEmpty()) {
+                leaves.add(c);
+            }
+        }
+        return leaves;
     }
 
     protected boolean validate(Entity entity) {
