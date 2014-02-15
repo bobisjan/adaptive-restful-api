@@ -10,6 +10,8 @@ import org.reflections.scanners.SubTypesScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -18,6 +20,8 @@ import org.reflections.util.FilterBuilder;
 public class Inspector {
 
     private InspectorListener listener;
+
+    private Logger logger = LoggerFactory.getLogger(Inspector.class);
 
     /**
      * Inspects given package for classes that extends Object class.
@@ -50,8 +54,7 @@ public class Inspector {
         Set<Class<?>> klasses = reflections.getSubTypesOf(klass);
 
         if (klasses.size() == 0) {
-            // TODO throw exception?
-            System.err.println("There are no classes in the package \"" + pack + "\"");
+            this.logger.warn("There are no classes in the package \"" + pack + "\"");
             return null;
         }
 
