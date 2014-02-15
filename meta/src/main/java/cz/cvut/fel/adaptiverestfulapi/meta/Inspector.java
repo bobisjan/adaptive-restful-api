@@ -94,10 +94,6 @@ public class Inspector {
         return true;
     }
 
-    public InspectorListener getListener() {
-        return this.listener;
-    }
-
     public void setListener(InspectorListener listener) {
         this.listener = listener;
     }
