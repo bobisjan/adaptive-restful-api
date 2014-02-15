@@ -28,7 +28,7 @@ public class Inspector {
      * @param pack package to inspect
      * @return model
      */
-    public Model inspect(String pack) {
+    public Model inspect(String pack) throws InspectionException {
         return this.inspect(pack, java.lang.Object.class);
     }
 
@@ -38,16 +38,14 @@ public class Inspector {
      * @param clazz base class
      * @return model
      */
-    public Model inspect(String pack, Class clazz) {
+    public Model inspect(String pack, Class clazz) throws InspectionException {
         if (this.listener == null) {
             // TODO throw exception?
             System.err.println("There is no listener for inspector.");
             return null;
         }
         if (pack == null || clazz == null) {
-            // TODO throw exception?
-            System.err.println("Package name, or base class are missing.");
-            return null;
+            throw new InspectionException("Package name, or base class are missing.");
         }
 
         Reflections reflections = this.reflections(pack, clazz);
