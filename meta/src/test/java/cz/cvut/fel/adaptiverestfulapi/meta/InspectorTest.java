@@ -2,10 +2,7 @@
 package cz.cvut.fel.adaptiverestfulapi.meta;
 
 import cz.cvut.fel.adaptiverestfulapi.meta.data.BaseClass;
-import org.junit.Test;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import org.testng.annotations.Test;
 
 
 public class InspectorTest {
@@ -18,7 +15,7 @@ public class InspectorTest {
         Model model = null;
         model = inspector.inspect("xyz");
 
-        assertNull("Model should be null.", model);
+        assert (model == null) : "Model should be null.";
     }
 
     @Test
@@ -29,8 +26,8 @@ public class InspectorTest {
         Model model = null;
         model = inspector.inspect("cz.cvut.fel.adaptiverestfulapi.meta.data");
 
-        assertNotNull("Model should not be null.", model);
-        assertNotNull("Model should has entity named \"Person\"",  model.entityForName("Person"));
+        assert (model != null) : "Model should not be null.";
+        assert (model.entityForName("Person") != null) : "Model should has entity named \"Person\".";
     }
 
     @Test
@@ -41,7 +38,7 @@ public class InspectorTest {
         Model model = null;
         model = inspector.inspect("cz.cvut.fel.adaptiverestfulapi.meta.data", BaseClass.class);
 
-        assertNotNull("Model should not be null.", model);
-        assertNotNull("Model should has entity named \"Person\"",  model.entityForName("Person"));
+        assert (model != null) : "Model should not be null.";
+        assert (model.entityForName("Person") != null) : "Model should has entity named \"Person\".";
     }
 }
