@@ -39,11 +39,6 @@ public class Inspector {
      * @return model
      */
     public Model inspect(String pack, Class clazz) throws InspectionException {
-        if (this.listener == null) {
-            // TODO throw exception?
-            System.err.println("There is no listener for inspector.");
-            return null;
-        }
         if (pack == null || clazz == null) {
             throw new InspectionException("Package name, or base class are missing.");
         }
