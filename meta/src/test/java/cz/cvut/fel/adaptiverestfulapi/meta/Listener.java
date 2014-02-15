@@ -11,7 +11,7 @@ import java.lang.reflect.Method;
 public class Listener implements InspectorListener {
 
     @Override
-    public Entity inspect(Class clazz) {
+    public Entity inspectEntity(Class clazz) {
         if (clazz.getSimpleName().equalsIgnoreCase("Person")) {
             return new Entity(clazz.getSimpleName(), clazz);
         }

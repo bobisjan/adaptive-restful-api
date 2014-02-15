@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
 
 public interface InspectorListener {
 
-    public Entity inspect(Class clazz);
+    public Entity inspectEntity(Class clazz);
 
     public Attribute inspectAttribute(Field field, Method getter, Method setter);
 

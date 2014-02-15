@@ -59,7 +59,7 @@ public class Inspector {
         Model model = new Model();
 
         for (Class<?> k : clazzes) {
-            Entity entity = this.listener.inspect(k);
+            Entity entity = this.listener.inspectEntity(k);
             if (entity != null) {
                 if (this.validate(entity)) {
                     // TODO inspect fields and methods
