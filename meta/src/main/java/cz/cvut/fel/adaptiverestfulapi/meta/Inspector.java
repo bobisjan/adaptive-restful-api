@@ -24,6 +24,8 @@ public class Inspector {
 
     private Logger logger = LoggerFactory.getLogger(Inspector.class);
 
+    private List<String> errors = new LinkedList<>();
+
     /**
      * Inspects given package for classes that extends Object class.
      * @param pack package to inspect
@@ -52,20 +54,35 @@ public class Inspector {
             return null;
         }
 
-        Model model = new Model();
+        Set<Entity> entities = new HashSet<>();
 
+        // phase 1: inspect all leaf classes
         for (Class<?> k : clazzes) {
             Entity entity = this.listener.inspectEntity(k);
             if (entity != null) {
-                if (this.validate(entity)) {
-                    // TODO inspect fields and methods
-                    model.getEntities().put(entity.getName(), entity);
+                if (this.isValid(entity)) {
+                    entities.add(entity);
 
                 } else {
-                    // TODO throw exception?
-                    System.err.println("Entity for class " + k.getName() + " is not valid.");
+                    this.errors.add("Entity for class " + k.getName() + " is not valid.");
                 }
             }
+        }
+
+        // phase 2: inspect attributes and relationships
+        // TODO implement phase 2
+
+        if (!errors.isEmpty()) {
+            for (String error : this.errors) {
+                this.logger.error(error);
+            }
+            return null;
+        }
+
+        Model model = new Model();
+
+        for (Entity entity : entities) {
+            model.getEntities().put(entity.getName(), entity);
         }
         return model;
     }
@@ -97,9 +114,12 @@ public class Inspector {
         return leaves;
     }
 
-    protected boolean validate(Entity entity) {
-        // TODO add entity validator?
-        return true;
+    protected boolean isValid(Entity entity) {
+        // TODO check for duplicates?
+        if (entity.getName() != null && entity.getEntityClass() != null) {
+            return true;
+        }
+        return false;
     }
 
     public void setListener(InspectorListener listener) {
