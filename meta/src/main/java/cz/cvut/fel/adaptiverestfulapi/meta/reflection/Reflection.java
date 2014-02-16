@@ -1,7 +1,6 @@
 
 package cz.cvut.fel.adaptiverestfulapi.meta.reflection;
 
-
 import org.reflections.ReflectionUtils;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
