@@ -3,19 +3,11 @@ package cz.cvut.fel.adaptiverestfulapi.meta;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.HashSet;
-
 import org.reflections.Reflections;
-import org.reflections.ReflectionUtils;
-import org.reflections.scanners.ResourcesScanner;
-import org.reflections.scanners.SubTypesScanner;
-import org.reflections.util.ClasspathHelper;
-import org.reflections.util.ConfigurationBuilder;
-import org.reflections.util.FilterBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,8 +45,8 @@ public class Inspector {
             throw new InspectionException("Package name, or base class are missing.");
         }
 
-        Reflections reflections = this.reflections(pack, clazz);
-        Set<Class<?>> clazzes = this.leafs(reflections, clazz);
+        Reflections reflections = Reflection.reflections(pack, clazz);
+        Set<Class<?>> clazzes = Reflection.leafs(reflections, clazz);
 
         if (clazzes.size() == 0) {
             this.logger.warn("There are no classes in the package \"" + pack + "\"");
@@ -120,39 +112,12 @@ public class Inspector {
         return model;
     }
 
-    private Reflections reflections(String pack, Class clazz) {
-        if (clazz.equals(Object.class)) {
-            // @see http://stackoverflow.com/a/9571146
-            List<ClassLoader> classLoadersList = new LinkedList<ClassLoader>();
-            classLoadersList.add(ClasspathHelper.contextClassLoader());
-            classLoadersList.add(ClasspathHelper.staticClassLoader());
-
-            return new Reflections(new ConfigurationBuilder()
-                    .setScanners(new SubTypesScanner(false), new ResourcesScanner())
-                    .setUrls(ClasspathHelper.forClassLoader(classLoadersList.toArray(new ClassLoader[0])))
-                    .filterInputsBy(new FilterBuilder().include(FilterBuilder.prefix(pack))));
-        }
-        return new Reflections(clazz);
-    }
-
-    private Set<Class<?>> leafs(Reflections reflections, Class clazz) {
-        Set<Class<?>> all = reflections.getSubTypesOf(clazz);
-        Set<Class<?>> leafs = new HashSet<>();
-
-        for (Class<?> c : all) {
-            if (reflections.getSubTypesOf(c.getClass()).isEmpty()) {
-                leafs.add(c);
-            }
-        }
-        return leafs;
-    }
-
     private Set<Triplet<Field, Method, Method>> match(Class clazz) {
         Set<Triplet<Field, Method, Method>> triplets = new HashSet<>();
 
-        Set<Field> fields = this.fields(clazz);
-        Set<Method> getters = this.getters(clazz);
-        Set<Method> setters = this.setters(clazz);
+        Set<Field> fields = Reflection.fields(clazz);
+        Set<Method> getters = Reflection.getters(clazz);
+        Set<Method> setters = Reflection.setters(clazz);
 
         // TODO match field with getter and setter methods
 
@@ -160,8 +125,8 @@ public class Inspector {
 
         // step 1: add fields with getters, and setters (matched by field name)
         for (Field field : fields) {
-            getter = this.getter(field, getters);
-            setter = this.setter(field, setters);
+            getter = Reflection.getter(field, getters);
+            setter = Reflection.setter(field, setters);
 
             if (getter == null && setter == null) {
                 continue;
@@ -178,7 +143,7 @@ public class Inspector {
         // step 2a: add remaining getter and setter pairs (matched by method name)
         // step 2b: add remaining setters
         for (Method s : setters) {
-            getter = this.getter(s, getters);
+            getter = Reflection.getter(s, getters);
 
             if (getter != null) {
                 triplets.add(new Triplet<Field, Method, Method>(null, getter, s));
@@ -195,64 +160,6 @@ public class Inspector {
         }
 
         return triplets;
-    }
-
-    private Set<Field> fields(Class clazz) {
-        Set<Field> fields = new HashSet<>();
-
-        fields.addAll(ReflectionUtils.getAllFields(clazz));
-        return fields;
-    }
-
-    private Method getter(Field field, Set<Method> getters) {
-        return this.getter(field.getName(), getters);
-    }
-
-    private Method getter(Method setter, Set<Method> getters) {
-        return this.getter(setter.getName().substring(3), getters);
-    }
-
-    private Method getter(String name, Set<Method> getters) {
-        for (Method getter : getters) {
-            if (getter.getName().equalsIgnoreCase("is" + name.toUpperCase())
-                    || getter.getName().equalsIgnoreCase("get" + name.toUpperCase())) {
-                return getter;
-            }
-        }
-        return null;
-    }
-
-    private Method setter(Field field, Set<Method> setters) {
-        for (Method setter : setters) {
-            if (setter.getName().equalsIgnoreCase("set" + field.getName().toUpperCase())) {
-                return setter;
-            }
-        }
-        return null;
-    }
-
-    private Set<Method> getters(Class clazz) {
-        Set<Method> getters = new HashSet<>();
-
-        getters.addAll(ReflectionUtils.getAllMethods(clazz,
-                ReflectionUtils.withModifier(Modifier.PUBLIC),
-                ReflectionUtils.withPrefix("get"),
-                ReflectionUtils.withParametersCount(0)));
-        getters.addAll(ReflectionUtils.getAllMethods(clazz,
-                ReflectionUtils.withModifier(Modifier.PUBLIC),
-                ReflectionUtils.withPrefix("is"),
-                ReflectionUtils.withParametersCount(0)));
-        return getters;
-    }
-
-    private Set<Method> setters(Class clazz) {
-        Set<Method> setters = new HashSet<>();
-
-        setters.addAll(ReflectionUtils.getAllMethods(clazz,
-                ReflectionUtils.withModifier(Modifier.PUBLIC),
-                ReflectionUtils.withPrefix("set"),
-                ReflectionUtils.withParametersCount(1)));
-        return setters;
     }
 
     private PropertyType typeOfProperty(Triplet<Field, Method, Method> triplet) {
