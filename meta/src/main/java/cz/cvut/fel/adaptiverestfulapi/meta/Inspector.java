@@ -104,14 +104,14 @@ public class Inspector {
 
     private Set<Class<?>> leafs(Reflections reflections, Class clazz) {
         Set<Class<?>> all = reflections.getSubTypesOf(clazz);
-        Set<Class<?>> leaves = new HashSet<>();
+        Set<Class<?>> leafs = new HashSet<>();
 
         for (Class<?> c : all) {
             if (reflections.getSubTypesOf(c.getClass()).isEmpty()) {
-                leaves.add(c);
+                leafs.add(c);
             }
         }
-        return leaves;
+        return leafs;
     }
 
     protected boolean isValid(Entity entity) {
