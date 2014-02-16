@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.HashSet;
+
+import cz.cvut.fel.adaptiverestfulapi.meta.reflection.Reflection;
+import cz.cvut.fel.adaptiverestfulapi.meta.reflection.Triplet;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,7 +73,7 @@ public class Inspector {
 
         // phase 2: inspect attributes and relationships
         for (Entity entity : entities) {
-            Set<Triplet<Field, Method, Method>> triplets = this.match(entity.getEntityClass());
+            Set<Triplet<Field, Method, Method>> triplets = Reflection.triplets(entity.getEntityClass());
             for (Triplet<Field, Method, Method> triplet : triplets) {
                 PropertyType type = this.typeOfProperty(triplet);
                 if (type.equals(PropertyType.ATTRIBUTE)) {
@@ -112,56 +115,6 @@ public class Inspector {
         return model;
     }
 
-    private Set<Triplet<Field, Method, Method>> match(Class clazz) {
-        Set<Triplet<Field, Method, Method>> triplets = new HashSet<>();
-
-        Set<Field> fields = Reflection.fields(clazz);
-        Set<Method> getters = Reflection.getters(clazz);
-        Set<Method> setters = Reflection.setters(clazz);
-
-        // TODO match field with getter and setter methods
-
-        Method getter, setter;
-
-        // step 1: add fields with getters, and setters (matched by field name)
-        for (Field field : fields) {
-            getter = Reflection.getter(field, getters);
-            setter = Reflection.setter(field, setters);
-
-            if (getter == null && setter == null) {
-                continue;
-            }
-            if (getter != null) {
-                getters.remove(getter);
-            }
-            if (setter != null) {
-                setters.remove(setter);
-            }
-            triplets.add(new Triplet<Field, Method, Method>(field, getter, setter));
-        }
-
-        // step 2a: add remaining getter and setter pairs (matched by method name)
-        // step 2b: add remaining setters
-        for (Method s : setters) {
-            getter = Reflection.getter(s, getters);
-
-            if (getter != null) {
-                triplets.add(new Triplet<Field, Method, Method>(null, getter, s));
-                getters.remove(getter);
-
-            } else {
-                triplets.add(new Triplet<Field, Method, Method>(null, null, s));
-            }
-        }
-
-        // step 3: add remaining getters
-        for (Method g : getters) {
-            triplets.add(new Triplet<Field, Method, Method>(null, g, null));
-        }
-
-        return triplets;
-    }
-
     private PropertyType typeOfProperty(Triplet<Field, Method, Method> triplet) {
         // TODO resolve property type from triplet
         return PropertyType.UNKNOWN;
@@ -199,21 +152,6 @@ public class Inspector {
         UNKNOWN,
         ATTRIBUTE,
         RELATIONSHIP
-    }
-
-    private class Triplet<A, B, C> {
-
-        A a; B b; C c;
-
-        Triplet(A a, B b, C c) {
-            this.a = a; this.b = b; this.c = c;
-        }
-
-        @Override
-        public String toString() {
-            return "<" + this.a + ", " + this.b + ", " + this.c + ">";
-        }
-
     }
 
 }

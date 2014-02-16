@@ -1,5 +1,5 @@
 
-package cz.cvut.fel.adaptiverestfulapi.meta;
+package cz.cvut.fel.adaptiverestfulapi.meta.reflection;
 
 
 import org.reflections.ReflectionUtils;
@@ -21,6 +21,9 @@ import java.util.Set;
 
 /**
  * Helper class for reflection.
+ *
+ * Getter is a public method which starts with `get` or `is` followed by name and takes no parameters.
+ * Setter is a public method which starts with `set` followed by name and takes only one parameter.
  */
 public class Reflection {
 
@@ -61,6 +64,62 @@ public class Reflection {
             }
         }
         return leafs;
+    }
+
+    /**
+     * Looks up for triplets of field, related getter and setter in the class.
+     * Triplet can contain combinations of
+     * - field, getter and/or setter,
+     * - getter and/or setter.
+     * @param clazz
+     * @return set of triplets
+     */
+    public static Set<Triplet<Field, Method, Method>> triplets(Class clazz) {
+        Set<Triplet<Field, Method, Method>> triplets = new HashSet<>();
+
+        Set<Field> fields = Reflection.fields(clazz);
+        Set<Method> getters = Reflection.getters(clazz);
+        Set<Method> setters = Reflection.setters(clazz);
+
+        Method getter, setter;
+
+        // step 1: add fields with getters, and setters (matched by field name)
+        for (Field field : fields) {
+            getter = Reflection.getter(field, getters);
+            setter = Reflection.setter(field, setters);
+
+            if (getter == null && setter == null) {
+                continue;
+            }
+            if (getter != null) {
+                getters.remove(getter);
+            }
+            if (setter != null) {
+                setters.remove(setter);
+            }
+            triplets.add(new Triplet<Field, Method, Method>(field, getter, setter));
+        }
+
+        // step 2a: add remaining getter and setter pairs (matched by method name)
+        // step 2b: add remaining setters
+        for (Method s : setters) {
+            getter = Reflection.getter(s, getters);
+
+            if (getter != null) {
+                triplets.add(new Triplet<Field, Method, Method>(null, getter, s));
+                getters.remove(getter);
+
+            } else {
+                triplets.add(new Triplet<Field, Method, Method>(null, null, s));
+            }
+        }
+
+        // step 3: add remaining getters
+        for (Method g : getters) {
+            triplets.add(new Triplet<Field, Method, Method>(null, g, null));
+        }
+
+        return triplets;
     }
 
     /**
@@ -127,7 +186,7 @@ public class Reflection {
     }
 
     /**
-     * Returns getters for the class. Getter is public method which starts with `get` or `is` and takes no parameters.
+     * Returns getters for the class.
      * @param clazz
      * @return set of getters
      */
@@ -146,7 +205,7 @@ public class Reflection {
     }
 
     /**
-     * Returns setters for the class. Setter is public method which starts with `set` and takes only one parameter.
+     * Returns setters for the class.
      * @param clazz
      * @return set of setters
      */
