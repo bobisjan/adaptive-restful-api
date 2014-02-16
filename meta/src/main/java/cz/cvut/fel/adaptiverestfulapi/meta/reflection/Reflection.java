@@ -122,6 +122,16 @@ public class Reflection {
     }
 
     /**
+     * Resolves type `Attribute.class` or `Relationship.class` of a triplet.
+     * @param triplet
+     * @return type or null if it could not be resolved
+     */
+    public static Class typeOf(Triplet<Field, Method, Method> triplet) {
+        // TODO discover and test appropriate implementation
+        return null;
+    }
+
+    /**
      * Returns all fields in the class.
      * @param clazz
      * @return set of fields

@@ -75,8 +75,8 @@ public class Inspector {
         for (Entity entity : entities) {
             Set<Triplet<Field, Method, Method>> triplets = Reflection.triplets(entity.getEntityClass());
             for (Triplet<Field, Method, Method> triplet : triplets) {
-                PropertyType type = this.typeOfProperty(triplet);
-                if (type.equals(PropertyType.ATTRIBUTE)) {
+                Class type = Reflection.typeOf(triplet);
+                if (Attribute.class.equals(type)) {
                     Attribute attr = this.listener.inspectAttribute(triplet.a, triplet.b, triplet.c);
                     if (this.isValid(attr)) {
                         entity.addAttribute(attr);
@@ -85,7 +85,7 @@ public class Inspector {
                         this.errors.add("Attribute for " + triplet.toString() + " in entity " + entity.getName() + " is not valid");
                     }
 
-                } else if (type.equals(PropertyType.RELATIONSHIP)) {
+                } else if (Relationship.class.equals(type)) {
                     Relationship rel = this.listener.inspectRelationship(triplet.a, triplet.b, triplet.c);
                     if (this.isValid(rel)) {
                         entity.addRelationship(rel);
@@ -115,11 +115,6 @@ public class Inspector {
         return model;
     }
 
-    private PropertyType typeOfProperty(Triplet<Field, Method, Method> triplet) {
-        // TODO resolve property type from triplet
-        return PropertyType.UNKNOWN;
-    }
-
     protected boolean isValid(Attribute attribute) {
         // TODO check for duplicates?
         if (attribute.getName() != null) {
@@ -146,12 +141,6 @@ public class Inspector {
 
     public void setListener(InspectorListener listener) {
         this.listener = listener;
-    }
-
-    private enum PropertyType {
-        UNKNOWN,
-        ATTRIBUTE,
-        RELATIONSHIP
     }
 
 }
