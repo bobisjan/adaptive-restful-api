@@ -3,11 +3,14 @@ package cz.cvut.fel.adaptiverestfulapi.meta;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.HashSet;
+
 import org.reflections.Reflections;
+import org.reflections.ReflectionUtils;
 import org.reflections.scanners.ResourcesScanner;
 import org.reflections.scanners.SubTypesScanner;
 import org.reflections.util.ClasspathHelper;
@@ -146,12 +149,110 @@ public class Inspector {
 
     private Set<Triplet<Field, Method, Method>> match(Class clazz) {
         Set<Triplet<Field, Method, Method>> triplets = new HashSet<>();
+
+        Set<Field> fields = this.fields(clazz);
+        Set<Method> getters = this.getters(clazz);
+        Set<Method> setters = this.setters(clazz);
+
         // TODO match field with getter and setter methods
+
+        Method getter, setter;
+
         // step 1: add fields with getters, and setters (matched by field name)
-        // step 2: add remaining getter and setter pairs (matched by method name)
+        for (Field field : fields) {
+            getter = this.getter(field, getters);
+            setter = this.setter(field, setters);
+
+            if (getter == null && setter == null) {
+                continue;
+            }
+            if (getter != null) {
+                getters.remove(getter);
+            }
+            if (setter != null) {
+                setters.remove(setter);
+            }
+            triplets.add(new Triplet<Field, Method, Method>(field, getter, setter));
+        }
+
+        // step 2a: add remaining getter and setter pairs (matched by method name)
+        // step 2b: add remaining setters
+        for (Method s : setters) {
+            getter = this.getter(s, getters);
+
+            if (getter != null) {
+                triplets.add(new Triplet<Field, Method, Method>(null, getter, s));
+                getters.remove(getter);
+
+            } else {
+                triplets.add(new Triplet<Field, Method, Method>(null, null, s));
+            }
+        }
+
         // step 3: add remaining getters
-        // step 4: add remaining setters
+        for (Method g : getters) {
+            triplets.add(new Triplet<Field, Method, Method>(null, g, null));
+        }
+
         return triplets;
+    }
+
+    private Set<Field> fields(Class clazz) {
+        Set<Field> fields = new HashSet<>();
+
+        fields.addAll(ReflectionUtils.getAllFields(clazz));
+        return fields;
+    }
+
+    private Method getter(Field field, Set<Method> getters) {
+        return this.getter(field.getName(), getters);
+    }
+
+    private Method getter(Method setter, Set<Method> getters) {
+        return this.getter(setter.getName().substring(3), getters);
+    }
+
+    private Method getter(String name, Set<Method> getters) {
+        for (Method getter : getters) {
+            if (getter.getName().equalsIgnoreCase("is" + name.toUpperCase())
+                    || getter.getName().equalsIgnoreCase("get" + name.toUpperCase())) {
+                return getter;
+            }
+        }
+        return null;
+    }
+
+    private Method setter(Field field, Set<Method> setters) {
+        for (Method setter : setters) {
+            if (setter.getName().equalsIgnoreCase("set" + field.getName().toUpperCase())) {
+                return setter;
+            }
+        }
+        return null;
+    }
+
+    private Set<Method> getters(Class clazz) {
+        Set<Method> getters = new HashSet<>();
+
+        getters.addAll(ReflectionUtils.getAllMethods(clazz,
+                ReflectionUtils.withModifier(Modifier.PUBLIC),
+                ReflectionUtils.withPrefix("get"),
+                ReflectionUtils.withParametersCount(0)));
+        getters.addAll(ReflectionUtils.getAllMethods(clazz,
+                ReflectionUtils.withModifier(Modifier.PUBLIC),
+                ReflectionUtils.withPrefix("is"),
+                ReflectionUtils.withParametersCount(0)));
+        return getters;
+    }
+
+    private Set<Method> setters(Class clazz) {
+        Set<Method> setters = new HashSet<>();
+
+        setters.addAll(ReflectionUtils.getAllMethods(clazz,
+                ReflectionUtils.withModifier(Modifier.PUBLIC),
+                ReflectionUtils.withPrefix("set"),
+                ReflectionUtils.withParametersCount(1)));
+        return setters;
     }
 
     private PropertyType typeOfProperty(Triplet<Field, Method, Method> triplet) {
