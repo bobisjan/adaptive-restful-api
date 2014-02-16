@@ -84,7 +84,7 @@ public class Inspector {
         Model model = new Model(configuration);
 
         for (Entity entity : entities) {
-            model.getEntities().put(entity.getName(), entity);
+            model.addEntity(entity);
         }
         return model;
     }

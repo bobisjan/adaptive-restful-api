@@ -1,6 +1,7 @@
 
 package cz.cvut.fel.adaptiverestfulapi.meta;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,8 +20,16 @@ public class Model {
         this.entities = new HashMap();
     }
 
+    /**
+     * Returns an immutable map of entities.
+     * @return entities
+     */
     public Map<String, Entity> getEntities() {
-        return this.entities;
+        return Collections.unmodifiableMap(this.entities);
+    }
+
+    public void addEntity(Entity entity) {
+        this.entities.put(entity.getName(), entity);
     }
 
     public Entity entityForName(String name) {
