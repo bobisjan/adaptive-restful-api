@@ -10,9 +10,12 @@ import java.util.Map;
  */
 public class Model {
 
+    private Configuration configuration;
+
     private Map<String, Entity> entities;
 
-    public Model() {
+    public Model(Configuration configuration) {
+        this.configuration = configuration;
         this.entities = new HashMap();
     }
 

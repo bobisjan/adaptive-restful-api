@@ -7,8 +7,8 @@ package cz.cvut.fel.adaptiverestfulapi.meta;
  */
 public class Attribute extends Property {
 
-    public Attribute(String name) {
-        super(name);
+    public Attribute(String name, Configuration configuration) {
+        super(name, configuration);
     }
 
 }

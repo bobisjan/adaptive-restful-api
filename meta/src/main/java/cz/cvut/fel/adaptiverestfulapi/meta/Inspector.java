@@ -29,19 +29,21 @@ public class Inspector {
     /**
      * Inspects given package for classes that extends Object class.
      * @param pack package to inspect
+     * @param configuration global configuration
      * @return model
      */
-    public Model inspect(String pack) throws InspectionException {
-        return this.inspect(pack, java.lang.Object.class);
+    public Model inspect(String pack, Configuration configuration) throws InspectionException {
+        return this.inspect(pack, java.lang.Object.class, configuration);
     }
 
     /**
      * Inspects given package for classes that extends passed class.
      * @param pack package to inspect
      * @param clazz base class
+     * @param configuration global configuration
      * @return model
      */
-    public Model inspect(String pack, Class clazz) throws InspectionException {
+    public Model inspect(String pack, Class clazz, Configuration configuration) throws InspectionException {
         if (pack == null || clazz == null) {
             throw new InspectionException("Package name, or base class are missing.");
         }
@@ -79,7 +81,7 @@ public class Inspector {
             return null;
         }
 
-        Model model = new Model();
+        Model model = new Model(configuration);
 
         for (Entity entity : entities) {
             model.getEntities().put(entity.getName(), entity);

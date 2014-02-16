@@ -4,6 +4,8 @@ package cz.cvut.fel.adaptiverestfulapi.meta;
 import cz.cvut.fel.adaptiverestfulapi.meta.data.BaseClass;
 import org.testng.annotations.Test;
 
+import java.util.HashMap;
+
 
 public class InspectorTest {
 
@@ -13,7 +15,8 @@ public class InspectorTest {
         inspector.setListener(new Listener());
 
         Model model = null;
-        model = inspector.inspect("xyz");
+        Configuration configuration = new Configuration(new HashMap<String, Object>());
+        model = inspector.inspect("xyz", configuration);
 
         assert (model == null) : "Model should be null.";
     }
@@ -24,7 +27,8 @@ public class InspectorTest {
         inspector.setListener(new Listener());
 
         Model model = null;
-        model = inspector.inspect("cz.cvut.fel.adaptiverestfulapi.meta.data");
+        Configuration configuration = new Configuration(new HashMap<String, Object>());
+        model = inspector.inspect("cz.cvut.fel.adaptiverestfulapi.meta.data", configuration);
 
         assert (model != null) : "Model should not be null.";
         assert (model.entityForName("Person") != null) : "Model should has entity named \"Person\".";
@@ -36,7 +40,8 @@ public class InspectorTest {
         inspector.setListener(new Listener());
 
         Model model = null;
-        model = inspector.inspect("cz.cvut.fel.adaptiverestfulapi.meta.data", BaseClass.class);
+        Configuration configuration = new Configuration(new HashMap<String, Object>());
+        model = inspector.inspect("cz.cvut.fel.adaptiverestfulapi.meta.data", BaseClass.class, configuration);
 
         assert (model != null) : "Model should not be null.";
         assert (model.entityForName("Person") != null) : "Model should has entity named \"Person\".";

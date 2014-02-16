@@ -8,9 +8,11 @@ package cz.cvut.fel.adaptiverestfulapi.meta;
 public abstract class Property {
 
     private final String name;
+    private final Configuration configuration;
 
-    public Property(String name) {
+    public Property(String name, Configuration configuration) {
         this.name = name;
+        this.configuration = configuration;
     }
 
     public String getName() {

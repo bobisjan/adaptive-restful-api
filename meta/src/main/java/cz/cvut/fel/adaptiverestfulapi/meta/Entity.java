@@ -11,13 +11,15 @@ public class Entity {
 
     private final String name;
     private final Class entityClass;
+    private final Configuration configuration;
 
     private Map<String, Attribute> attributes;
     private Map<String, Relationship> relationships;
 
-    public Entity(String name, Class entityClass) {
+    public Entity(String name, Class entityClass, Configuration configuration) {
         this.name = name;
         this.entityClass = entityClass;
+        this.configuration = configuration;
     }
 
     public String getName() {
