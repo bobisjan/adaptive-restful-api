@@ -1,6 +1,8 @@
 
 package cz.cvut.fel.adaptiverestfulapi.meta;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Set;
@@ -72,7 +74,33 @@ public class Inspector {
         }
 
         // phase 2: inspect attributes and relationships
-        // TODO implement phase 2
+        for (Entity entity : entities) {
+            Set<Triplet<Field, Method, Method>> triplets = this.match(entity.getEntityClass());
+            for (Triplet<Field, Method, Method> triplet : triplets) {
+                PropertyType type = this.typeOfProperty(triplet);
+                if (type.equals(PropertyType.ATTRIBUTE)) {
+                    Attribute attr = this.listener.inspectAttribute(triplet.a, triplet.b, triplet.c);
+                    if (this.isValid(attr)) {
+                        entity.addAttribute(attr);
+
+                    } else {
+                        this.errors.add("Attribute for " + triplet.toString() + " in entity " + entity.getName() + " is not valid");
+                    }
+
+                } else if (type.equals(PropertyType.RELATIONSHIP)) {
+                    Relationship rel = this.listener.inspectRelationship(triplet.a, triplet.b, triplet.c);
+                    if (this.isValid(rel)) {
+                        entity.addRelationship(rel);
+
+                    } else {
+                        this.errors.add("Relationship for " + triplet.toString() + " in entity " + entity.getName() + " is not valid");
+                    }
+
+                } else {
+                    this.errors.add("Could not resolve type of property " + triplet + " in entity " + entity.getName());
+                }
+            }
+        }
 
         if (!errors.isEmpty()) {
             for (String error : this.errors) {
@@ -116,6 +144,37 @@ public class Inspector {
         return leafs;
     }
 
+    private Set<Triplet<Field, Method, Method>> match(Class clazz) {
+        Set<Triplet<Field, Method, Method>> triplets = new HashSet<>();
+        // TODO match field with getter and setter methods
+        // step 1: add fields with getters, and setters (matched by field name)
+        // step 2: add remaining getter and setter pairs (matched by method name)
+        // step 3: add remaining getters
+        // step 4: add remaining setters
+        return triplets;
+    }
+
+    private PropertyType typeOfProperty(Triplet<Field, Method, Method> triplet) {
+        // TODO resolve property type from triplet
+        return PropertyType.UNKNOWN;
+    }
+
+    protected boolean isValid(Attribute attribute) {
+        // TODO check for duplicates?
+        if (attribute.getName() != null) {
+            return true;
+        }
+        return false;
+    }
+
+    protected boolean isValid(Relationship relationship) {
+        // TODO check for duplicates?
+        if (relationship.getName() != null) {
+            return true;
+        }
+        return false;
+    }
+
     protected boolean isValid(Entity entity) {
         // TODO check for duplicates?
         if (entity.getName() != null && entity.getEntityClass() != null) {
@@ -126,6 +185,27 @@ public class Inspector {
 
     public void setListener(InspectorListener listener) {
         this.listener = listener;
+    }
+
+    private enum PropertyType {
+        UNKNOWN,
+        ATTRIBUTE,
+        RELATIONSHIP
+    }
+
+    private class Triplet<A, B, C> {
+
+        A a; B b; C c;
+
+        Triplet(A a, B b, C c) {
+            this.a = a; this.b = b; this.c = c;
+        }
+
+        @Override
+        public String toString() {
+            return "<" + this.a + ", " + this.b + ", " + this.c + ">";
+        }
+
     }
 
 }
