@@ -1,0 +1,55 @@
+
+package cz.cvut.fel.adaptiverestfulapi.meta;
+
+import cz.cvut.fel.adaptiverestfulapi.meta.data.Provider;
+import cz.cvut.fel.adaptiverestfulapi.meta.reflection.Reflection;
+import cz.cvut.fel.adaptiverestfulapi.meta.reflection.Triplet;
+import org.reflections.Reflections;
+import org.testng.annotations.Test;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.Set;
+
+
+public class RelationshipTest {
+
+    @Test(dataProvider = "packages", dataProviderClass = Provider.class)
+    public void testToOneCanBeInstantiated(String pack, Class baseClass) throws Exception {
+        Reflections reflections = Reflection.reflections(pack, baseClass);
+        Set<Class<?>> leafs = Reflection.leafs(reflections, baseClass);
+
+        for (Class<?> clazz : leafs) {
+            Set<Triplet<Field, Method, Method>> triplets = Reflection.triplets(clazz);
+            for (Triplet<Field, Method, Method> triplet : triplets) {
+                Class<?> dclazz = null;
+
+                if (triplet.a != null) {
+                    dclazz = triplet.a.getDeclaringClass();
+
+                } else if (triplet.c != null) {
+                    Class<?>[] parameters = triplet.c.getParameterTypes();
+                    dclazz = parameters[0].getDeclaringClass();
+
+                } else {
+                    // Instantiation is not required...
+                    continue;
+                }
+
+                // Test entity classes only...
+                if (leafs.contains(dclazz)) {
+                    try {
+                        assert (dclazz.newInstance() != null) : "Can not create instance of " + dclazz.getName() + " from " + clazz.getSimpleName()  + ".";
+
+                    } catch (InstantiationException e) {
+                        assert (false) : e.getLocalizedMessage();
+
+                    } catch (IllegalAccessException e) {
+                        assert (false) : e.getLocalizedMessage();
+                    }
+                }
+            }
+        }
+    }
+
+}
