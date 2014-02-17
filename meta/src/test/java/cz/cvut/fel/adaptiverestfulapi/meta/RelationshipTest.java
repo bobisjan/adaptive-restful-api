@@ -28,7 +28,7 @@ public class RelationshipTest {
                 Class<?> dclazz = null;
 
                 if (triplet.a != null) {
-                    dclazz = triplet.a.getDeclaringClass();
+                    dclazz = triplet.a.getType();
 
                 } else if (triplet.c != null) {
                     Class<?>[] parameters = triplet.c.getParameterTypes();
