@@ -25,14 +25,14 @@ public class RelationshipTest {
         for (Class<?> clazz : leafs) {
             Set<Triplet<Field, Method, Method>> triplets = Reflection.triplets(clazz);
             for (Triplet<Field, Method, Method> triplet : triplets) {
-                Class<?> dclazz = null;
+                Class<?> targetClass = null;
 
                 if (triplet.a != null) {
-                    dclazz = triplet.a.getType();
+                    targetClass = triplet.a.getType();
 
                 } else if (triplet.c != null) {
                     Class<?>[] parameters = triplet.c.getParameterTypes();
-                    dclazz = parameters[0].getDeclaringClass();
+                    targetClass = parameters[0].getDeclaringClass();
 
                 } else {
                     // Instantiation is not required...
@@ -40,9 +40,9 @@ public class RelationshipTest {
                 }
 
                 // Test entity classes only...
-                if (leafs.contains(dclazz)) {
+                if (leafs.contains(targetClass)) {
                     try {
-                        assert (dclazz.newInstance() != null) : "Can not create instance of " + dclazz.getName() + " from " + clazz.getSimpleName()  + ".";
+                        assert (targetClass.newInstance() != null) : "Can not create instance of " + targetClass.getName() + " from " + clazz.getSimpleName()  + ".";
 
                     } catch (InstantiationException e) {
                         assert (false) : e.getLocalizedMessage();
@@ -63,7 +63,7 @@ public class RelationshipTest {
         for (Class<?> clazz : leafs) {
             Set<Triplet<Field, Method, Method>> triplets = Reflection.triplets(clazz);
             for (Triplet<Field, Method, Method> triplet : triplets) {
-                Class<?> dclazz = null;
+                Class<?> targetClass = null;
 
                 if (triplet.a != null) {
                     Class<?> tmp = triplet.a.getType();
@@ -74,7 +74,7 @@ public class RelationshipTest {
                         if (type instanceof ParameterizedType) {
                             ParameterizedType pType = (ParameterizedType)type;
                             Type[] arr = pType.getActualTypeArguments();
-                            dclazz = (Class<?>)arr[0];
+                            targetClass = (Class<?>)arr[0];
                         }
                     }
 
@@ -87,7 +87,7 @@ public class RelationshipTest {
                         if (types[0] instanceof ParameterizedType) {
                             ParameterizedType pType = (ParameterizedType)types[0];
                             Type[] arr = pType.getActualTypeArguments();
-                            dclazz = (Class<?>)arr[0];
+                            targetClass = (Class<?>)arr[0];
                         }
                     }
 
@@ -97,9 +97,9 @@ public class RelationshipTest {
                 }
 
                 // Test entity classes only...
-                if (leafs.contains(dclazz)) {
+                if (leafs.contains(targetClass)) {
                     try {
-                        assert (dclazz.newInstance() != null) : "Can not create instance of " + dclazz.getName() + " from collection from " + clazz.getSimpleName()  + ".";
+                        assert (targetClass.newInstance() != null) : "Can not create instance of " + targetClass.getName() + " from collection from " + clazz.getSimpleName()  + ".";
 
                     } catch (InstantiationException e) {
                         assert (false) : e.getLocalizedMessage();
