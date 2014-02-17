@@ -13,10 +13,7 @@ public class Listener implements InspectorListener {
 
     @Override
     public Entity inspectEntity(Class clazz) {
-        if (clazz.getSimpleName().equalsIgnoreCase("Person")) {
-            return new Entity(clazz.getSimpleName(), clazz, new Configuration(new HashMap<String, Object>()));
-        }
-        return null;
+        return new Entity(clazz.getSimpleName(), clazz, new Configuration(new HashMap<String, Object>()));
     }
 
     @Override
