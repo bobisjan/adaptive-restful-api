@@ -7,8 +7,8 @@ package cz.cvut.fel.adaptiverestfulapi.meta;
  */
 public class Relationship extends Property {
 
-    public Relationship(String name, Configuration configuration) {
-        super(name, configuration);
+    public Relationship(String name) {
+        super(name);
     }
 
 }

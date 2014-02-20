@@ -18,7 +18,7 @@ import java.util.Set;
 public class RelationshipTest {
 
     @Test(dataProvider = "packages", dataProviderClass = Provider.class)
-    public void testToOneCanBeInstantiated(String pack, Class baseClass, Configuration configuration) throws Exception {
+    public void testToOneCanBeInstantiated(String pack, Class baseClass) throws Exception {
         Reflections reflections = Reflection.reflections(pack, baseClass);
         Set<Class<?>> leafs = Reflection.leafs(reflections, baseClass);
 
@@ -56,7 +56,7 @@ public class RelationshipTest {
     }
 
     @Test(dataProvider = "packages", dataProviderClass = Provider.class)
-    public void testToManyCanBeInstantiated(String pack, Class baseClass, Configuration configuration) throws Exception {
+    public void testToManyCanBeInstantiated(String pack, Class baseClass) throws Exception {
         Reflections reflections = Reflection.reflections(pack, baseClass);
         Set<Class<?>> leafs = Reflection.leafs(reflections, baseClass);
 

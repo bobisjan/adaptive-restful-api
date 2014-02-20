@@ -11,12 +11,9 @@ import java.util.Map;
  */
 public class Model {
 
-    private Configuration configuration;
-
     private Map<String, Entity> entities;
 
-    public Model(Configuration configuration) {
-        this.configuration = configuration;
+    public Model() {
         this.entities = new HashMap();
     }
 

@@ -13,10 +13,10 @@ public class Provider {
     @DataProvider(name = "packages")
     public static Object[][] packages() {
         return new Object[][] {
-                { "cz.cvut.fel.adaptiverestfulapi.meta.data.simple", Object.class, new Configuration(new HashMap<String, Object>()) },
-                { "cz.cvut.fel.adaptiverestfulapi.meta.data.base", Item.class, new Configuration(new HashMap<String, Object>()) },
-                { "cz.cvut.fel.adaptiverestfulapi.meta.data.abstracts", Object.class, new Configuration(new HashMap<String, Object>()) },
-                { "cz.cvut.fel.adaptiverestfulapi.meta.data.interfaces", Object.class, new Configuration(new HashMap<String, Object>()) }
+                { "cz.cvut.fel.adaptiverestfulapi.meta.data.simple", Object.class },
+                { "cz.cvut.fel.adaptiverestfulapi.meta.data.base", Item.class },
+                { "cz.cvut.fel.adaptiverestfulapi.meta.data.abstracts", Object.class },
+                { "cz.cvut.fel.adaptiverestfulapi.meta.data.interfaces", Object.class }
         };
     }
 
