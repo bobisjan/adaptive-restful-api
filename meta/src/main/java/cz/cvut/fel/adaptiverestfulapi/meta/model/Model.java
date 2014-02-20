@@ -11,10 +11,16 @@ import java.util.Map;
  */
 public class Model {
 
+    private String name;
     private Map<String, Entity> entities;
 
-    public Model() {
+    public Model(String name) {
+        this.name = name;
         this.entities = new HashMap();
+    }
+
+    public String getName() {
+        return this.name;
     }
 
     /**

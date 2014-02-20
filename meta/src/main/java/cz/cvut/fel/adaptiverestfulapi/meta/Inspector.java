@@ -110,7 +110,7 @@ public class Inspector {
             return null;
         }
 
-        Model model = new Model();
+        Model model = new Model(pack);
 
         for (Entity entity : entities) {
             model.addEntity(entity);
