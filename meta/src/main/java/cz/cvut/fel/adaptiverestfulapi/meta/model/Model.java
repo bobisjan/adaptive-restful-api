@@ -1,5 +1,5 @@
 
-package cz.cvut.fel.adaptiverestfulapi.meta;
+package cz.cvut.fel.adaptiverestfulapi.meta.model;
 
 import java.util.Collections;
 import java.util.HashMap;

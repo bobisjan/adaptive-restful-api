@@ -1,11 +1,8 @@
 
 package cz.cvut.fel.adaptiverestfulapi.meta.data;
 
-import cz.cvut.fel.adaptiverestfulapi.meta.Configuration;
 import cz.cvut.fel.adaptiverestfulapi.meta.data.base.Item;
 import org.testng.annotations.DataProvider;
-
-import java.util.HashMap;
 
 
 public class Provider {

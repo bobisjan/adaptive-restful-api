@@ -1,9 +1,12 @@
 
 package cz.cvut.fel.adaptiverestfulapi.meta;
 
+import cz.cvut.fel.adaptiverestfulapi.meta.model.Attribute;
+import cz.cvut.fel.adaptiverestfulapi.meta.model.Entity;
+import cz.cvut.fel.adaptiverestfulapi.meta.model.Relationship;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.HashMap;
 
 
 public class Listener implements ModelInspection {

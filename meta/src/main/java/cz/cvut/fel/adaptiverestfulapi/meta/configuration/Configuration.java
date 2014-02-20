@@ -1,5 +1,5 @@
 
-package cz.cvut.fel.adaptiverestfulapi.meta;
+package cz.cvut.fel.adaptiverestfulapi.meta.configuration;
 
 import java.util.Map;
 import java.util.HashMap;

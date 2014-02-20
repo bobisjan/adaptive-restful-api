@@ -2,6 +2,7 @@
 package cz.cvut.fel.adaptiverestfulapi.meta;
 
 import cz.cvut.fel.adaptiverestfulapi.meta.data.Provider;
+import cz.cvut.fel.adaptiverestfulapi.meta.model.Model;
 import org.testng.annotations.Test;
 
 

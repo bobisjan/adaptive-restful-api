@@ -8,6 +8,10 @@ import java.util.LinkedList;
 import java.util.Set;
 import java.util.HashSet;
 
+import cz.cvut.fel.adaptiverestfulapi.meta.model.Attribute;
+import cz.cvut.fel.adaptiverestfulapi.meta.model.Entity;
+import cz.cvut.fel.adaptiverestfulapi.meta.model.Model;
+import cz.cvut.fel.adaptiverestfulapi.meta.model.Relationship;
 import cz.cvut.fel.adaptiverestfulapi.meta.reflection.Reflection;
 import cz.cvut.fel.adaptiverestfulapi.meta.reflection.Triplet;
 import org.reflections.Reflections;
