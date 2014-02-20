@@ -63,7 +63,7 @@ public class Inspector {
 
         // phase 1: model all leaf classes
         for (Class<?> k : clazzes) {
-            Entity entity = this.modeler.inspectEntity(k);
+            Entity entity = this.modeler.entity(k);
             if (entity != null) {
                 if (this.isValid(entity)) {
                     entities.add(entity);
@@ -80,7 +80,7 @@ public class Inspector {
             for (Triplet<Field, Method, Method> triplet : triplets) {
                 Class type = Reflection.typeOf(triplet);
                 if (Attribute.class.equals(type)) {
-                    Attribute attr = this.modeler.inspectAttribute(triplet.a, triplet.b, triplet.c);
+                    Attribute attr = this.modeler.attribute(triplet.a, triplet.b, triplet.c);
                     if (this.isValid(attr)) {
                         entity.addAttribute(attr);
 
@@ -89,7 +89,7 @@ public class Inspector {
                     }
 
                 } else if (Relationship.class.equals(type)) {
-                    Relationship rel = this.modeler.inspectRelationship(triplet.a, triplet.b, triplet.c);
+                    Relationship rel = this.modeler.relationship(triplet.a, triplet.b, triplet.c);
                     if (this.isValid(rel)) {
                         entity.addRelationship(rel);
 

@@ -12,12 +12,12 @@ import java.lang.reflect.Method;
 public class Listener implements ModelInspection {
 
     @Override
-    public Entity inspectEntity(Class clazz) {
+    public Entity entity(Class clazz) {
         return new Entity(clazz.getSimpleName(), clazz);
     }
 
     @Override
-    public Attribute inspectAttribute(Field field, Method getter, Method setter) {
+    public Attribute attribute(Field field, Method getter, Method setter) {
         if (field != null) {
             // TODO implement
             return new Attribute(field.getName());
@@ -28,7 +28,7 @@ public class Listener implements ModelInspection {
     }
 
     @Override
-    public Relationship inspectRelationship(Field field, Method getter, Method setter) {
+    public Relationship relationship(Field field, Method getter, Method setter) {
         if (field != null) {
             // TODO implement
             return new Relationship(field.getName());

@@ -11,10 +11,10 @@ import java.lang.reflect.Method;
 
 public interface ModelInspection {
 
-    public Entity inspectEntity(Class clazz);
+    public Entity entity(Class clazz);
 
-    public Attribute inspectAttribute(Field field, Method getter, Method setter);
+    public Attribute attribute(Field field, Method getter, Method setter);
 
-    public Relationship inspectRelationship(Field field, Method getter, Method setter);
+    public Relationship relationship(Field field, Method getter, Method setter);
 
 }
