@@ -28,20 +28,20 @@ public class Inspector {
 
     /**
      * Inspects given package for classes that extends Object class.
-     * @param pack package to inspect
+     * @param pack package to model
      * @return model
      */
-    public Model inspect(String pack) throws InspectionException {
-        return this.inspect(pack, java.lang.Object.class);
+    public Model model(String pack) throws InspectionException {
+        return this.model(pack, java.lang.Object.class);
     }
 
     /**
      * Inspects given package for classes that extends passed class.
-     * @param pack package to inspect
+     * @param pack package to model
      * @param clazz base class
      * @return model
      */
-    public Model inspect(String pack, Class clazz) throws InspectionException {
+    public Model model(String pack, Class clazz) throws InspectionException {
         if (pack == null || clazz == null) {
             throw new InspectionException("Package name, or base class are missing.");
         }
@@ -56,7 +56,7 @@ public class Inspector {
 
         Set<Entity> entities = new HashSet<>();
 
-        // phase 1: inspect all leaf classes
+        // phase 1: model all leaf classes
         for (Class<?> k : clazzes) {
             Entity entity = this.listener.inspectEntity(k);
             if (entity != null) {
@@ -69,7 +69,7 @@ public class Inspector {
             }
         }
 
-        // phase 2: inspect attributes and relationships
+        // phase 2: model attributes and relationships
         for (Entity entity : entities) {
             Set<Triplet<Field, Method, Method>> triplets = Reflection.triplets(entity.getEntityClass());
             for (Triplet<Field, Method, Method> triplet : triplets) {

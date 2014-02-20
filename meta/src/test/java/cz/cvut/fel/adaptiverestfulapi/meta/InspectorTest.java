@@ -3,7 +3,6 @@ package cz.cvut.fel.adaptiverestfulapi.meta;
 
 import cz.cvut.fel.adaptiverestfulapi.meta.data.Provider;
 import org.testng.annotations.Test;
-import java.util.HashMap;
 
 
 public class InspectorTest {
@@ -14,7 +13,7 @@ public class InspectorTest {
         inspector.setListener(new Listener());
 
         Model model = null;
-        model = inspector.inspect("xyz");
+        model = inspector.model("xyz");
 
         assert (model == null) : "Model should be null.";
     }
@@ -25,7 +24,7 @@ public class InspectorTest {
         inspector.setListener(new Listener());
 
         Model model = null;
-        model = inspector.inspect(pack, baseClass);
+        model = inspector.model(pack, baseClass);
 
         assert (model != null) : "Model should not be null.";
         assert (model.entityForName("Project") != null) : "Model should has entity named \"Project\".";
