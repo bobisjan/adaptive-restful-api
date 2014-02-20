@@ -1,6 +1,8 @@
 
 package cz.cvut.fel.adaptiverestfulapi.meta.configuration;
 
+import cz.cvut.fel.adaptiverestfulapi.meta.model.*;
+
 import java.util.Map;
 import java.util.HashMap;
 
@@ -8,19 +10,14 @@ import java.util.HashMap;
 /**
  * Configuration holds metadata about the model, entities and properties.
  */
-public class Configuration {
+public interface Configuration {
 
-    private final Map<String, Object> map;
+    public <T> T get(String key, Model model);
 
-    public Configuration(Map<String, Object> map) {
-        this.map = new HashMap<>();
-        this.map.putAll(map);
-    }
+    public <T> T get(String key, Entity entity);
 
-    public Object get(String key) {
-        return this.map.get(key);
-    }
+    public <T> T get(String key, Attribute attribute);
 
-    // TODO implement helper methods, like getString(), getBoolean(), ...
+    public <T> T get(String key, Relationship relationship);
 
 }

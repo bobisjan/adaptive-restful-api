@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.Set;
 import java.util.HashSet;
 
+import cz.cvut.fel.adaptiverestfulapi.meta.configuration.Configuration;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Attribute;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Entity;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Model;
@@ -24,10 +25,10 @@ import org.slf4j.LoggerFactory;
  */
 public class Inspector {
 
-    private ModelInspection listener;
+    private ModelInspection modeler;
+    private ConfigurationInspection configurator;
 
     private Logger logger = LoggerFactory.getLogger(Inspector.class);
-
     private List<String> errors = new LinkedList<>();
 
     /**
@@ -62,7 +63,7 @@ public class Inspector {
 
         // phase 1: model all leaf classes
         for (Class<?> k : clazzes) {
-            Entity entity = this.listener.inspectEntity(k);
+            Entity entity = this.modeler.inspectEntity(k);
             if (entity != null) {
                 if (this.isValid(entity)) {
                     entities.add(entity);
@@ -79,7 +80,7 @@ public class Inspector {
             for (Triplet<Field, Method, Method> triplet : triplets) {
                 Class type = Reflection.typeOf(triplet);
                 if (Attribute.class.equals(type)) {
-                    Attribute attr = this.listener.inspectAttribute(triplet.a, triplet.b, triplet.c);
+                    Attribute attr = this.modeler.inspectAttribute(triplet.a, triplet.b, triplet.c);
                     if (this.isValid(attr)) {
                         entity.addAttribute(attr);
 
@@ -88,7 +89,7 @@ public class Inspector {
                     }
 
                 } else if (Relationship.class.equals(type)) {
-                    Relationship rel = this.listener.inspectRelationship(triplet.a, triplet.b, triplet.c);
+                    Relationship rel = this.modeler.inspectRelationship(triplet.a, triplet.b, triplet.c);
                     if (this.isValid(rel)) {
                         entity.addRelationship(rel);
 
@@ -117,6 +118,17 @@ public class Inspector {
         return model;
     }
 
+    /**
+     * Inspects given model for it's configuration.
+     * @param model
+     * @return configuration
+     * @throws InspectionException
+     */
+    public Configuration configuration(Model model) throws InspectionException {
+        // TODO implement configuration inspection
+        return null;
+    }
+
     protected boolean isValid(Attribute attribute) {
         // TODO check for duplicates?
         if (attribute.getName() != null) {
@@ -141,8 +153,12 @@ public class Inspector {
         return false;
     }
 
-    public void setListener(ModelInspection listener) {
-        this.listener = listener;
+    public void setModeler(ModelInspection modeler) {
+        this.modeler = modeler;
+    }
+
+    public void setConfigurator(ConfigurationInspection configurator) {
+        this.configurator = configurator;
     }
 
 }
