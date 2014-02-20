@@ -3,9 +3,6 @@ package cz.cvut.fel.adaptiverestfulapi.meta.configuration;
 
 import cz.cvut.fel.adaptiverestfulapi.meta.model.*;
 
-import java.util.Map;
-import java.util.HashMap;
-
 
 /**
  * Configuration holds metadata about the model, entities and properties.
