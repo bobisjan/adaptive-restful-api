@@ -5,7 +5,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 
-public interface InspectorListener {
+public interface ModelInspection {
 
     public Entity inspectEntity(Class clazz);
 

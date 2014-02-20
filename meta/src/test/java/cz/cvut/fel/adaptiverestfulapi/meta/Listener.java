@@ -1,15 +1,12 @@
 
 package cz.cvut.fel.adaptiverestfulapi.meta;
 
-import cz.cvut.fel.adaptiverestfulapi.meta.Entity;
-import cz.cvut.fel.adaptiverestfulapi.meta.InspectorListener;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 
 
-public class Listener implements InspectorListener {
+public class Listener implements ModelInspection {
 
     @Override
     public Entity inspectEntity(Class clazz) {

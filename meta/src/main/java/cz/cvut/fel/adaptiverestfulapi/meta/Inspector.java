@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Inspector {
 
-    private InspectorListener listener;
+    private ModelInspection listener;
 
     private Logger logger = LoggerFactory.getLogger(Inspector.class);
 
@@ -139,7 +139,7 @@ public class Inspector {
         return false;
     }
 
-    public void setListener(InspectorListener listener) {
+    public void setListener(ModelInspection listener) {
         this.listener = listener;
     }
 
