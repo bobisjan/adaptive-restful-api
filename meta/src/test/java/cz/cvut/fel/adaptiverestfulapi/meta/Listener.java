@@ -13,14 +13,14 @@ public class Listener implements ModelInspection {
 
     @Override
     public Entity entity(Class clazz) {
-        return new Entity(clazz.getSimpleName(), clazz);
+        return new Entity(clazz.getName(), clazz);
     }
 
     @Override
     public Attribute attribute(Field field, Method getter, Method setter) {
         if (field != null) {
             // TODO implement
-            return new Attribute(field.getName());
+            return new Attribute(field.getDeclaringClass().getName() + "." + field.getName());
 
         }
         // TODO virtual getter, setter
@@ -31,7 +31,7 @@ public class Listener implements ModelInspection {
     public Relationship relationship(Field field, Method getter, Method setter) {
         if (field != null) {
             // TODO implement
-            return new Relationship(field.getName());
+            return new Relationship(field.getDeclaringClass().getName() + "." + field.getName());
         }
         // TODO virtual getter, setter
         return null;

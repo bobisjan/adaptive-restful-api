@@ -28,6 +28,14 @@ public class Entity {
         return this.entityClass;
     }
 
+    public Map<String, Attribute> getAttributes() {
+        return this.attributes;
+    }
+
+    public Map<String, Relationship> getRelationships() {
+        return this.relationships;
+    }
+
     public Attribute attributeForName(String name) {
         if (name != null) {
             return this.attributes.get(name);

@@ -26,27 +26,27 @@ public interface ConfigurationInspection {
      * @param model
      * @return variables
      */
-    public List<Variable<Model>> configuration(Model model);
+    public List<Variable> configuration(Model model);
 
     /**
      * Returns configuration variables for the entity.
      * @param entity
      * @return configuration
      */
-    public List<Variable<Entity>> configuration(Entity entity);
+    public List<Variable> configuration(Entity entity);
 
     /**
      * Returns configuration variables for the attribute.
      * @param attribute
      * @return variables
      */
-    public List<Variable<Attribute>> configuration(Attribute attribute);
+    public List<Variable> configuration(Attribute attribute);
 
     /**
      * Returns configuration variables for the relationship.
      * @param relationship
      * @return variables
      */
-    public List<Variable<Relationship>> configuration(Relationship relationship);
+    public List<Variable> configuration(Relationship relationship);
 
 }
