@@ -1,6 +1,7 @@
 
 package cz.cvut.fel.adaptiverestfulapi.meta.model;
 
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -18,6 +19,8 @@ public class Entity {
     public Entity(String name, Class entityClass) {
         this.name = name;
         this.entityClass = entityClass;
+        this.attributes = new HashMap<>();
+        this.relationships = new HashMap<>();
     }
 
     public String getName() {

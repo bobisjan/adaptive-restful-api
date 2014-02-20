@@ -79,7 +79,7 @@ public class Inspector {
         for (Entity entity : entities) {
             Set<Triplet<Field, Method, Method>> triplets = Reflection.triplets(entity.getEntityClass());
             for (Triplet<Field, Method, Method> triplet : triplets) {
-                Class type = Reflection.typeOf(triplet);
+                Class type = Reflection.typeOf(triplet, entities);
                 if (Attribute.class.equals(type)) {
                     Attribute attr = this.modeler.attribute(triplet.a, triplet.b, triplet.c);
                     if (this.isValid(attr)) {

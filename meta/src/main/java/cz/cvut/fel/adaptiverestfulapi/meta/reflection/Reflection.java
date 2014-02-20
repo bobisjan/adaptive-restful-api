@@ -1,6 +1,9 @@
 
 package cz.cvut.fel.adaptiverestfulapi.meta.reflection;
 
+import cz.cvut.fel.adaptiverestfulapi.meta.model.Attribute;
+import cz.cvut.fel.adaptiverestfulapi.meta.model.Entity;
+import cz.cvut.fel.adaptiverestfulapi.meta.model.Relationship;
 import org.reflections.ReflectionUtils;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
@@ -9,13 +12,8 @@ import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.lang.reflect.*;
+import java.util.*;
 
 
 /**
@@ -126,9 +124,32 @@ public class Reflection {
      * @param triplet
      * @return type or null if it could not be resolved
      */
-    public static Class typeOf(Triplet<Field, Method, Method> triplet) {
-        // TODO discover and test appropriate implementation
-        return null;
+    public static Class typeOf(Triplet<Field, Method, Method> triplet, Set<Entity> entities) {
+        Class<?> target = null;
+
+        if (triplet.a != null) {
+            target = triplet.a.getType();
+
+            if (Collection.class.isAssignableFrom(target)) {
+                Type type = triplet.a.getGenericType();
+
+                if (type instanceof ParameterizedType) {
+                    ParameterizedType pType = (ParameterizedType)type;
+                    Type[] arr = pType.getActualTypeArguments();
+                    target = (Class<?>)arr[0];
+                }
+            }
+
+            for (Entity e : entities) {
+                if (e.getEntityClass().equals(target)) {
+                    return Relationship.class;
+                }
+            }
+        }
+
+        // TODO implement triplet.{b,c} cases
+
+        return Attribute.class;
     }
 
     /**

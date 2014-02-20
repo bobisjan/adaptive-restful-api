@@ -28,8 +28,8 @@ public class InspectorTest {
         model = inspector.model(pack, baseClass);
 
         assert (model != null) : "Model should not be null.";
-        assert (model.entityForName("Project") != null) : "Model should has entity named \"Project\".";
-        assert (model.entityForName("Issue") != null) : "Model should has entity named \"Issue\".";
+        assert (model.entityForName(pack + ".Project") != null) : "Model should has entity named \"" + pack + ".Project\".";
+        assert (model.entityForName(pack +  ".Issue") != null) : "Model should has entity named \"" + pack + ".Issue\".";
     }
 
 }
