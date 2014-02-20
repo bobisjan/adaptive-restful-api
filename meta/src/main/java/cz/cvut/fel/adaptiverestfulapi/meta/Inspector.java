@@ -1,16 +1,16 @@
 
 package cz.cvut.fel.adaptiverestfulapi.meta;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.HashSet;
+
+import cz.cvut.fel.adaptiverestfulapi.meta.reflection.Reflection;
+import cz.cvut.fel.adaptiverestfulapi.meta.reflection.Triplet;
 import org.reflections.Reflections;
-import org.reflections.scanners.ResourcesScanner;
-import org.reflections.scanners.SubTypesScanner;
-import org.reflections.util.ClasspathHelper;
-import org.reflections.util.ConfigurationBuilder;
-import org.reflections.util.FilterBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,8 +48,8 @@ public class Inspector {
             throw new InspectionException("Package name, or base class are missing.");
         }
 
-        Reflections reflections = this.reflections(pack, clazz);
-        Set<Class<?>> clazzes = this.leafs(reflections, clazz);
+        Reflections reflections = Reflection.reflections(pack, clazz);
+        Set<Class<?>> clazzes = Reflection.leafs(reflections, clazz);
 
         if (clazzes.size() == 0) {
             this.logger.warn("There are no classes in the package \"" + pack + "\"");
@@ -72,7 +72,33 @@ public class Inspector {
         }
 
         // phase 2: inspect attributes and relationships
-        // TODO implement phase 2
+        for (Entity entity : entities) {
+            Set<Triplet<Field, Method, Method>> triplets = Reflection.triplets(entity.getEntityClass());
+            for (Triplet<Field, Method, Method> triplet : triplets) {
+                Class type = Reflection.typeOf(triplet);
+                if (Attribute.class.equals(type)) {
+                    Attribute attr = this.listener.inspectAttribute(triplet.a, triplet.b, triplet.c);
+                    if (this.isValid(attr)) {
+                        entity.addAttribute(attr);
+
+                    } else {
+                        this.errors.add("Attribute for " + triplet.toString() + " in entity " + entity.getName() + " is not valid");
+                    }
+
+                } else if (Relationship.class.equals(type)) {
+                    Relationship rel = this.listener.inspectRelationship(triplet.a, triplet.b, triplet.c);
+                    if (this.isValid(rel)) {
+                        entity.addRelationship(rel);
+
+                    } else {
+                        this.errors.add("Relationship for " + triplet.toString() + " in entity " + entity.getName() + " is not valid");
+                    }
+
+                } else {
+                    this.errors.add("Could not resolve type of property " + triplet + " in entity " + entity.getName());
+                }
+            }
+        }
 
         if (!errors.isEmpty()) {
             for (String error : this.errors) {
@@ -89,31 +115,20 @@ public class Inspector {
         return model;
     }
 
-    private Reflections reflections(String pack, Class clazz) {
-        if (clazz.equals(Object.class)) {
-            // @see http://stackoverflow.com/a/9571146
-            List<ClassLoader> classLoadersList = new LinkedList<ClassLoader>();
-            classLoadersList.add(ClasspathHelper.contextClassLoader());
-            classLoadersList.add(ClasspathHelper.staticClassLoader());
-
-            return new Reflections(new ConfigurationBuilder()
-                    .setScanners(new SubTypesScanner(false), new ResourcesScanner())
-                    .setUrls(ClasspathHelper.forClassLoader(classLoadersList.toArray(new ClassLoader[0])))
-                    .filterInputsBy(new FilterBuilder().include(FilterBuilder.prefix(pack))));
+    protected boolean isValid(Attribute attribute) {
+        // TODO check for duplicates?
+        if (attribute.getName() != null) {
+            return true;
         }
-        return new Reflections(clazz);
+        return false;
     }
 
-    private Set<Class<?>> leafs(Reflections reflections, Class clazz) {
-        Set<Class<?>> all = reflections.getSubTypesOf(clazz);
-        Set<Class<?>> leafs = new HashSet<>();
-
-        for (Class<?> c : all) {
-            if (reflections.getSubTypesOf(c.getClass()).isEmpty()) {
-                leafs.add(c);
-            }
+    protected boolean isValid(Relationship relationship) {
+        // TODO check for duplicates?
+        if (relationship.getName() != null) {
+            return true;
         }
-        return leafs;
+        return false;
     }
 
     protected boolean isValid(Entity entity) {

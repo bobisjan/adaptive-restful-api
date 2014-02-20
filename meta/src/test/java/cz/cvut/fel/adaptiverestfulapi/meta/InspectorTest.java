@@ -1,16 +1,15 @@
 
 package cz.cvut.fel.adaptiverestfulapi.meta;
 
-import cz.cvut.fel.adaptiverestfulapi.meta.data.BaseClass;
+import cz.cvut.fel.adaptiverestfulapi.meta.data.Provider;
 import org.testng.annotations.Test;
-
 import java.util.HashMap;
 
 
 public class InspectorTest {
 
     @Test
-    public void testInspectWithInvalidPackage() throws Exception {
+    public void testInspectionWithInvalidPackage() throws Exception {
         Inspector inspector = new Inspector();
         inspector.setListener(new Listener());
 
@@ -21,29 +20,17 @@ public class InspectorTest {
         assert (model == null) : "Model should be null.";
     }
 
-    @Test
-    public void testInspectWithObject() throws Exception {
+    @Test(dataProvider = "packages", dataProviderClass = Provider.class)
+    public void testInspection(String pack, Class baseClass, Configuration configuration) throws Exception {
         Inspector inspector = new Inspector();
         inspector.setListener(new Listener());
 
         Model model = null;
-        Configuration configuration = new Configuration(new HashMap<String, Object>());
-        model = inspector.inspect("cz.cvut.fel.adaptiverestfulapi.meta.data", configuration);
+        model = inspector.inspect(pack, baseClass, configuration);
 
         assert (model != null) : "Model should not be null.";
-        assert (model.entityForName("Person") != null) : "Model should has entity named \"Person\".";
+        assert (model.entityForName("Project") != null) : "Model should has entity named \"Project\".";
+        assert (model.entityForName("Issue") != null) : "Model should has entity named \"Issue\".";
     }
 
-    @Test
-    public void testInspectWithBaseClass() throws Exception {
-        Inspector inspector = new Inspector();
-        inspector.setListener(new Listener());
-
-        Model model = null;
-        Configuration configuration = new Configuration(new HashMap<String, Object>());
-        model = inspector.inspect("cz.cvut.fel.adaptiverestfulapi.meta.data", BaseClass.class, configuration);
-
-        assert (model != null) : "Model should not be null.";
-        assert (model.entityForName("Person") != null) : "Model should has entity named \"Person\".";
-    }
 }
