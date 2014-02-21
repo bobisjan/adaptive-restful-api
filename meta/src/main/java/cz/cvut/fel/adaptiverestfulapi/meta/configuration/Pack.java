@@ -47,6 +47,11 @@ public class Pack implements Configuration {
      * @param parent scope
      */
     public void addConfiguration(List<Variable> variables, String scope, String parent) {
+        if (!this.data.containsKey(parent)) {
+            // TODO throw `invalid parent` exception?
+            return;
+        }
+
         Map<String, Object> map = new HashMap<>();
 
         map.put(PARENT, parent);
