@@ -17,10 +17,17 @@ public class Pack implements Configuration {
 
     private Map<String, Map<String, Object>> data;
 
+    /**
+     * Creates pack with empty global configuration
+     */
     public Pack() {
         this(new LinkedList<Variable>());
     }
 
+    /**
+     * Creates pack with global configuration.
+     * @param variables
+     */
     public Pack(List<Variable> variables) {
         this.data = new HashMap<>();
 
