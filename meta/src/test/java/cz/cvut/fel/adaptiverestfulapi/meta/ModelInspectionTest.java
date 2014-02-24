@@ -6,7 +6,7 @@ import cz.cvut.fel.adaptiverestfulapi.meta.model.Model;
 import org.testng.annotations.Test;
 
 
-public class InspectorTest {
+public class ModelInspectionTest {
 
     @Test
     public void testInspectionWithInvalidPackage() throws Exception {
