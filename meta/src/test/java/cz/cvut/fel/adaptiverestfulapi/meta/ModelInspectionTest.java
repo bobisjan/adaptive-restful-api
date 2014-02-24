@@ -11,7 +11,7 @@ public class ModelInspectionTest {
     @Test
     public void testInspectionWithInvalidPackage() throws Exception {
         Inspector inspector = new Inspector();
-        inspector.setModeler(new Listener());
+        inspector.setModeler(new TestInspectionListener());
 
         Model model = null;
         model = inspector.model("xyz");
@@ -22,7 +22,7 @@ public class ModelInspectionTest {
     @Test(dataProvider = "packages", dataProviderClass = Provider.class)
     public void testInspection(String pack, Class baseClass) throws Exception {
         Inspector inspector = new Inspector();
-        inspector.setModeler(new Listener());
+        inspector.setModeler(new TestInspectionListener());
 
         Model model = null;
         model = inspector.model(pack, baseClass);
