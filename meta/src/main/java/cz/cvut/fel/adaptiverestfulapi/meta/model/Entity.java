@@ -17,10 +17,14 @@ public class Entity {
     private Map<String, Relationship> relationships;
 
     public Entity(String name, Class entityClass) {
+        this(name, entityClass, new HashMap<String, Attribute>(), new HashMap<String, Relationship>());
+    }
+
+    public Entity(String name, Class entityClass, Map<String, Attribute> attributes, Map<String, Relationship> relationships) {
         this.name = name;
         this.entityClass = entityClass;
-        this.attributes = new HashMap<>();
-        this.relationships = new HashMap<>();
+        this.attributes = attributes;
+        this.relationships = relationships;
     }
 
     public String getName() {
@@ -51,18 +55,6 @@ public class Entity {
             return this.relationships.get(name);
         }
         return null;
-    }
-
-    public void addAttribute(Attribute attribute) {
-        if (attribute != null) {
-            this.attributes.put(attribute.getName(), attribute);
-        }
-    }
-
-    public void addRelationship(Relationship relationship) {
-        if (relationship != null) {
-            this.relationships.put(relationship.getName(), relationship);
-        }
     }
 
 }

@@ -21,12 +21,16 @@ public class ModelBuilder {
     private final String name; // name of the model
 
     private final Map<String, Entity> entities;
+    private final Map<String, Map<String, Attribute>> attributes;
+    private final Map<String, Map<String, Relationship>> relationships;
 
     private final List<String> errors;
 
     public ModelBuilder(String name) {
         this.name = name;
         this.entities = new HashMap<>();
+        this.attributes = new HashMap<>();
+        this.relationships = new HashMap<>();
         this.errors = new LinkedList<>();
     }
 
@@ -38,19 +42,21 @@ public class ModelBuilder {
         if (entity != null) {
             if (this.isValid(entity)) {
                 this.entities.put(entity.getName(), entity);
+                this.attributes.put(entity.getName(), new HashMap<String, Attribute>());
+                this.relationships.put(entity.getName(), new HashMap<String, Relationship>());
             }
         }
     }
 
     public void addAttribute(Attribute attribute, Entity entity) {
         if (this.isValid(attribute, entity)) {
-            entity.addAttribute(attribute);
+            this.attributes.get(entity.getName()).put(attribute.getName(), attribute);
         }
     }
 
     public void addRelationship(Relationship relationship, Entity entity) {
         if (this.isValid(relationship, entity)) {
-            entity.addRelationship(relationship);
+            this.relationships.get(entity.getName()).put(relationship.getName(), relationship);
         }
     }
 
@@ -108,7 +114,17 @@ public class ModelBuilder {
             }
             return null;
         }
-        return new Model(this.name, this.entities);
+
+        Map<String, Entity> entities = new HashMap<>();
+        for (Entity entity : this.entities.values()) {
+            Entity e = new Entity(entity.getName(),
+                    entity.getEntityClass(),
+                    this.attributes.get(entity.getName()),
+                    this.relationships.get(entity.getName()));
+
+            entities.put(e.getName(), e);
+        }
+        return new Model(this.name, entities);
     }
 
 }
