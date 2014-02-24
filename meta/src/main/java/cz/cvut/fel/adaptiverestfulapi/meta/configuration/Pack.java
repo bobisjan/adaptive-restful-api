@@ -40,22 +40,7 @@ public class Pack implements Configuration {
         this.data.put(GLOBAL, map);
     }
 
-    /**
-     * Add variables for scope under the global level.
-     * @param variables
-     * @param scope
-     */
-    public void addConfiguration(List<Variable> variables, String scope) {
-        this.addConfiguration(variables, scope, GLOBAL);
-    }
-
-    /**
-     * Adds variables for the scope under the parent level.
-     * @param variables
-     * @param scope
-     * @param parent scope
-     */
-    public void addConfiguration(List<Variable> variables, String scope, String parent) {
+    private void addConfiguration(List<Variable> variables, String scope, String parent) {
         if (!this.data.containsKey(parent)) {
             // TODO throw `invalid parent` exception?
             return;
@@ -69,6 +54,55 @@ public class Pack implements Configuration {
             map.put(v.key, v.value);
         }
         this.data.put(scope, map);
+    }
+
+    /**
+     * Add variables for model under the global level.
+     * @param variables
+     * @param model
+     */
+    public void addConfiguration(List<Variable> variables, Model model) {
+        this.addConfiguration(variables, model.getName(), GLOBAL);
+    }
+
+    /**
+     * Add variables for model under the parent model.
+     * @param variables
+     * @param model
+     * @param parent
+     */
+    public void addConfiguration(List<Variable> variables, Model model, Model parent) {
+        this.addConfiguration(variables, model.getName(), parent.getName());
+    }
+
+    /**
+     * Add variables for entity under the model.
+     * @param variables
+     * @param entity
+     * @param model
+     */
+    public void addConfiguration(List<Variable> variables, Entity entity, Model model) {
+        this.addConfiguration(variables, entity.getName(), model.getName());
+    }
+
+    /**
+     * Add variables for attribute under the entity.
+     * @param variables
+     * @param attribute
+     * @param entity
+     */
+    public void addConfiguration(List<Variable> variables, Attribute attribute, Entity entity) {
+        this.addConfiguration(variables, attribute.getName(), entity.getName());
+    }
+
+    /**
+     * Add variables for relationship under the entity.
+     * @param variables
+     * @param relationship
+     * @param entity
+     */
+    public void addConfiguration(List<Variable> variables, Relationship relationship, Entity entity) {
+        this.addConfiguration(variables, relationship.getName(), entity.getName());
     }
 
     private <T> T get(String key, String scope) {

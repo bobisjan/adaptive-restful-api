@@ -78,22 +78,22 @@ public class Inspector {
         Pack pack = new Pack(this.configurator.configuration());
 
         // inspect model configuration
-        pack.addConfiguration(this.configurator.configuration(model), model.getName());
+        pack.addConfiguration(this.configurator.configuration(model), model);
 
         // TODO if configuration per submodel will be needed then the implementation goes here
 
         // inspect entity configuration
         for (Entity entity : model.getEntities().values()) {
-            pack.addConfiguration(this.configurator.configuration(entity), entity.getName(), model.getName());
+            pack.addConfiguration(this.configurator.configuration(entity), entity, model);
 
             // inspect attribute configuration
             for (Attribute attribute : entity.getAttributes().values()) {
-                pack.addConfiguration(this.configurator.configuration(attribute), attribute.getName() , entity.getName());
+                pack.addConfiguration(this.configurator.configuration(attribute), attribute, entity);
             }
 
             // inspect relationship configuration
             for (Relationship relationship : entity.getRelationships().values()) {
-                pack.addConfiguration(this.configurator.configuration(relationship), relationship.getName() , entity.getName());
+                pack.addConfiguration(this.configurator.configuration(relationship), relationship, entity);
             }
         }
 
