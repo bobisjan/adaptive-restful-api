@@ -27,7 +27,6 @@ public class Inspector {
     private ConfigurationInspectionListener configurator;
 
     private Logger logger = LoggerFactory.getLogger(Inspector.class);
-    private List<String> errors = new LinkedList<>();
 
     /**
      * Inspects given package for classes that extends Object class.
@@ -57,27 +56,15 @@ public class Inspector {
             return null;
         }
 
+        ModelBuilder builder = new ModelBuilder(pack);
+
         // phase 1: model all leaf classes
-        Set<Entity> entities = this.entities(clazzes);
+        this.addEntities(builder, clazzes);
 
         // phase 2: model attributes and relationships
-        for (Entity entity : entities) {
-            this.addProperties(entity, entities);
-        }
+        this.addProperties(builder);
 
-        if (!errors.isEmpty()) {
-            for (String error : this.errors) {
-                this.logger.error(error);
-            }
-            return null;
-        }
-
-        Model model = new Model(pack);
-
-        for (Entity entity : entities) {
-            model.addEntity(entity);
-        }
-        return model;
+        return builder.build(this.logger);
     }
 
     /**
@@ -115,82 +102,41 @@ public class Inspector {
 
     /**
      * Inspects set of classes.
+     * @param builder
      * @param clazzes
-     * @return entities
      */
-    protected Set<Entity> entities(Set<Class<?>> clazzes) {
-        Set<Entity> entities = new HashSet<>();
-
+    protected void addEntities(ModelBuilder builder, Set<Class<?>> clazzes) {
         for (Class<?> clazz : clazzes) {
             Entity entity = this.modeler.entity(clazz);
-            if (entity != null) {
-                if (this.isValid(entity)) {
-                    entities.add(entity);
-
-                } else {
-                    this.errors.add("Entity for class " + clazz.getName() + " is not valid.");
-                }
-            }
+            builder.addEntity(entity);
         }
-        return entities;
     }
 
     /**
-     * Adds properties into the entity.
-     * @param entity to inspect
-     * @param entities known entities
+     * Inspects properties for entities in the builder.
+     * @param builder
      */
-    protected void addProperties(Entity entity, Set<Entity> entities) {
-        Set<Triplet<Field, Method, Method>> triplets = Reflection.triplets(entity.getEntityClass());
+    protected void addProperties(ModelBuilder builder) {
+        Set<Entity> entities = new HashSet<>(builder.getEntities().values());
 
-        for (Triplet<Field, Method, Method> triplet : triplets) {
-            Class type = Reflection.typeOf(triplet, entities);
-            if (Attribute.class.equals(type)) {
-                Attribute attr = this.modeler.attribute(triplet.a, triplet.b, triplet.c);
-                if (this.isValid(attr)) {
-                    entity.addAttribute(attr);
+        for (Entity entity : entities) {
+            Set<Triplet<Field, Method, Method>> triplets = Reflection.triplets(entity.getEntityClass());
 
-                } else {
-                    this.errors.add("Attribute for " + triplet.toString() + " in entity " + entity.getName() + " is not valid");
-                }
+            for (Triplet<Field, Method, Method> triplet : triplets) {
+                Class type = Reflection.typeOf(triplet, entities);
+                if (Attribute.class.equals(type)) {
+                    Attribute attribute = this.modeler.attribute(triplet.a, triplet.b, triplet.c);
+                    builder.addAttribute(attribute, entity);
 
-            } else if (Relationship.class.equals(type)) {
-                Relationship rel = this.modeler.relationship(triplet.a, triplet.b, triplet.c);
-                if (this.isValid(rel)) {
-                    entity.addRelationship(rel);
+                } else if (Relationship.class.equals(type)) {
+                    Relationship relationship = this.modeler.relationship(triplet.a, triplet.b, triplet.c);
+                    builder.addRelationship(relationship, entity);
 
                 } else {
-                    this.errors.add("Relationship for " + triplet.toString() + " in entity " + entity.getName() + " is not valid");
+                    builder.addError("Could not resolve type of property " + triplet + " in entity " + entity.getName());
                 }
-
-            } else {
-                this.errors.add("Could not resolve type of property " + triplet + " in entity " + entity.getName());
             }
         }
-    }
-
-    protected boolean isValid(Attribute attribute) {
-        // TODO check for duplicates?
-        if (attribute.getName() != null) {
-            return true;
-        }
-        return false;
-    }
-
-    protected boolean isValid(Relationship relationship) {
-        // TODO check for duplicates?
-        if (relationship.getName() != null) {
-            return true;
-        }
-        return false;
-    }
-
-    protected boolean isValid(Entity entity) {
-        // TODO check for duplicates?
-        if (entity.getName() != null && entity.getEntityClass() != null) {
-            return true;
-        }
-        return false;
     }
 
     public void setModeler(ModelInspectionListener modeler) {

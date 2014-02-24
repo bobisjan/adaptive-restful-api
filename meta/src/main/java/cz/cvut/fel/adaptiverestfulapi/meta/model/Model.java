@@ -11,12 +11,12 @@ import java.util.Map;
  */
 public class Model {
 
-    private String name;
-    private Map<String, Entity> entities;
+    private final String name;
+    private final Map<String, Entity> entities;
 
-    public Model(String name) {
+    public Model(String name, Map<String, Entity> entities) {
         this.name = name;
-        this.entities = new HashMap();
+        this.entities = entities;
     }
 
     public String getName() {
@@ -29,10 +29,6 @@ public class Model {
      */
     public Map<String, Entity> getEntities() {
         return Collections.unmodifiableMap(this.entities);
-    }
-
-    public void addEntity(Entity entity) {
-        this.entities.put(entity.getName(), entity);
     }
 
     public Entity entityForName(String name) {
