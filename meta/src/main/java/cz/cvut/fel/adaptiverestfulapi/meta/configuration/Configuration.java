@@ -1,8 +1,8 @@
 
 package cz.cvut.fel.adaptiverestfulapi.meta.configuration;
 
-
 import cz.cvut.fel.adaptiverestfulapi.meta.model.*;
+
 
 /**
  * Configuration holds metadata about the model, entities and properties.
