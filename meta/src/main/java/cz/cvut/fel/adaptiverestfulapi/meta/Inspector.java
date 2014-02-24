@@ -48,18 +48,10 @@ public class Inspector {
             throw new InspectionException("Package name, or base class are missing.");
         }
 
-        Reflections reflections = Reflection.reflections(pack, clazz);
-        Set<Class<?>> clazzes = Reflection.leafs(reflections, clazz);
-
-        if (clazzes.size() == 0) {
-            this.logger.warn("There are no classes in the package \"" + pack + "\"");
-            return null;
-        }
-
-        ModelBuilder builder = new ModelBuilder(pack);
+        ModelBuilder builder = new ModelBuilder(pack, clazz);
 
         // phase 1: model all leaf classes
-        this.addEntities(builder, clazzes);
+        this.addEntities(builder);
 
         // phase 2: model attributes and relationships
         this.addProperties(builder);
@@ -96,16 +88,17 @@ public class Inspector {
                 pack.addConfiguration(this.configurator.configuration(relationship), relationship, entity);
             }
         }
-
         return pack;
     }
 
     /**
-     * Inspects set of classes.
+     * Inspects classes for the builder.
      * @param builder
-     * @param clazzes
      */
-    protected void addEntities(ModelBuilder builder, Set<Class<?>> clazzes) {
+    protected void addEntities(ModelBuilder builder) {
+        Reflections reflections = Reflection.reflections(builder.getName(), builder.getBaseClass());
+        Set<Class<?>> clazzes = Reflection.leafs(reflections, builder.getBaseClass());
+
         for (Class<?> clazz : clazzes) {
             Entity entity = this.modeler.entity(clazz);
             builder.addEntity(entity);

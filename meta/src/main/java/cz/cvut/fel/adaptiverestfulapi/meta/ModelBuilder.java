@@ -19,6 +19,7 @@ import java.util.Map;
 public class ModelBuilder {
 
     private final String name; // name of the model
+    private final Class baseClass;
 
     private final Map<String, Entity> entities;
     private final Map<String, Map<String, Attribute>> attributes;
@@ -26,8 +27,9 @@ public class ModelBuilder {
 
     private final List<String> errors;
 
-    public ModelBuilder(String name) {
+    public ModelBuilder(String name, Class baseClass) {
         this.name = name;
+        this.baseClass = baseClass;
         this.entities = new HashMap<>();
         this.attributes = new HashMap<>();
         this.relationships = new HashMap<>();
@@ -36,6 +38,14 @@ public class ModelBuilder {
 
     public Map<String, Entity> getEntities() {
         return this.entities;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public Class getBaseClass() {
+        return this.baseClass;
     }
 
     public void addEntity(Entity entity) {
@@ -106,6 +116,10 @@ public class ModelBuilder {
     }
 
     public Model build(Logger logger) {
+        if (this.entities.size() == 0) {
+            this.addError("There are no entities in the model \"" + this.name + "\"");
+        }
+
         if (this.hasErrors()) {
             if (logger != null) {
                 for (String error : this.errors) {
