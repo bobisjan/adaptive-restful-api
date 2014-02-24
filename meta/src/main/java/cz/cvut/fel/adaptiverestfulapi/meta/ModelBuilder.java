@@ -133,12 +133,12 @@ public class ModelBuilder {
         for (Entity entity : this.entities.values()) {
             Entity e = new Entity(entity.getName(),
                     entity.getEntityClass(),
-                    this.attributes.get(entity.getName()),
-                    this.relationships.get(entity.getName()));
+                    this.attributes.get(entity.getName()).values(),
+                    this.relationships.get(entity.getName()).values());
 
             entities.put(e.getName(), e);
         }
-        return new Model(this.name, entities);
+        return new Model(this.name, entities.values());
     }
 
 }

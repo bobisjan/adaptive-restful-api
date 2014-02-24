@@ -1,8 +1,7 @@
 
 package cz.cvut.fel.adaptiverestfulapi.meta.model;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -17,14 +16,22 @@ public class Entity {
     private Map<String, Relationship> relationships;
 
     public Entity(String name, Class entityClass) {
-        this(name, entityClass, new HashMap<String, Attribute>(), new HashMap<String, Relationship>());
+        this(name, entityClass, new LinkedList<Attribute>(), new LinkedList<Relationship>());
     }
 
-    public Entity(String name, Class entityClass, Map<String, Attribute> attributes, Map<String, Relationship> relationships) {
+    public Entity(String name, Class entityClass, Collection<Attribute> attributes, Collection<Relationship> relationships) {
         this.name = name;
         this.entityClass = entityClass;
-        this.attributes = attributes;
-        this.relationships = relationships;
+
+        this.attributes = new HashMap<>();
+        for (Attribute attribute : attributes) {
+            this.attributes.put(attribute.getName(), attribute);
+        }
+
+        this.relationships = new HashMap<>();
+        for (Relationship relationship : relationships) {
+            this.relationships.put(relationship.getName(), relationship);
+        }
     }
 
     public String getName() {
@@ -36,11 +43,11 @@ public class Entity {
     }
 
     public Map<String, Attribute> getAttributes() {
-        return this.attributes;
+        return Collections.unmodifiableMap(this.attributes);
     }
 
     public Map<String, Relationship> getRelationships() {
-        return this.relationships;
+        return Collections.unmodifiableMap(this.relationships);
     }
 
     public Attribute attributeForName(String name) {

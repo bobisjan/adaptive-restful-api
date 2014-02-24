@@ -1,9 +1,7 @@
 
 package cz.cvut.fel.adaptiverestfulapi.meta.model;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -14,9 +12,13 @@ public class Model {
     private final String name;
     private final Map<String, Entity> entities;
 
-    public Model(String name, Map<String, Entity> entities) {
+    public Model(String name, Collection<Entity> entities) {
         this.name = name;
-        this.entities = entities;
+        this.entities = new HashMap<>();
+
+        for (Entity entity : entities) {
+            this.entities.put(entity.getName(), entity);
+        }
     }
 
     public String getName() {
