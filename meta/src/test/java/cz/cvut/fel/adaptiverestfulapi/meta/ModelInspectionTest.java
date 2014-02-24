@@ -20,9 +20,9 @@ public class ModelInspectionTest {
     }
 
     @Test(dataProvider = "packages", dataProviderClass = Provider.class)
-    public void testInspection(String pack, Class baseClass) throws Exception {
+    public void testInspection(String pack, Class baseClass, ModelInspectionListener modeler, ConfigurationInspectionListener configurator) throws Exception {
         Inspector inspector = new Inspector();
-        inspector.setModeler(new TestInspectionListener());
+        inspector.setModeler(modeler);
 
         Model model = null;
         model = inspector.model(pack, baseClass);
