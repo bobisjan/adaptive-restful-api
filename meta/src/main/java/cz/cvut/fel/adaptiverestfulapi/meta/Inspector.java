@@ -10,10 +10,7 @@ import java.util.HashSet;
 
 import cz.cvut.fel.adaptiverestfulapi.meta.configuration.Configuration;
 import cz.cvut.fel.adaptiverestfulapi.meta.configuration.Pack;
-import cz.cvut.fel.adaptiverestfulapi.meta.model.Attribute;
-import cz.cvut.fel.adaptiverestfulapi.meta.model.Entity;
-import cz.cvut.fel.adaptiverestfulapi.meta.model.Model;
-import cz.cvut.fel.adaptiverestfulapi.meta.model.Relationship;
+import cz.cvut.fel.adaptiverestfulapi.meta.model.*;
 import cz.cvut.fel.adaptiverestfulapi.meta.reflection.Reflection;
 import cz.cvut.fel.adaptiverestfulapi.meta.reflection.Triplet;
 import org.reflections.Reflections;
@@ -60,48 +57,12 @@ public class Inspector {
             return null;
         }
 
-        Set<Entity> entities = new HashSet<>();
-
         // phase 1: model all leaf classes
-        for (Class<?> k : clazzes) {
-            Entity entity = this.modeler.entity(k);
-            if (entity != null) {
-                if (this.isValid(entity)) {
-                    entities.add(entity);
-
-                } else {
-                    this.errors.add("Entity for class " + k.getName() + " is not valid.");
-                }
-            }
-        }
+        Set<Entity> entities = this.entities(clazzes);
 
         // phase 2: model attributes and relationships
         for (Entity entity : entities) {
-            Set<Triplet<Field, Method, Method>> triplets = Reflection.triplets(entity.getEntityClass());
-            for (Triplet<Field, Method, Method> triplet : triplets) {
-                Class type = Reflection.typeOf(triplet, entities);
-                if (Attribute.class.equals(type)) {
-                    Attribute attr = this.modeler.attribute(triplet.a, triplet.b, triplet.c);
-                    if (this.isValid(attr)) {
-                        entity.addAttribute(attr);
-
-                    } else {
-                        this.errors.add("Attribute for " + triplet.toString() + " in entity " + entity.getName() + " is not valid");
-                    }
-
-                } else if (Relationship.class.equals(type)) {
-                    Relationship rel = this.modeler.relationship(triplet.a, triplet.b, triplet.c);
-                    if (this.isValid(rel)) {
-                        entity.addRelationship(rel);
-
-                    } else {
-                        this.errors.add("Relationship for " + triplet.toString() + " in entity " + entity.getName() + " is not valid");
-                    }
-
-                } else {
-                    this.errors.add("Could not resolve type of property " + triplet + " in entity " + entity.getName());
-                }
-            }
+            this.addProperties(entity, entities);
         }
 
         if (!errors.isEmpty()) {
@@ -150,6 +111,62 @@ public class Inspector {
         }
 
         return pack;
+    }
+
+    /**
+     * Inspects set of classes.
+     * @param clazzes
+     * @return entities
+     */
+    protected Set<Entity> entities(Set<Class<?>> clazzes) {
+        Set<Entity> entities = new HashSet<>();
+
+        for (Class<?> clazz : clazzes) {
+            Entity entity = this.modeler.entity(clazz);
+            if (entity != null) {
+                if (this.isValid(entity)) {
+                    entities.add(entity);
+
+                } else {
+                    this.errors.add("Entity for class " + clazz.getName() + " is not valid.");
+                }
+            }
+        }
+        return entities;
+    }
+
+    /**
+     * Adds properties into the entity.
+     * @param entity to inspect
+     * @param entities known entities
+     */
+    protected void addProperties(Entity entity, Set<Entity> entities) {
+        Set<Triplet<Field, Method, Method>> triplets = Reflection.triplets(entity.getEntityClass());
+
+        for (Triplet<Field, Method, Method> triplet : triplets) {
+            Class type = Reflection.typeOf(triplet, entities);
+            if (Attribute.class.equals(type)) {
+                Attribute attr = this.modeler.attribute(triplet.a, triplet.b, triplet.c);
+                if (this.isValid(attr)) {
+                    entity.addAttribute(attr);
+
+                } else {
+                    this.errors.add("Attribute for " + triplet.toString() + " in entity " + entity.getName() + " is not valid");
+                }
+
+            } else if (Relationship.class.equals(type)) {
+                Relationship rel = this.modeler.relationship(triplet.a, triplet.b, triplet.c);
+                if (this.isValid(rel)) {
+                    entity.addRelationship(rel);
+
+                } else {
+                    this.errors.add("Relationship for " + triplet.toString() + " in entity " + entity.getName() + " is not valid");
+                }
+
+            } else {
+                this.errors.add("Could not resolve type of property " + triplet + " in entity " + entity.getName());
+            }
+        }
     }
 
     protected boolean isValid(Attribute attribute) {
