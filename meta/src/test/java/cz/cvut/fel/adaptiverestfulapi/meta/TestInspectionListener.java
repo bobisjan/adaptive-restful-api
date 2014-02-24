@@ -21,7 +21,7 @@ public class TestInspectionListener implements ModelInspectionListener, Configur
     public Attribute attribute(Field field, Method getter, Method setter) {
         if (field != null) {
             // TODO implement
-            return new Attribute(field.getDeclaringClass().getName() + "." + field.getName());
+            return new Attribute(field.getDeclaringClass().getName() + "." + field.getName(), getter, setter);
 
         }
         // TODO virtual getter, setter
@@ -32,7 +32,7 @@ public class TestInspectionListener implements ModelInspectionListener, Configur
     public Relationship relationship(Field field, Method getter, Method setter) {
         if (field != null) {
             // TODO implement
-            return new Relationship(field.getDeclaringClass().getName() + "." + field.getName());
+            return new Relationship(field.getDeclaringClass().getName() + "." + field.getName(), getter, setter);
         }
         // TODO virtual getter, setter
         return null;
