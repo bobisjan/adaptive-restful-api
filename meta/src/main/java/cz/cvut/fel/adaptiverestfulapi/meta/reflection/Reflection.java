@@ -152,6 +152,34 @@ public class Reflection {
         return Attribute.class;
     }
 
+    public static Entity targetEntity(Triplet<Field, Method, Method> triplet, Set<Entity> entities) {
+        Class<?> target = null;
+
+        if (triplet.a != null) {
+            target = triplet.a.getType();
+
+            if (Collection.class.isAssignableFrom(target)) {
+                Type type = triplet.a.getGenericType();
+
+                if (type instanceof ParameterizedType) {
+                    ParameterizedType pType = (ParameterizedType)type;
+                    Type[] arr = pType.getActualTypeArguments();
+                    target = (Class<?>)arr[0];
+                }
+            }
+
+            for (Entity e : entities) {
+                if (e.getEntityClass().equals(target)) {
+                    return e;
+                }
+            }
+        }
+
+        // TODO implement triplet.{b,c} cases
+
+        return null;
+    }
+
     /**
      * Returns all fields in the class.
      * @param clazz

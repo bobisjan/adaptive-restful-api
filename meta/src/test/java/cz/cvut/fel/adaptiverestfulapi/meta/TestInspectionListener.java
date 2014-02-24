@@ -29,10 +29,10 @@ public class TestInspectionListener implements ModelInspectionListener, Configur
     }
 
     @Override
-    public Relationship relationship(Field field, Method getter, Method setter) {
+    public Relationship relationship(Field field, Method getter, Method setter, Entity targetEntity) {
         if (field != null) {
             // TODO implement
-            return new Relationship(field.getDeclaringClass().getName() + "." + field.getName(), getter, setter);
+            return new Relationship(field.getDeclaringClass().getName() + "." + field.getName(), getter, setter, targetEntity);
         }
         // TODO virtual getter, setter
         return null;

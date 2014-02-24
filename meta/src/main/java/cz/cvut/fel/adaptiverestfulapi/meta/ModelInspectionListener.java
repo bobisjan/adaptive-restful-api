@@ -15,6 +15,6 @@ public interface ModelInspectionListener {
 
     public Attribute attribute(Field field, Method getter, Method setter);
 
-    public Relationship relationship(Field field, Method getter, Method setter);
+    public Relationship relationship(Field field, Method getter, Method setter, Entity targetEntity);
 
 }
