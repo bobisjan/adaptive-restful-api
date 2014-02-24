@@ -1,6 +1,8 @@
 
 package cz.cvut.fel.adaptiverestfulapi.meta.configuration;
 
+import cz.cvut.fel.adaptiverestfulapi.meta.model.*;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -69,8 +71,7 @@ public class Pack implements Configuration {
         this.data.put(scope, map);
     }
 
-    @Override
-    public <T> T get(String key, String scope) {
+    private <T> T get(String key, String scope) {
         if (!this.data.containsKey(scope)) {
             // TODO throw `invalid scope` exception?
             return null;
@@ -90,6 +91,31 @@ public class Pack implements Configuration {
 
         // TODO throw `not found` exception?
         return null;
+    }
+
+    @Override
+    public <T> T get(String key) {
+        return this.get(key, GLOBAL);
+    }
+
+    @Override
+    public <T> T get(String key, Model model) {
+        return this.get(key, model.getName());
+    }
+
+    @Override
+    public <T> T get(String key, Entity entity) {
+        return this.get(key, entity.getName());
+    }
+
+    @Override
+    public <T> T get(String key, Attribute attribute) {
+        return this.get(key, attribute.getName());
+    }
+
+    @Override
+    public <T> T get(String key, Relationship relationship) {
+        return this.get(key, relationship.getName());
     }
 
 }
