@@ -7,7 +7,12 @@ package cz.cvut.fel.adaptiverestfulapi.meta.configuration;
  */
 public class Variable {
 
-    public String key;
-    public Object value;
+    public final String key;
+    public final Object value;
+
+    public Variable(String key, Object value) {
+        this.key = key;
+        this.value = value;
+    }
 
 }
