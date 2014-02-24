@@ -23,8 +23,8 @@ import org.slf4j.LoggerFactory;
  */
 public class Inspector {
 
-    private ModelInspection modeler;
-    private ConfigurationInspection configurator;
+    private ModelInspectionListener modeler;
+    private ConfigurationInspectionListener configurator;
 
     private Logger logger = LoggerFactory.getLogger(Inspector.class);
     private List<String> errors = new LinkedList<>();
@@ -193,11 +193,11 @@ public class Inspector {
         return false;
     }
 
-    public void setModeler(ModelInspection modeler) {
+    public void setModeler(ModelInspectionListener modeler) {
         this.modeler = modeler;
     }
 
-    public void setConfigurator(ConfigurationInspection configurator) {
+    public void setConfigurator(ConfigurationInspectionListener configurator) {
         this.configurator = configurator;
     }
 

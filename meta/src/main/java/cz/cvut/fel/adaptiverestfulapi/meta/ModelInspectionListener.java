@@ -9,7 +9,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 
-public interface ModelInspection {
+public interface ModelInspectionListener {
 
     public Entity entity(Class clazz);
 

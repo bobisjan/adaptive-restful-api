@@ -9,7 +9,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 
-public class Listener implements ModelInspection {
+public class Listener implements ModelInspectionListener {
 
     @Override
     public Entity entity(Class clazz) {

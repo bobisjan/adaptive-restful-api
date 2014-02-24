@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Allows to provide configuration from different scopes.
  */
-public interface ConfigurationInspection {
+public interface ConfigurationInspectionListener {
 
     /**
      * Returns global configuration variables.
