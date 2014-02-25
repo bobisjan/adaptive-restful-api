@@ -95,7 +95,7 @@ public class ModelBuilder {
         boolean valid = true;
 
         if (attribute.getName() == null || attribute.getName().isEmpty()) {
-            this.addError("Entity " + entity.getName() + " : Attribute name " + attribute.getName() + " is not valid.");
+            this.addError("Attribute name " + attribute.getName() + " is not valid on entity " + entity.getName() + ".");
             valid = false;
         }
         // TODO check for duplicates?
@@ -106,7 +106,11 @@ public class ModelBuilder {
         boolean valid = true;
 
         if (relationship.getName() == null || relationship.getName().isEmpty()) {
-            this.addError("Entity " + entity.getName() + "Relationship name " + relationship.getName() + " is not valid.");
+            this.addError("Relationship name " + relationship.getName() + " is not valid on entity " + entity.getName() + ".");
+            valid = false;
+        }
+        if (!this.entities.containsKey(relationship.getTargetEntity())) {
+            this.addError("Relationship " + relationship.getName() + " has invalid target entity named " + relationship.getTargetEntity());
             valid = false;
         }
         // TODO check for duplicates?
