@@ -45,27 +45,41 @@ public class TestInspectionListener implements ModelInspectionListener, Configur
 
     @Override
     public List<Variable> configuration() {
-        return new LinkedList<>();
+        List<Variable> variables = new LinkedList<>();
+        variables.add(new Variable("Serialization", "JSON"));
+        return variables;
     }
 
     @Override
     public List<Variable> configuration(Model model) {
-        return new LinkedList<>();
+        List<Variable> variables = new LinkedList<>();
+
+        variables.add(new Variable("ABC", "a"));
+        return variables;
     }
 
     @Override
     public List<Variable> configuration(Entity entity) {
-        return new LinkedList<>();
+        List<Variable> variables = new LinkedList<>();
+
+        return variables;
     }
 
     @Override
     public List<Variable> configuration(Attribute attribute) {
-        return new LinkedList<>();
+        List<Variable> variables = new LinkedList<>();
+
+        if (attribute.getName().endsWith("description")) {
+            variables.add(new Variable("ABC", "z"));
+        }
+        return variables;
     }
 
     @Override
     public List<Variable> configuration(Relationship relationship) {
-        return new LinkedList<>();
+        List<Variable> variables = new LinkedList<>();
+
+        return variables;
     }
 
 }
