@@ -4,10 +4,7 @@ package cz.cvut.fel.adaptiverestfulapi.meta;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.*;
 import org.slf4j.Logger;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -33,8 +30,8 @@ public class ModelBuilder {
         this.errors = new LinkedList<>();
     }
 
-    public Map<String, Entity> getEntities() {
-        return this.entities;
+    public Set<Entity> getEntities() {
+        return new HashSet<>(this.entities.values());
     }
 
     public String getName() {
@@ -64,13 +61,13 @@ public class ModelBuilder {
         }
     }
 
-    public void addAttribute(Attribute attribute, Entity entity) {
+    protected void addAttribute(Attribute attribute, Entity entity) {
         if (this.isValid(attribute, entity)) {
             this.attributes.get(entity.getName()).put(attribute.getName(), attribute);
         }
     }
 
-    public void addRelationship(Relationship relationship, Entity entity) {
+    protected void addRelationship(Relationship relationship, Entity entity) {
         if (this.isValid(relationship, entity)) {
             this.relationships.get(entity.getName()).put(relationship.getName(), relationship);
         }

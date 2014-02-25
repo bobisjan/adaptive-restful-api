@@ -107,9 +107,7 @@ public class Inspector {
      * @param builder
      */
     protected void addProperties(ModelBuilder builder, Reflection reflection) {
-        Set<Entity> entities = new HashSet<>(builder.getEntities().values());
-
-        for (Entity entity : entities) {
+        for (Entity entity : builder.getEntities()) {
             Set<Triplet<Field, Method, Method>> triplets = reflection.triplets(entity.getEntityClass());
 
             for (Triplet<Field, Method, Method> triplet : triplets) {
