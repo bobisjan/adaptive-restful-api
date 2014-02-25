@@ -4,7 +4,6 @@ package cz.cvut.fel.adaptiverestfulapi.meta;
 import cz.cvut.fel.adaptiverestfulapi.meta.data.Provider;
 import cz.cvut.fel.adaptiverestfulapi.meta.reflection.Reflection;
 import cz.cvut.fel.adaptiverestfulapi.meta.reflection.Triplet;
-import org.reflections.Reflections;
 import org.testng.annotations.Test;
 
 import java.lang.reflect.Field;
@@ -19,11 +18,11 @@ public class RelationshipTest {
 
     @Test(dataProvider = "packages", dataProviderClass = Provider.class)
     public void testToOneCanBeInstantiated(String pack, Class baseClass) throws Exception {
-        Reflections reflections = Reflection.reflections(pack, baseClass);
-        Set<Class<?>> leafs = Reflection.leafs(reflections, baseClass);
+        Reflection reflection = new Reflection(pack, baseClass);
+        Set<Class<?>> leafs = reflection.leafs(baseClass);
 
         for (Class<?> clazz : leafs) {
-            Set<Triplet<Field, Method, Method>> triplets = Reflection.triplets(clazz);
+            Set<Triplet<Field, Method, Method>> triplets = reflection.triplets(clazz);
             for (Triplet<Field, Method, Method> triplet : triplets) {
                 Class<?> targetClass = null;
 
@@ -57,11 +56,11 @@ public class RelationshipTest {
 
     @Test(dataProvider = "packages", dataProviderClass = Provider.class)
     public void testToManyCanBeInstantiated(String pack, Class baseClass) throws Exception {
-        Reflections reflections = Reflection.reflections(pack, baseClass);
-        Set<Class<?>> leafs = Reflection.leafs(reflections, baseClass);
+        Reflection reflection = new Reflection(pack, baseClass);
+        Set<Class<?>> leafs = reflection.leafs(baseClass);
 
         for (Class<?> clazz : leafs) {
-            Set<Triplet<Field, Method, Method>> triplets = Reflection.triplets(clazz);
+            Set<Triplet<Field, Method, Method>> triplets = reflection.triplets(clazz);
             for (Triplet<Field, Method, Method> triplet : triplets) {
                 Class<?> targetClass = null;
 

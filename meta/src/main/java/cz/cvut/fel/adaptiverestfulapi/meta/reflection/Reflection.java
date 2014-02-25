@@ -21,35 +21,38 @@ import java.util.*;
  */
 public class Reflection {
 
+    private final Reflections reflections;
+
     /**
-     * Creates reflections for package and base class.
-     * @param pack package
-     * @param clazz base class
-     * @return reflections
+     * Creates reflection for package and base class.
+     * @param pack
+     * @param clazz
      */
-    public static Reflections reflections(String pack, Class clazz) {
+    public Reflection(String pack, Class clazz) {
         if (clazz.equals(Object.class)) {
             // @see http://stackoverflow.com/a/9571146
             List<ClassLoader> classLoadersList = new LinkedList<ClassLoader>();
             classLoadersList.add(ClasspathHelper.contextClassLoader());
             classLoadersList.add(ClasspathHelper.staticClassLoader());
 
-            return new Reflections(new ConfigurationBuilder()
+            this.reflections = new Reflections(new ConfigurationBuilder()
                     .setScanners(new SubTypesScanner(false), new ResourcesScanner())
                     .setUrls(ClasspathHelper.forClassLoader(classLoadersList.toArray(new ClassLoader[0])))
                     .filterInputsBy(new FilterBuilder().include(FilterBuilder.prefix(pack))));
+
+        } else {
+            this.reflections = new Reflections(clazz);
         }
-        return new Reflections(clazz);
     }
 
+
     /**
-     * Finds all leaf classes of the base class in the reflections
-     * @param reflections
+     * Finds all leaf classes of the base class.
      * @param clazz base class
      * @return set of leaf classes
      */
-    public static Set<Class<?>> leafs(Reflections reflections, Class clazz) {
-        Set<Class<?>> all = reflections.getSubTypesOf(clazz);
+    public Set<Class<?>> leafs(Class clazz) {
+        Set<Class<?>> all = this.reflections.getSubTypesOf(clazz);
         Set<Class<?>> leafs = new HashSet<>();
 
         for (Class<?> c : all) {
@@ -68,7 +71,7 @@ public class Reflection {
      * @param clazz
      * @return set of triplets
      */
-    public static Set<Triplet<Field, Method, Method>> triplets(Class clazz) {
+    public Set<Triplet<Field, Method, Method>> triplets(Class clazz) {
         Set<Triplet<Field, Method, Method>> triplets = new HashSet<>();
 
         Set<Field> fields = Reflection.fields(clazz);
@@ -121,7 +124,7 @@ public class Reflection {
      * @param clazz
      * @return set of fields
      */
-    public static Set<Field> fields(Class clazz) {
+    private static Set<Field> fields(Class clazz) {
         Set<Field> fields = new HashSet<>();
 
         fields.addAll(ReflectionUtils.getAllFields(clazz));
@@ -134,7 +137,7 @@ public class Reflection {
      * @param getters
      * @return getter
      */
-    public static Method getter(Field field, Set<Method> getters) {
+    private static Method getter(Field field, Set<Method> getters) {
         return getter(field.getName(), getters);
     }
 
@@ -144,7 +147,7 @@ public class Reflection {
      * @param getters
      * @return getter
      */
-    public static Method getter(Method setter, Set<Method> getters) {
+    private static Method getter(Method setter, Set<Method> getters) {
         return getter(setter.getName().substring(3), getters);
     }
 
@@ -154,7 +157,7 @@ public class Reflection {
      * @param getters
      * @return getter
      */
-    public static Method getter(String name, Set<Method> getters) {
+    private static Method getter(String name, Set<Method> getters) {
         for (Method getter : getters) {
             if (getter.getName().equalsIgnoreCase("is" + name.toUpperCase())
                     || getter.getName().equalsIgnoreCase("get" + name.toUpperCase())) {
@@ -170,7 +173,7 @@ public class Reflection {
      * @param setters
      * @return setter
      */
-    public static Method setter(Field field, Set<Method> setters) {
+    private static Method setter(Field field, Set<Method> setters) {
         for (Method setter : setters) {
             if (setter.getName().equalsIgnoreCase("set" + field.getName().toUpperCase())) {
                 return setter;
@@ -184,7 +187,7 @@ public class Reflection {
      * @param clazz
      * @return set of getters
      */
-    public static Set<Method> getters(Class clazz) {
+    private static Set<Method> getters(Class clazz) {
         Set<Method> getters = new HashSet<>();
 
         getters.addAll(ReflectionUtils.getAllMethods(clazz,
@@ -203,7 +206,7 @@ public class Reflection {
      * @param clazz
      * @return set of setters
      */
-    public static Set<Method> setters(Class clazz) {
+    private static Set<Method> setters(Class clazz) {
         Set<Method> setters = new HashSet<>();
 
         setters.addAll(ReflectionUtils.getAllMethods(clazz,

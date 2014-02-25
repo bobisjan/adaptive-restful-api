@@ -3,8 +3,6 @@ package cz.cvut.fel.adaptiverestfulapi.meta;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.List;
-import java.util.LinkedList;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -13,7 +11,6 @@ import cz.cvut.fel.adaptiverestfulapi.meta.configuration.Pack;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.*;
 import cz.cvut.fel.adaptiverestfulapi.meta.reflection.Reflection;
 import cz.cvut.fel.adaptiverestfulapi.meta.reflection.Triplet;
-import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,12 +46,13 @@ public class Inspector {
         }
 
         ModelBuilder builder = new ModelBuilder(pack, clazz);
+        Reflection reflection = new Reflection(builder.getName(), builder.getBaseClass());
 
         // phase 1: model all leaf classes
-        this.addEntities(builder);
+        this.addEntities(builder, reflection);
 
         // phase 2: model attributes and relationships
-        this.addProperties(builder);
+        this.addProperties(builder, reflection);
 
         return builder.build(this.logger);
     }
@@ -95,9 +93,8 @@ public class Inspector {
      * Inspects classes for the builder.
      * @param builder
      */
-    protected void addEntities(ModelBuilder builder) {
-        Reflections reflections = Reflection.reflections(builder.getName(), builder.getBaseClass());
-        Set<Class<?>> clazzes = Reflection.leafs(reflections, builder.getBaseClass());
+    protected void addEntities(ModelBuilder builder, Reflection reflection) {
+        Set<Class<?>> clazzes = reflection.leafs(builder.getBaseClass());
 
         for (Class<?> clazz : clazzes) {
             Entity entity = this.modeler.entity(clazz);
@@ -109,11 +106,11 @@ public class Inspector {
      * Inspects properties for entities in the builder.
      * @param builder
      */
-    protected void addProperties(ModelBuilder builder) {
+    protected void addProperties(ModelBuilder builder, Reflection reflection) {
         Set<Entity> entities = new HashSet<>(builder.getEntities().values());
 
         for (Entity entity : entities) {
-            Set<Triplet<Field, Method, Method>> triplets = Reflection.triplets(entity.getEntityClass());
+            Set<Triplet<Field, Method, Method>> triplets = reflection.triplets(entity.getEntityClass());
 
             for (Triplet<Field, Method, Method> triplet : triplets) {
                 Property property = this.modeler.property(triplet.a, triplet.b, triplet.c);
