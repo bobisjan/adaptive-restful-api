@@ -122,7 +122,8 @@ public class Inspector {
                     builder.addAttribute(attribute, entity);
 
                 } else if (Relationship.class.equals(type)) {
-                    Relationship relationship = this.modeler.relationship(triplet.a, triplet.b, triplet.c);
+                    Entity targetEntity = Reflection.targetEntity(triplet, entities);
+                    Relationship relationship = this.modeler.relationship(triplet.a, triplet.b, triplet.c, targetEntity);
                     builder.addRelationship(relationship, entity);
 
                 } else {

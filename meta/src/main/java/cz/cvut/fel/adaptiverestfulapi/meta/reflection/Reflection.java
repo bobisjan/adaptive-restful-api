@@ -119,12 +119,7 @@ public class Reflection {
         return triplets;
     }
 
-    /**
-     * Resolves type `Attribute.class` or `Relationship.class` of a triplet.
-     * @param triplet
-     * @return type or null if it could not be resolved
-     */
-    public static Class typeOf(Triplet<Field, Method, Method> triplet, Set<Entity> entities) {
+    private static Class<?> targetClass(Triplet<Field, Method, Method> triplet) {
         Class<?> target = null;
 
         if (triplet.a != null) {
@@ -140,16 +135,74 @@ public class Reflection {
                 }
             }
 
-            for (Entity e : entities) {
-                if (e.getEntityClass().equals(target)) {
-                    return Relationship.class;
+        } else if (triplet.b != null) {
+            target = triplet.b.getReturnType();
+
+            if (Collection.class.isAssignableFrom(target)) {
+                Type type = triplet.b.getGenericReturnType();
+
+                if (type instanceof ParameterizedType) {
+                    ParameterizedType pType = (ParameterizedType)type;
+                    Type[] arr = pType.getActualTypeArguments();
+                    target = (Class<?>)arr[0];
+                }
+            }
+
+        } else if (triplet.c != null) {
+            target = triplet.c.getParameterTypes()[0];
+
+            if (Collection.class.isAssignableFrom(target)) {
+                Type type = triplet.c.getGenericParameterTypes()[0];
+
+                if (type instanceof ParameterizedType) {
+                    ParameterizedType pType = (ParameterizedType)type;
+                    Type[] arr = pType.getActualTypeArguments();
+                    target = (Class<?>)arr[0];
                 }
             }
         }
+        return target;
+    }
 
-        // TODO implement triplet.{b,c} cases
+    /**
+     * Resolves type `Attribute.class` or `Relationship.class` of a triplet.
+     * @param triplet
+     * @return type or null if it could not be resolved
+     */
+    public static Class typeOf(Triplet<Field, Method, Method> triplet, Set<Entity> entities) {
+        Class<?> target = targetClass(triplet);
 
+        if (target == null) {
+            return null;
+        }
+
+        for (Entity e : entities) {
+            if (e.getEntityClass().equals(target)) {
+                return Relationship.class;
+            }
+        }
         return Attribute.class;
+    }
+
+    /**
+     * Resolve target entity from triplet.
+     * @param triplet
+     * @param entities
+     * @return
+     */
+    public static Entity targetEntity(Triplet<Field, Method, Method> triplet, Set<Entity> entities) {
+        Class<?> target = targetClass(triplet);
+
+        if (target == null) {
+            return null;
+        }
+
+        for (Entity entity : entities) {
+            if (entity.getEntityClass().equals(target)) {
+                return entity;
+            }
+        }
+        return null;
     }
 
     /**
