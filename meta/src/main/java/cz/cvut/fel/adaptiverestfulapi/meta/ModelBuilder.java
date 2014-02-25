@@ -91,6 +91,8 @@ public class ModelBuilder {
     protected boolean isValid(Attribute attribute, Entity entity) {
         boolean valid = true;
 
+        valid = this.isValid(entity);
+
         if (attribute.getName() == null || attribute.getName().isEmpty()) {
             this.addError("Attribute name " + attribute.getName() + " is not valid on entity " + entity.getName() + ".");
             valid = false;
@@ -101,6 +103,8 @@ public class ModelBuilder {
 
     protected boolean isValid(Relationship relationship, Entity entity) {
         boolean valid = true;
+
+        valid = this.isValid(entity);
 
         if (relationship.getName() == null || relationship.getName().isEmpty()) {
             this.addError("Relationship name " + relationship.getName() + " is not valid on entity " + entity.getName() + ".");
