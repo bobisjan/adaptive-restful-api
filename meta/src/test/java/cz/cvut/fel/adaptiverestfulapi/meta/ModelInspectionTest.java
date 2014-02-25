@@ -33,7 +33,7 @@ public class ModelInspectionTest {
         Entity expected = null;
 
         expected = model.entityForName(pack + ".Project");
-        assert (expected != null) : "Model should has entity named `Project`.";
+        assert (expected != null) : "Model should have entity named `Project`.";
         assert (expected.attributeForName(expected.getName() + ".name") != null) : "Entity `Project` should have attribute `name`.";
         assert (expected.attributeForName(expected.getName() + ".lowerCasedName") != null) : "Entity `Project` should have `setter only` attribute `lowerCasedName`.";
         assert (expected.attributeForName(expected.getName() + ".startedAt") != null) : "Entity `Project` should have attribute `startedAt`.";
@@ -41,7 +41,7 @@ public class ModelInspectionTest {
         assert (expected.relationshipForName(expected.getName() + ".issues") != null) : "Entity `Project` should have relationship `issues`.";
 
         expected = model.entityForName(pack +  ".Issue");
-        assert (expected != null) : "Model should has entity named `Issue`.";
+        assert (expected != null) : "Model should have entity named `Issue`.";
         assert (expected.attributeForName(expected.getName() + ".description") != null) : "Entity `Issue` should have attribute `description`.";
         assert (expected.attributeForName(expected.getName() + ".localizedDescription") != null) : "Entity `Issue` should have `getter only` attribute `localizedDescription`.";
         assert (expected.relationshipForName(expected.getName() + ".project") != null) : "Entity `Issue` should have relationship `project`.";
