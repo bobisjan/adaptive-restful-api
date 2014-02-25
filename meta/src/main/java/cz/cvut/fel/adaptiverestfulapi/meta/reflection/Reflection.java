@@ -56,7 +56,7 @@ public class Reflection {
         Set<Class<?>> leafs = new HashSet<>();
 
         for (Class<?> c : all) {
-            if (reflections.getSubTypesOf(c.getClass()).isEmpty()) {
+            if (this.reflections.getSubTypesOf(c).isEmpty()) {
                 leafs.add(c);
             }
         }
