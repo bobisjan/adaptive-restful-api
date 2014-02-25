@@ -9,8 +9,8 @@ public class DummyTestServlet extends FilteredServlet {
     public DummyTestServlet() {
         this.chain = new Filter() {
             @Override
-            public void process(HttpContext httpContext) {
-
+            public HttpContext process(HttpContext httpContext) {
+                return httpContext;
             }
         };
     }
