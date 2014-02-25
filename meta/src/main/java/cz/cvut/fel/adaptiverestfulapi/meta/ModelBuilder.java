@@ -1,10 +1,7 @@
 
 package cz.cvut.fel.adaptiverestfulapi.meta;
 
-import cz.cvut.fel.adaptiverestfulapi.meta.model.Attribute;
-import cz.cvut.fel.adaptiverestfulapi.meta.model.Entity;
-import cz.cvut.fel.adaptiverestfulapi.meta.model.Model;
-import cz.cvut.fel.adaptiverestfulapi.meta.model.Relationship;
+import cz.cvut.fel.adaptiverestfulapi.meta.model.*;
 import org.slf4j.Logger;
 
 import java.util.HashMap;
@@ -55,6 +52,15 @@ public class ModelBuilder {
                 this.attributes.put(entity.getName(), new HashMap<String, Attribute>());
                 this.relationships.put(entity.getName(), new HashMap<String, Relationship>());
             }
+        }
+    }
+
+    public void addProperty(Property property, Entity entity) {
+        if (property instanceof Attribute) {
+            this.addAttribute((Attribute)property, entity);
+
+        } else if (property instanceof Relationship) {
+            this.addRelationship((Relationship)property, entity);
         }
     }
 

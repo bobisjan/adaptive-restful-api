@@ -9,14 +9,14 @@ import java.lang.reflect.Method;
  */
 public class Relationship extends Property {
 
-    private final Entity targetEntity;
+    private final String targetEntity;
 
-    public Relationship(String name, Method getter, Method setter, Entity targetEntity) {
+    public Relationship(String name, Method getter, Method setter, String targetEntity) {
         super(name, getter, setter);
         this.targetEntity = targetEntity;
     }
 
-    public Entity getTargetEntity() {
+    public String getTargetEntity() {
         return this.targetEntity;
     }
 

@@ -18,8 +18,19 @@ public class TestInspectionListener implements ModelInspectionListener, Configur
     }
 
     @Override
-    public Attribute attribute(Field field, Method getter, Method setter) {
+    public Property property(Field field, Method getter, Method setter) {
         if (field != null) {
+            if (field.getName().equalsIgnoreCase("description")
+                    || field.getName().equalsIgnoreCase("name")) {
+                return new Attribute(this.propertyName(field), getter, setter);
+
+            } else if (field.getName().equalsIgnoreCase("project")) {
+                return new Relationship(this.propertyName(field), getter, setter, field.getDeclaringClass().getPackage().getName() + ".Project");
+
+            } else if (field.getName().equalsIgnoreCase("issues")) {
+                return new Relationship(this.propertyName(field), getter, setter, field.getDeclaringClass().getPackage().getName() + ".Issue");
+            }
+
             // TODO implement
             return new Attribute(field.getDeclaringClass().getName() + "." + field.getName(), getter, setter);
 
@@ -28,14 +39,8 @@ public class TestInspectionListener implements ModelInspectionListener, Configur
         return null;
     }
 
-    @Override
-    public Relationship relationship(Field field, Method getter, Method setter, Entity targetEntity) {
-        if (field != null) {
-            // TODO implement
-            return new Relationship(field.getDeclaringClass().getName() + "." + field.getName(), getter, setter, targetEntity);
-        }
-        // TODO virtual getter, setter
-        return null;
+    private String propertyName(Field field) {
+        return field.getDeclaringClass().getName() + "." + field.getName();
     }
 
     @Override

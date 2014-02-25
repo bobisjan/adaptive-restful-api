@@ -116,19 +116,8 @@ public class Inspector {
             Set<Triplet<Field, Method, Method>> triplets = Reflection.triplets(entity.getEntityClass());
 
             for (Triplet<Field, Method, Method> triplet : triplets) {
-                Class type = Reflection.typeOf(triplet, entities);
-                if (Attribute.class.equals(type)) {
-                    Attribute attribute = this.modeler.attribute(triplet.a, triplet.b, triplet.c);
-                    builder.addAttribute(attribute, entity);
-
-                } else if (Relationship.class.equals(type)) {
-                    Entity targetEntity = Reflection.targetEntity(triplet, entities);
-                    Relationship relationship = this.modeler.relationship(triplet.a, triplet.b, triplet.c, targetEntity);
-                    builder.addRelationship(relationship, entity);
-
-                } else {
-                    builder.addError("Could not resolve type of property " + triplet + " in entity " + entity.getName());
-                }
+                Property property = this.modeler.property(triplet.a, triplet.b, triplet.c);
+                builder.addProperty(property, entity);
             }
         }
     }
