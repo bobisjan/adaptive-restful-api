@@ -21,6 +21,10 @@ public class Model {
         }
     }
 
+    /**
+     * Returns name of the model.
+     * @return model name
+     */
     public String getName() {
         return this.name;
     }
@@ -33,6 +37,11 @@ public class Model {
         return Collections.unmodifiableMap(this.entities);
     }
 
+    /**
+     * Returns entity for given name.
+     * @param name
+     * @return entity or null if not found
+     */
     public Entity entityForName(String name) {
         if (name != null) {
             return this.entities.get(name);

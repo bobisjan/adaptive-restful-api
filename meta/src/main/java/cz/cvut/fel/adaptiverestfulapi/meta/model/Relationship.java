@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 
 
 /**
- * Represents entity's relationship with other entities.
+ * Represents entity's relationship with other entity.
  */
 public class Relationship extends Property {
 

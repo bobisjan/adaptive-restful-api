@@ -19,6 +19,10 @@ public abstract class Property {
         this.setter = setter;
     }
 
+    /**
+     * Returns name of the property.
+     * @return property name
+     */
     public String getName() {
         return this.name;
     }
