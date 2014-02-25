@@ -118,7 +118,7 @@ public class ModelBuilder {
         return !this.errors.isEmpty();
     }
 
-    public void addError(String error) {
+    protected void addError(String error) {
         this.errors.add(error);
     }
 
