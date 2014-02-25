@@ -190,14 +190,34 @@ public class Reflection {
     private static Set<Method> getters(Class clazz) {
         Set<Method> getters = new HashSet<>();
 
-        getters.addAll(ReflectionUtils.getAllMethods(clazz,
+        Set<Method> methods = null;
+
+        methods = ReflectionUtils.getAllMethods(clazz,
                 ReflectionUtils.withModifier(Modifier.PUBLIC),
                 ReflectionUtils.withPrefix("get"),
-                ReflectionUtils.withParametersCount(0)));
-        getters.addAll(ReflectionUtils.getAllMethods(clazz,
+                ReflectionUtils.withParametersCount(0));
+
+        for (Method method : methods) {
+            if (Modifier.isAbstract(method.getModifiers())
+                    || Modifier.isInterface(method.getModifiers())) {
+                continue;
+            }
+            getters.add(method);
+        }
+
+        methods = ReflectionUtils.getAllMethods(clazz,
                 ReflectionUtils.withModifier(Modifier.PUBLIC),
                 ReflectionUtils.withPrefix("is"),
-                ReflectionUtils.withParametersCount(0)));
+                ReflectionUtils.withParametersCount(0));
+
+        for (Method method : methods) {
+            if (Modifier.isAbstract(method.getModifiers())
+                    || Modifier.isInterface(method.getModifiers())) {
+                continue;
+            }
+            getters.add(method);
+        }
+
         return getters;
     }
 
@@ -209,10 +229,18 @@ public class Reflection {
     private static Set<Method> setters(Class clazz) {
         Set<Method> setters = new HashSet<>();
 
-        setters.addAll(ReflectionUtils.getAllMethods(clazz,
+        Set<Method> methods = ReflectionUtils.getAllMethods(clazz,
                 ReflectionUtils.withModifier(Modifier.PUBLIC),
                 ReflectionUtils.withPrefix("set"),
-                ReflectionUtils.withParametersCount(1)));
+                ReflectionUtils.withParametersCount(1));
+
+        for (Method method : methods) {
+            if (Modifier.isAbstract(method.getModifiers())
+                    || Modifier.isInterface(method.getModifiers())) {
+                continue;
+            }
+            setters.add(method);
+        }
         return setters;
     }
 
