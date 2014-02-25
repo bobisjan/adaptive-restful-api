@@ -30,10 +30,6 @@ public class TestInspectionListener implements ModelInspectionListener, Configur
             } else if (field.getName().equalsIgnoreCase("issues")) {
                 return new Relationship(this.propertyName(field), getter, setter, field.getDeclaringClass().getPackage().getName() + ".Issue");
             }
-
-            // TODO implement
-            return new Attribute(field.getDeclaringClass().getName() + "." + field.getName(), getter, setter);
-
         }
         // TODO virtual getter, setter
         return null;
