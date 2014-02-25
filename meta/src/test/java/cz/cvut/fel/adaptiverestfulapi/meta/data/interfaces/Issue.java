@@ -1,6 +1,8 @@
 
 package cz.cvut.fel.adaptiverestfulapi.meta.data.interfaces;
 
+import java.util.Locale;
+
 
 public class Issue implements IIssue {
 
@@ -22,6 +24,10 @@ public class Issue implements IIssue {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getLocalizedDescription() {
+        return Locale.getDefault().toString() + ": " + this.getDescription();
     }
 
     public IProject getProject() {

@@ -21,7 +21,8 @@ public class TestInspectionListener implements ModelInspectionListener, Configur
     public Property property(Field field, Method getter, Method setter) {
         if (field != null) {
             if (field.getName().equalsIgnoreCase("description")
-                    || field.getName().equalsIgnoreCase("name")) {
+                    || field.getName().equalsIgnoreCase("name")
+                    || field.getName().equalsIgnoreCase("startedAt")) {
                 return new Attribute(this.propertyName(field), getter, setter);
 
             } else if (field.getName().equalsIgnoreCase("project")) {
@@ -31,12 +32,36 @@ public class TestInspectionListener implements ModelInspectionListener, Configur
                 return new Relationship(this.propertyName(field), getter, setter, field.getDeclaringClass().getPackage().getName() + ".Issue");
             }
         }
-        // TODO virtual getter, setter
-        return null;
+
+        if (getter != null && setter != null) {
+            if (getter.getName().equalsIgnoreCase("isStarted") && setter.getName().equalsIgnoreCase("setStarted")) {
+                return new Attribute(this.propertyName(getter, "started"), getter, setter);
+            }
+            return null;
+
+        } else if (getter != null) {
+            if (getter.getName().equalsIgnoreCase("getLocalizedDescription")) {
+                return new Attribute(this.propertyName(getter, "localizedDescription"), getter, null);
+            }
+            return null;
+
+        } else if (setter != null) {
+            if (setter.getName().equalsIgnoreCase("setLowerCasedName")) {
+                return new Attribute(this.propertyName(setter, "lowerCasedName"), null, setter);
+            }
+            return null;
+
+        } else {
+            return null;
+        }
     }
 
     private String propertyName(Field field) {
         return field.getDeclaringClass().getName() + "." + field.getName();
+    }
+
+    private String propertyName(Method method, String name) {
+        return method.getDeclaringClass().getName() + "." + name;
     }
 
     @Override

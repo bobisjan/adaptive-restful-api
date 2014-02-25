@@ -1,6 +1,7 @@
 
 package cz.cvut.fel.adaptiverestfulapi.meta.data.base;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -9,6 +10,7 @@ public class Project extends Item {
 
     private String name;
     private List<Issue> issues;
+    private Date startedAt;
 
     public Project() {
         this.setName("New Project");
@@ -26,6 +28,26 @@ public class Project extends Item {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setLowerCasedName(String name) {
+        this.setName(name != null ? name.toUpperCase() : null);
+    }
+
+    public Date getStartedAt() {
+        return this.startedAt;
+    }
+
+    public void setStartedAt(Date startedAt) {
+        this.startedAt = startedAt;
+    }
+
+    public boolean isStarted() {
+        return this.getStartedAt() != null;
+    }
+
+    public void setStarted(boolean started) {
+        this.setStartedAt(started ? new Date() : null);
     }
 
     public List<Issue> getIssues() {
