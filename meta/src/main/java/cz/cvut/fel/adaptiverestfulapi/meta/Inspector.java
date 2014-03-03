@@ -3,11 +3,14 @@ package cz.cvut.fel.adaptiverestfulapi.meta;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
 
 import cz.cvut.fel.adaptiverestfulapi.meta.configuration.Configuration;
 import cz.cvut.fel.adaptiverestfulapi.meta.configuration.Pack;
+import cz.cvut.fel.adaptiverestfulapi.meta.configuration.Variable;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.*;
 import cz.cvut.fel.adaptiverestfulapi.meta.reflection.Reflection;
 import cz.cvut.fel.adaptiverestfulapi.meta.reflection.Triplet;
@@ -21,7 +24,7 @@ import org.slf4j.LoggerFactory;
 public class Inspector {
 
     private ModelInspectionListener modeler;
-    private ConfigurationInspectionListener configurator;
+    private Set<ConfigurationInspectionListener> configurators = new HashSet<>();
 
     private Logger logger = LoggerFactory.getLogger(Inspector.class);
 
@@ -65,25 +68,48 @@ public class Inspector {
      */
     public Configuration configuration(Model model) throws InspectionException {
         // inspect global configuration
-        Pack pack = new Pack(this.configurator.configuration());
+
+        List<Variable> variables = null;
+
+        variables = new LinkedList<>();
+        for (ConfigurationInspectionListener listener : this.configurators) {
+            variables.addAll(listener.configuration());
+        }
+        Pack pack = new Pack(variables);
 
         // inspect model configuration
-        pack.addConfiguration(this.configurator.configuration(model), model);
+        variables = new LinkedList<>();
+        for (ConfigurationInspectionListener listener : this.configurators) {
+            variables.addAll(listener.configuration(model));
+        }
+        pack.addConfiguration(variables, model);
 
         // TODO if configuration per submodel will be needed then the implementation goes here
 
         // inspect entity configuration
         for (Entity entity : model.getEntities().values()) {
-            pack.addConfiguration(this.configurator.configuration(entity), entity, model);
+            variables = new LinkedList<>();
+            for (ConfigurationInspectionListener listener : this.configurators) {
+                variables.addAll(listener.configuration(entity));
+            }
+            pack.addConfiguration(variables, entity, model);
 
             // inspect attribute configuration
             for (Attribute attribute : entity.getAttributes().values()) {
-                pack.addConfiguration(this.configurator.configuration(attribute), attribute, entity);
+                variables = new LinkedList<>();
+                for (ConfigurationInspectionListener listener : this.configurators) {
+                    variables.addAll(listener.configuration(attribute));
+                }
+                pack.addConfiguration(variables, attribute, entity);
             }
 
             // inspect relationship configuration
             for (Relationship relationship : entity.getRelationships().values()) {
-                pack.addConfiguration(this.configurator.configuration(relationship), relationship, entity);
+                variables = new LinkedList<>();
+                for (ConfigurationInspectionListener listener : this.configurators) {
+                    variables.addAll(listener.configuration(relationship));
+                }
+                pack.addConfiguration(variables, relationship, entity);
             }
         }
         return pack;
@@ -121,8 +147,8 @@ public class Inspector {
         this.modeler = modeler;
     }
 
-    public void setConfigurator(ConfigurationInspectionListener configurator) {
-        this.configurator = configurator;
+    public void addConfigurator(ConfigurationInspectionListener configurator) {
+        this.configurators.add(configurator);
     }
 
 }

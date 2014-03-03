@@ -14,7 +14,7 @@ public class ConfigurationInspectionTest {
         Inspector inspector = new Inspector();
 
         inspector.setModeler(modeler);
-        inspector.setConfigurator(configurator);
+        inspector.addConfigurator(configurator);
 
         Model model = inspector.model(pack, baseClass);
         Configuration configuration = inspector.configuration(model);
