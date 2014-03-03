@@ -5,13 +5,11 @@ import cz.cvut.fel.adaptiverestfulapi.core.Filter;
 import cz.cvut.fel.adaptiverestfulapi.core.FilterException;
 
 
-public abstract class DataHandler extends Filter {
+public abstract class Dispatcher extends Filter {
 
     @Override
     public HttpContext process(HttpContext httpContext) throws FilterException {
         return this.resign(httpContext);
     }
-
-    // TODO define abstract CRUD operations
 
 }
