@@ -9,6 +9,8 @@ import java.util.Map;
  */
 public class HttpContext {
 
+    private Object content;
+
     // request
     private final String uri;
     private final HttpMethod method;
@@ -25,6 +27,14 @@ public class HttpContext {
         this.method = method;
         this.requestHeaders = headers;
         this.requestContent = content;
+    }
+
+    public Object getContent() {
+        return this.content;
+    }
+
+    public void setContent(Object content) {
+        this.content = content;
     }
 
     public String getUri() {

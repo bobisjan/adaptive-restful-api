@@ -3,6 +3,8 @@ package cz.cvut.fel.adaptiverestfulapi.security;
 import cz.cvut.fel.adaptiverestfulapi.core.HttpContext;
 import cz.cvut.fel.adaptiverestfulapi.core.Filter;
 import cz.cvut.fel.adaptiverestfulapi.core.FilterException;
+import cz.cvut.fel.adaptiverestfulapi.meta.configuration.Configuration;
+import cz.cvut.fel.adaptiverestfulapi.meta.model.Model;
 
 
 /**
@@ -11,9 +13,9 @@ import cz.cvut.fel.adaptiverestfulapi.core.FilterException;
 public abstract class Authentication extends Filter {
 
     @Override
-    public final HttpContext process(HttpContext httpContext) throws FilterException {
+    public final HttpContext process(HttpContext httpContext, Model model, Configuration configuration) throws FilterException {
         if (this.authenticate(httpContext)) {
-            return this.resign(httpContext);
+            return this.resign(httpContext, model, configuration);
 
         } else {
             // TODO unauthorized httpContext

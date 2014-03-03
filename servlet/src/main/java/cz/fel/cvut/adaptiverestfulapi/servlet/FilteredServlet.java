@@ -3,6 +3,8 @@ package cz.fel.cvut.adaptiverestfulapi.servlet;
 import cz.cvut.fel.adaptiverestfulapi.core.HttpContext;
 import cz.cvut.fel.adaptiverestfulapi.core.Filter;
 import cz.cvut.fel.adaptiverestfulapi.core.FilterException;
+import cz.cvut.fel.adaptiverestfulapi.meta.configuration.Configuration;
+import cz.cvut.fel.adaptiverestfulapi.meta.model.Model;
 import cz.fel.cvut.adaptiverestfulapi.servlet.utils.RequestReader;
 import cz.fel.cvut.adaptiverestfulapi.servlet.utils.ResponseWriter;
 
@@ -27,9 +29,11 @@ public class FilteredServlet extends HttpServlet {
         }
 
         HttpContext httpContext = RequestReader.context(req);
+        Model model = null;
+        Configuration configuration = null;
 
         try {
-            httpContext = this.chain.process(httpContext);
+            httpContext = this.chain.process(httpContext, model, configuration);
 
         } catch (FilterException e) {
             // TODO set httpContext to 500 Server Error
