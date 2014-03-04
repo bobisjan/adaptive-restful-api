@@ -11,6 +11,10 @@
         <servlet-class>cz.cvut.fel.adaptiverestfulapi.example.FilteredServlet</servlet-class>
     </servlet>
 
+    <listener>
+        <listener-class>cz.cvut.fel.adaptiverestfulapi.example.ApplicationContextListener</listener-class>
+    </listener>
+
     <servlet-mapping>
         <servlet-name>FilteredServlet</servlet-name>
         <url-pattern>/</url-pattern>

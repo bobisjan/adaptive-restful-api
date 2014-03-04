@@ -19,30 +19,9 @@ import java.util.Enumeration;
 
 public class FilteredServlet extends HttpServlet {
 
-    private ApplicationContext getApplicationContext() throws ServletException {
-        ApplicationContext ctx = ApplicationContext.getInstance();
-
-        if (!ctx.isInitialized()) {
-            Inspector inspector = new Inspector();
-
-            inspector.setModeler(new ModelListener());
-            inspector.addConfigurator(new ConfigurationListener());
-
-            try {
-                Model model = inspector.model("cz.cvut.fel.adaptiverestfulapi.example.model");
-                Configuration configuration = inspector.configuration(model);
-                ApplicationContext.initialize(model, configuration);
-
-            } catch (InspectionException e) {
-                throw new ServletException(e);
-            }
-        }
-        return ctx;
-    }
-
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ApplicationContext applicationContext = this.getApplicationContext();
+        ApplicationContext applicationContext = ApplicationContext.getInstance();
 
         Filter filter = new Dispatcher();
         HttpContext httpContext = this.input(req);
