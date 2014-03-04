@@ -47,16 +47,16 @@ public class ModelListener implements ModelInspectionListener {
         Method setter = triplet.c;
 
         if (field != null) {
-            return entity.getName() + "." + field.getName();
+            return entity.getName() + "." + this.toFirstLetterLowerCase(field.getName());
 
         } else if (getter != null && getter.getName().startsWith("get"))  {
-            return entity.getName() + "." + getter.getName().substring("get".length());
+            return entity.getName() + "." + this.toFirstLetterLowerCase(getter.getName().substring("get".length()));
 
         } else if (getter != null && getter.getName().startsWith("is"))  {
-            return entity.getName() + "." + getter.getName().substring("is".length());
+            return entity.getName() + "." + this.toFirstLetterLowerCase(getter.getName().substring("is".length()));
 
         } else if (setter != null && setter.getName().startsWith("set"))  {
-            return entity.getName() + "." + setter.getName().substring("set".length());
+            return entity.getName() + "." + this.toFirstLetterLowerCase(setter.getName().substring("set".length()));
 
         } else {
             return null;
@@ -119,6 +119,10 @@ public class ModelListener implements ModelInspectionListener {
             }
         }
         return target;
+    }
+
+    protected String toFirstLetterLowerCase(String string) {
+        return string.substring(0, 1).toLowerCase() + string.substring(1);
     }
 
 }
