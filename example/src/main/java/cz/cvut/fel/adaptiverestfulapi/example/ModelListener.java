@@ -30,31 +30,31 @@ public class ModelListener implements ModelInspectionListener {
 
         if (field != null) {
             if (field.getName().equalsIgnoreCase("project")) {
-                return new Relationship(this.propertyName(field), getter, setter, field.getDeclaringClass().getPackage().getName() + ".Project");
+                return new Relationship(this.propertyName(triplet, entity), getter, setter, field.getDeclaringClass().getPackage().getName() + ".Project");
 
             } else if (field.getName().equalsIgnoreCase("issues")) {
-                return new Relationship(this.propertyName(field), getter, setter, field.getDeclaringClass().getPackage().getName() + ".Issue");
+                return new Relationship(this.propertyName(triplet, entity), getter, setter, field.getDeclaringClass().getPackage().getName() + ".Issue");
 
             } else {
-                return new Attribute(this.propertyName(field), getter, setter);
+                return new Attribute(this.propertyName(triplet, entity), getter, setter);
             }
         }
 
         if (getter != null && setter != null) {
             if (getter.getName().equalsIgnoreCase("isStarted") && setter.getName().equalsIgnoreCase("setStarted")) {
-                return new Attribute(this.propertyName(getter, "started"), getter, setter);
+                return new Attribute(this.propertyName(triplet, entity), getter, setter);
             }
             return null;
 
         } else if (getter != null) {
             if (getter.getName().equalsIgnoreCase("getLocalizedDescription")) {
-                return new Attribute(this.propertyName(getter, "localizedDescription"), getter, null);
+                return new Attribute(this.propertyName(triplet, entity), getter, null);
             }
             return null;
 
         } else if (setter != null) {
             if (setter.getName().equalsIgnoreCase("setLowerCasedName")) {
-                return new Attribute(this.propertyName(setter, "lowerCasedName"), null, setter);
+                return new Attribute(this.propertyName(triplet, entity), null, setter);
             }
             return null;
 
@@ -67,12 +67,26 @@ public class ModelListener implements ModelInspectionListener {
         return clazz.getName();
     }
 
-    private String propertyName(Field field) {
-        return field.getDeclaringClass().getName() + "." + field.getName();
-    }
+    protected String propertyName(Triplet<Field, Method, Method> triplet, Entity entity) {
+        Field field = triplet.a;
+        Method getter = triplet.b;
+        Method setter = triplet.c;
 
-    private String propertyName(Method method, String name) {
-        return method.getDeclaringClass().getName() + "." + name;
+        if (field != null) {
+            return entity.getName() + "." + field.getName();
+
+        } else if (getter != null && getter.getName().startsWith("get"))  {
+            return entity.getName() + "." + getter.getName().substring("get".length());
+
+        } else if (getter != null && getter.getName().startsWith("is"))  {
+            return entity.getName() + "." + getter.getName().substring("is".length());
+
+        } else if (setter != null && setter.getName().startsWith("set"))  {
+            return entity.getName() + "." + getter.getName().substring("set".length());
+
+        } else {
+            return null;
+        }
     }
 
 }
