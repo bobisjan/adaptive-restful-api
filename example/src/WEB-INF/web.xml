@@ -1,0 +1,18 @@
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+	      http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         version="3.0">
+
+    <display-name>Adaptive RESTful API - Servlet example</display-name>
+
+    <servlet>
+        <servlet-name>FilteredServlet</servlet-name>
+        <servlet-class>cz.cvut.fel.adaptiverestfulapi.example.FilteredServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>FilteredServlet</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+</web-app>

@@ -1,10 +1,7 @@
 
 package cz.cvut.fel.adaptiverestfulapi.data;
 
-import cz.cvut.fel.adaptiverestfulapi.core.HttpContext;
-import cz.cvut.fel.adaptiverestfulapi.core.Filter;
-import cz.cvut.fel.adaptiverestfulapi.core.FilterException;
-import cz.cvut.fel.adaptiverestfulapi.core.HttpMethod;
+import cz.cvut.fel.adaptiverestfulapi.core.*;
 import cz.cvut.fel.adaptiverestfulapi.meta.configuration.Configuration;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Entity;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Model;
@@ -55,7 +52,7 @@ public class Dispatcher extends Filter {
             // TODO allow to have namespace, eq.: http://app.com/api/v2/package/Entity
 
             path = path.replaceAll("/", ".");
-            return model.getName() + "." + path;
+            return model.getName() + path;
 
         } catch (MalformedURLException e) {
             throw new DataException("Malformed URL: " + e.getLocalizedMessage());
