@@ -14,6 +14,14 @@ public class Dispatcher extends Filter {
 
     public static final String Handler = "cz.cvut.fel.adaptiverestfulapi.data.Handler";
 
+    public Dispatcher() {
+        this(null);
+    }
+
+    public Dispatcher(Filter next) {
+        super(next);
+    }
+
     @Override
     public HttpContext process(HttpContext httpContext, Model model, Configuration configuration) throws FilterException {
         // TODO consider using a router
@@ -88,6 +96,7 @@ public class Dispatcher extends Filter {
         }
 
         httpContext.setContent(result);
+        httpContext.response(HttpStatus.S_200, new HttpHeaders(), result.toString());
     }
 
 }

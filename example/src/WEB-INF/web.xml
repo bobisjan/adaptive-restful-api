@@ -8,7 +8,7 @@
 
     <servlet>
         <servlet-name>FilteredServlet</servlet-name>
-        <servlet-class>cz.cvut.fel.adaptiverestfulapi.example.FilteredServlet</servlet-class>
+        <servlet-class>cz.fel.cvut.adaptiverestfulapi.servlet.FilteredServlet</servlet-class>
     </servlet>
 
     <listener>

@@ -1,49 +1,36 @@
+
 package cz.fel.cvut.adaptiverestfulapi.servlet;
 
-import cz.cvut.fel.adaptiverestfulapi.core.HttpContext;
-import cz.cvut.fel.adaptiverestfulapi.core.Filter;
-import cz.cvut.fel.adaptiverestfulapi.core.FilterException;
+import cz.cvut.fel.adaptiverestfulapi.core.*;
+import cz.cvut.fel.adaptiverestfulapi.data.Dispatcher;
+import cz.cvut.fel.adaptiverestfulapi.meta.InspectionException;
+import cz.cvut.fel.adaptiverestfulapi.meta.Inspector;
 import cz.cvut.fel.adaptiverestfulapi.meta.configuration.Configuration;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Model;
-import cz.fel.cvut.adaptiverestfulapi.servlet.utils.RequestReader;
-import cz.fel.cvut.adaptiverestfulapi.servlet.utils.ResponseWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Enumeration;
 
 
-/**
- *
- */
 public class FilteredServlet extends HttpServlet {
-
-    protected Filter chain;
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (this.chain == null) {
-            throw new FilteredServletException("The filter's chain can not be null.");
-        }
+        ApplicationContext applicationContext = ApplicationContext.getInstance();
 
-        HttpContext httpContext = RequestReader.context(req);
-        Model model = null;
-        Configuration configuration = null;
+        Filter filter = new ExampleFilter(req, resp);
 
         try {
-            httpContext = this.chain.process(httpContext, model, configuration);
+            filter.process(null, applicationContext.getModel(), applicationContext.getConfiguration());
 
         } catch (FilterException e) {
-            // TODO set httpContext to 500 Server Error
-            e.printStackTrace();
-
-        } finally {
-            ResponseWriter.write(httpContext, resp);
+            throw new ServletException(e);
         }
     }
 
 }
-
-

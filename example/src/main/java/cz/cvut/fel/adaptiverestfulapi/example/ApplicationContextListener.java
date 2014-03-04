@@ -9,7 +9,6 @@ import cz.cvut.fel.adaptiverestfulapi.meta.model.Model;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import javax.servlet.ServletException;
 
 
 public class ApplicationContextListener implements ServletContextListener {

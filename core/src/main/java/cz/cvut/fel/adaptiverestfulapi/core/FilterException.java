@@ -12,4 +12,8 @@ public class FilterException extends Exception {
         super(message);
     }
 
+    public FilterException(Exception e) {
+        super(e);
+    }
+
 }

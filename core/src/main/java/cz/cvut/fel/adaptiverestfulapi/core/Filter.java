@@ -20,8 +20,28 @@ public abstract class Filter {
         this.setNext(next);
     }
 
-    protected void setNext(Filter next) {
+    public Filter setNext(Filter next) {
         this.next = next;
+        return this;
+    }
+
+    public Filter setLast(Filter last) {
+        Filter next = this.next;
+
+        if (next == null) {
+            this.setNext(last);
+            return this;
+        }
+
+        while (next != null) {
+            if (next.next != null) {
+                next = next.next;
+
+            } else {
+                next.setNext(last);
+            }
+        }
+        return this;
     }
 
     /**
