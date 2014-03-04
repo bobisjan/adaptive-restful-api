@@ -2,7 +2,7 @@
 package cz.cvut.fel.adaptiverestfulapi.example;
 
 import cz.cvut.fel.adaptiverestfulapi.data.Dispatcher;
-import cz.fel.cvut.adaptiverestfulapi.servlet.ServletFilter;
+import cz.cvut.fel.adaptiverestfulapi.servlet.ServletFilter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

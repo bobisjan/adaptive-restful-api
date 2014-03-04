@@ -1,5 +1,5 @@
 
-package cz.fel.cvut.adaptiverestfulapi.servlet;
+package cz.cvut.fel.adaptiverestfulapi.servlet;
 
 import cz.cvut.fel.adaptiverestfulapi.core.Filter;
 import cz.cvut.fel.adaptiverestfulapi.core.FilterException;
