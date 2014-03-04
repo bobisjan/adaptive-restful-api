@@ -21,6 +21,9 @@ import java.util.Collection;
 import java.util.Set;
 
 
+/**
+ * The default model inspection listener.
+ */
 public class ModelListener implements ModelInspectionListener {
 
     @Override
@@ -42,10 +45,21 @@ public class ModelListener implements ModelInspectionListener {
         return new Attribute(name, getter, setter);
     }
 
+    /**
+     * Returns entity name from class.
+     * @param clazz
+     * @return The entity name.
+     */
     protected String entityName(Class clazz) {
         return clazz.getName();
     }
 
+    /**
+     * Returns property name from triplet of field, getter and setter.
+     * @param triplet
+     * @param entity The entity of the property.
+     * @return The property name.
+     */
     protected String propertyName(Triplet<Field, Method, Method> triplet, Entity entity) {
         Field field = triplet.a;
         Method getter = triplet.b;
@@ -68,6 +82,13 @@ public class ModelListener implements ModelInspectionListener {
         }
     }
 
+    /**
+     * Looks for target entity from triplet of field, getter and setter.
+     * @param triplet
+     * @param entity The entity of the property.
+     * @param entities The known entities in the model.
+     * @return The target entity or null if not found.
+     */
     protected Entity targetEntity(Triplet<Field, Method, Method> triplet, Entity entity, Set<Entity> entities) {
         Class<?> target = this.targetClass(triplet);
 
@@ -79,6 +100,11 @@ public class ModelListener implements ModelInspectionListener {
         return null;
     }
 
+    /**
+     * Returns target class from triplet of field, getter and setter.
+     * @param triplet
+     * @return The target class.
+     */
     protected Class<?> targetClass(Triplet<Field, Method, Method> triplet) {
         Class<?> target = null;
 
@@ -103,6 +129,11 @@ public class ModelListener implements ModelInspectionListener {
         return target;
     }
 
+    /**
+     * Returns target class from field.
+     * @param field
+     * @return The target class.
+     */
     protected Class<?> targetClassFromField(Field field) {
         Class<?> target = field.getType();
 
@@ -118,6 +149,11 @@ public class ModelListener implements ModelInspectionListener {
         return target;
     }
 
+    /**
+     * Returns target class from getter method.
+     * @param getter
+     * @return The target class.
+     */
     protected Class<?> targetClassFromGetter(Method getter) {
         Class<?> target = getter.getReturnType();
 
@@ -133,6 +169,11 @@ public class ModelListener implements ModelInspectionListener {
         return target;
     }
 
+    /**
+     * Returns target class from setter method.
+     * @param setter
+     * @return The target class.
+     */
     protected Class<?> targetClassFromSetter(Method setter) {
         Class<?> target = setter.getParameterTypes()[0];
 
@@ -148,6 +189,11 @@ public class ModelListener implements ModelInspectionListener {
         return target;
     }
 
+    /**
+     * Looks for JPA relationship annotation to find target class.
+     * @param annotations
+     * @return The target class.
+     */
     protected Class<?> targetClassFromAnnotations(Annotation[] annotations) {
         for (Annotation annotation : annotations) {
             if (annotation.annotationType().equals(OneToOne.class)) {
@@ -170,6 +216,11 @@ public class ModelListener implements ModelInspectionListener {
         return null;
     }
 
+    /**
+     * Makes first letter of the string lower cased.
+     * @param string
+     * @return The first letter lower cased string.
+     */
     protected String toFirstLetterLowerCase(String string) {
         return string.substring(0, 1).toLowerCase() + string.substring(1);
     }
