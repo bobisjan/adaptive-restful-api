@@ -8,6 +8,11 @@ import cz.cvut.fel.adaptiverestfulapi.meta.model.Property;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Relationship;
 import cz.cvut.fel.adaptiverestfulapi.meta.reflection.Triplet;
 
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -74,18 +79,26 @@ public class ModelListener implements ModelInspectionListener {
         return null;
     }
 
-    // TODO Add check for JPA relationship annotation
     protected Class<?> targetClass(Triplet<Field, Method, Method> triplet) {
         Class<?> target = null;
 
         if (triplet.a != null) {
             target = this.targetClassFromField(triplet.a);
+            if (target == null) {
+                target = this.targetClassFromAnnotations(triplet.a.getAnnotations());
+            }
 
         } else if (triplet.b != null) {
             target = this.targetClassFromGetter(triplet.b);
+            if (target == null) {
+                target = this.targetClassFromAnnotations(triplet.b.getAnnotations());
+            }
 
         } else if (triplet.c != null) {
             target = this.targetClassFromSetter(triplet.c);
+            if (target == null) {
+                target = this.targetClassFromAnnotations(triplet.c.getAnnotations());
+            }
         }
         return target;
     }
@@ -133,6 +146,28 @@ public class ModelListener implements ModelInspectionListener {
             }
         }
         return target;
+    }
+
+    protected Class<?> targetClassFromAnnotations(Annotation[] annotations) {
+        for (Annotation annotation : annotations) {
+            if (annotation.annotationType().equals(OneToOne.class)) {
+                OneToOne oneToOne = (OneToOne)annotation;
+                return oneToOne.targetEntity();
+
+            } else if (annotation.annotationType().equals(OneToMany.class)) {
+                OneToMany oneToMany = (OneToMany)annotation;
+                return oneToMany.targetEntity();
+
+            }  else if (annotation.annotationType().equals(ManyToOne.class)) {
+                ManyToOne manyToOne = (ManyToOne)annotation;
+                return manyToOne.targetEntity();
+
+            }  else if (annotation.annotationType().equals(ManyToMany.class)) {
+                ManyToMany manyToMany = (ManyToMany)annotation;
+                return manyToMany.targetEntity();
+            }
+        }
+        return null;
     }
 
     protected String toFirstLetterLowerCase(String string) {
