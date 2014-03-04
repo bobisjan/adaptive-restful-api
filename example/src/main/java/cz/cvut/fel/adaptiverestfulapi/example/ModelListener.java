@@ -75,47 +75,61 @@ public class ModelListener implements ModelInspectionListener {
     }
 
     // TODO Add check for JPA relationship annotation
-    // TODO Refactor
     protected Class<?> targetClass(Triplet<Field, Method, Method> triplet) {
         Class<?> target = null;
 
         if (triplet.a != null) {
-            target = triplet.a.getType();
-
-            if (Collection.class.isAssignableFrom(target)) {
-                Type type = triplet.a.getGenericType();
-
-                if (type instanceof ParameterizedType) {
-                    ParameterizedType pType = (ParameterizedType)type;
-                    Type[] arr = pType.getActualTypeArguments();
-                    target = (Class<?>)arr[0];
-                }
-            }
+            target = this.targetClassFromField(triplet.a);
 
         } else if (triplet.b != null) {
-            target = triplet.b.getReturnType();
-
-            if (Collection.class.isAssignableFrom(target)) {
-                Type type = triplet.b.getGenericReturnType();
-
-                if (type instanceof ParameterizedType) {
-                    ParameterizedType pType = (ParameterizedType)type;
-                    Type[] arr = pType.getActualTypeArguments();
-                    target = (Class<?>)arr[0];
-                }
-            }
+            target = this.targetClassFromGetter(triplet.b);
 
         } else if (triplet.c != null) {
-            target = triplet.c.getParameterTypes()[0];
+            target = this.targetClassFromSetter(triplet.c);
+        }
+        return target;
+    }
 
-            if (Collection.class.isAssignableFrom(target)) {
-                Type type = triplet.c.getGenericParameterTypes()[0];
+    protected Class<?> targetClassFromField(Field field) {
+        Class<?> target = field.getType();
 
-                if (type instanceof ParameterizedType) {
-                    ParameterizedType pType = (ParameterizedType)type;
-                    Type[] arr = pType.getActualTypeArguments();
-                    target = (Class<?>)arr[0];
-                }
+        if (Collection.class.isAssignableFrom(target)) {
+            Type type = field.getGenericType();
+
+            if (type instanceof ParameterizedType) {
+                ParameterizedType pType = (ParameterizedType)type;
+                Type[] arr = pType.getActualTypeArguments();
+                target = (Class<?>)arr[0];
+            }
+        }
+        return target;
+    }
+
+    protected Class<?> targetClassFromGetter(Method getter) {
+        Class<?> target = getter.getReturnType();
+
+        if (Collection.class.isAssignableFrom(target)) {
+            Type type = getter.getGenericReturnType();
+
+            if (type instanceof ParameterizedType) {
+                ParameterizedType pType = (ParameterizedType)type;
+                Type[] arr = pType.getActualTypeArguments();
+                target = (Class<?>)arr[0];
+            }
+        }
+        return target;
+    }
+
+    protected Class<?> targetClassFromSetter(Method setter) {
+        Class<?> target = setter.getParameterTypes()[0];
+
+        if (Collection.class.isAssignableFrom(target)) {
+            Type type = setter.getGenericParameterTypes()[0];
+
+            if (type instanceof ParameterizedType) {
+                ParameterizedType pType = (ParameterizedType)type;
+                Type[] arr = pType.getActualTypeArguments();
+                target = (Class<?>)arr[0];
             }
         }
         return target;
