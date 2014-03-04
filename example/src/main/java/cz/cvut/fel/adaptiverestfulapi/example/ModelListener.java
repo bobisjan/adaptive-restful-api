@@ -15,7 +15,7 @@ public class ModelListener implements ModelInspectionListener {
 
     @Override
     public Entity entity(Class clazz) {
-        return new Entity(clazz.getName(), clazz);
+        return new Entity(this.entityName(clazz), clazz);
     }
 
     @Override
@@ -55,6 +55,10 @@ public class ModelListener implements ModelInspectionListener {
         } else {
             return null;
         }
+    }
+
+    protected String entityName(Class clazz) {
+        return clazz.getName();
     }
 
     private String propertyName(Field field) {
