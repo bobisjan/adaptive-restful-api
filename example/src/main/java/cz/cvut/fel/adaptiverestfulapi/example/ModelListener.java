@@ -6,9 +6,11 @@ import cz.cvut.fel.adaptiverestfulapi.meta.model.Attribute;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Entity;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Property;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Relationship;
+import cz.cvut.fel.adaptiverestfulapi.meta.reflection.Triplet;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Set;
 
 
 public class ModelListener implements ModelInspectionListener {
@@ -19,8 +21,12 @@ public class ModelListener implements ModelInspectionListener {
     }
 
     @Override
-    public Property property(Field field, Method getter, Method setter) {
+    public Property property(Triplet<Field, Method, Method> triplet, Entity entity, Set<Entity> entities) {
         // TODO make property inspector generic and then move it to the core
+
+        Field field = triplet.a;
+        Method getter = triplet.b;
+        Method setter = triplet.c;
 
         if (field != null) {
             if (field.getName().equalsIgnoreCase("project")) {

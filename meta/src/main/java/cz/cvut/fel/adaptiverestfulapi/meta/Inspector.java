@@ -133,11 +133,13 @@ public class Inspector {
      * @param builder
      */
     protected void addProperties(ModelBuilder builder, Reflection reflection) {
-        for (Entity entity : builder.getEntities()) {
+        Set<Entity> entities = builder.getEntities();
+
+        for (Entity entity : entities) {
             Set<Triplet<Field, Method, Method>> triplets = reflection.triplets(entity.getEntityClass());
 
             for (Triplet<Field, Method, Method> triplet : triplets) {
-                Property property = this.modeler.property(triplet.a, triplet.b, triplet.c);
+                Property property = this.modeler.property(triplet, entity, entities);
                 builder.addProperty(property, entity);
             }
         }

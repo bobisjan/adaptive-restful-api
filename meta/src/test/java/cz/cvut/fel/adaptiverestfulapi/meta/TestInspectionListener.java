@@ -3,11 +3,13 @@ package cz.cvut.fel.adaptiverestfulapi.meta;
 
 import cz.cvut.fel.adaptiverestfulapi.meta.configuration.Variable;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.*;
+import cz.cvut.fel.adaptiverestfulapi.meta.reflection.Triplet;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 
 public class TestInspectionListener implements ModelInspectionListener, ConfigurationInspectionListener {
@@ -18,7 +20,11 @@ public class TestInspectionListener implements ModelInspectionListener, Configur
     }
 
     @Override
-    public Property property(Field field, Method getter, Method setter) {
+    public Property property(Triplet<Field, Method, Method> triplet, Entity entity, Set<Entity> entities) {
+        Field field = triplet.a;
+        Method getter = triplet.b;
+        Method setter = triplet.c;
+
         if (field != null) {
             if (field.getName().equalsIgnoreCase("description")
                     || field.getName().equalsIgnoreCase("name")
