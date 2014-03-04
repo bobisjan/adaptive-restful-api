@@ -47,6 +47,10 @@ public class ModelListener implements ModelInspectionListener {
 
     /**
      * Returns entity name from class.
+     *
+     * It uses fully qualified name of the class,
+     * eq.: `com.app.model.Project`.
+     *
      * @param clazz
      * @return The entity name.
      */
@@ -56,6 +60,12 @@ public class ModelListener implements ModelInspectionListener {
 
     /**
      * Returns property name from triplet of field, getter and setter.
+     *
+     * It uses entity name combined with name of the field,
+     * or name of the getter without `get` (`is`) prefix,
+     * or name of the setter without `set` prefix,
+     * eq.: `com.app.model.Project.startedAt`.
+     *
      * @param triplet
      * @param entity The entity of the property.
      * @return The property name.
