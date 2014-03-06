@@ -7,23 +7,71 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Enumeration;
 
 
 public class FilteredServlet extends HttpServlet {
 
-    protected ServletFilter filter;
+    protected Filter filter;
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ApplicationContext applicationContext = ApplicationContext.getInstance();
 
         try {
-            this.filter.process(null, applicationContext.getModel(), applicationContext.getConfiguration());
+            HttpContext httpContext = this.read(req);
+            httpContext = this.filter.process(httpContext, applicationContext.getModel(), applicationContext.getConfiguration());
+            this.write(resp, httpContext);
 
         } catch (FilterException e) {
             throw new ServletException(e);
         }
+    }
+
+    protected HttpContext read(HttpServletRequest request) throws IOException {
+        String uri = request.getRequestURL().toString();
+        HttpMethod httpMethod = HttpMethod.valueOf(request.getMethod());
+        HttpHeaders headers = this.headers(request);
+        String content = this.content(request);
+
+        return new HttpContext(uri, httpMethod, headers, content);
+    }
+
+    protected void write(HttpServletResponse response, HttpContext httpContext) throws IOException  {
+        response.setStatus(httpContext.getStatus().getCode());
+
+        response.getWriter().write(httpContext.getResponseContent());
+        response.getWriter().flush();
+        response.getWriter().close();
+    }
+
+    private HttpHeaders headers(HttpServletRequest request) {
+        HttpHeaders headers = new HttpHeaders();
+        Enumeration<String> keys = request.getHeaderNames();
+
+        while (keys.hasMoreElements()) {
+            String key = keys.nextElement();
+            Enumeration<String> values = request.getHeaders(key);
+
+            while (values.hasMoreElements()) {
+                String value = values.nextElement();
+                headers.put(key, value);
+            }
+        }
+        return headers;
+    }
+
+    private String content(HttpServletRequest request) throws IOException {
+        StringBuffer sb = new StringBuffer();
+        BufferedReader reader = request.getReader();
+
+        String line = null;
+        while ((line = reader.readLine()) != null) {
+            sb.append(line);
+        }
+        return sb.toString();
     }
 
 }
