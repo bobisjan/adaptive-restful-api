@@ -14,20 +14,15 @@ public abstract class Authentication extends Filter {
 
     @Override
     public final HttpContext process(HttpContext httpContext, Model model, Configuration configuration) throws FilterException {
-        if (this.authenticate(httpContext)) {
-            return this.resign(httpContext, model, configuration);
-
-        } else {
-            // TODO unauthorized httpContext
-            return httpContext;
-        }
+        this.authenticate(httpContext);
+        return this.resign(httpContext, model, configuration);
     }
 
     /**
-     * Authenticate user in the httpContext.
-     * @param httpContext
-     * @return true if user is authenticated
+     * Authenticates user in the HTTP context.
+     * @param httpContext The HTTP context.
+     * @throws AuthenticationException
      */
-    protected abstract boolean authenticate(HttpContext httpContext);
+    protected abstract void authenticate(HttpContext httpContext) throws AuthenticationException;
 
 }

@@ -9,7 +9,7 @@ import cz.cvut.fel.adaptiverestfulapi.core.HttpContext;
 public class BasicAuthentication extends Authentication {
 
     @Override
-    protected boolean authenticate(HttpContext httpContext) {
-        return true; // TODO implement
+    protected void authenticate(HttpContext httpContext) throws AuthenticationException {
+        // TODO implement basic authentication
     }
 }
