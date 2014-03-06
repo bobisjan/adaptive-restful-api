@@ -26,7 +26,7 @@ public class FilteredServlet extends HttpServlet {
             this.write(resp, httpContext);
 
         } catch (FilterException e) {
-            throw new ServletException(e);
+            this.error(e, resp);
         }
     }
 
@@ -43,6 +43,14 @@ public class FilteredServlet extends HttpServlet {
         response.setStatus(httpContext.getStatus().getCode());
 
         response.getWriter().write(httpContext.getResponseContent());
+        response.getWriter().flush();
+        response.getWriter().close();
+    }
+
+    protected void error(FilterException e, HttpServletResponse response) throws IOException {
+        response.setStatus(e.getCode());
+
+        response.getWriter().write(e.getLocalizedMessage());
         response.getWriter().flush();
         response.getWriter().close();
     }
