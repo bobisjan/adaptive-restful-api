@@ -11,11 +11,13 @@ public class JsonSerializer extends Serializer {
 
     @Override
     protected HttpContext serialize(HttpContext httpContext) throws SerializationException {
+        // TODO implement JSON serialization
         return httpContext;
     }
 
     @Override
     protected HttpContext deserialize(HttpContext httpContext) throws SerializationException {
+        // TODO implement JSON deserialization
         return httpContext;
     }
 
