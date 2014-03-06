@@ -6,6 +6,7 @@
     <properties>
         <project.version>1.0-SNAPSHOT</project.version>
         <org.slf4j.version>1.7.2</org.slf4j.version>
+        <org.testng.version>6.8.8</org.testng.version>
     </properties>
 
     <groupId>cz.cvut.fel</groupId>
@@ -30,6 +31,13 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${org.slf4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>${org.testng.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
