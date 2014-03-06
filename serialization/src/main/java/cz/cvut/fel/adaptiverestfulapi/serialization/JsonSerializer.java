@@ -1,7 +1,8 @@
+
 package cz.cvut.fel.adaptiverestfulapi.serialization;
 
-
 import cz.cvut.fel.adaptiverestfulapi.core.HttpContext;
+
 
 /**
  * JSON Serializer.
@@ -9,13 +10,13 @@ import cz.cvut.fel.adaptiverestfulapi.core.HttpContext;
 public class JsonSerializer extends Serializer {
 
     @Override
-    protected void serialize(HttpContext httpContext) {
-
+    protected HttpContext serialize(HttpContext httpContext) throws SerializationException {
+        return httpContext;
     }
 
     @Override
-    protected void deserialize(HttpContext httpContext) {
-
+    protected HttpContext deserialize(HttpContext httpContext) throws SerializationException {
+        return httpContext;
     }
 
 }
