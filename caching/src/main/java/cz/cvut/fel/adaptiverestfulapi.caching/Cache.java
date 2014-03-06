@@ -14,11 +14,12 @@ public abstract class Cache extends Filter {
 
     @Override
     public HttpContext process(HttpContext httpContext, Model model, Configuration configuration) throws FilterException {
-        if (!this.load(httpContext)) { // try load data from cache
-            httpContext = this.resign(httpContext, model, configuration);  // ask for data someone else
-            this.save(httpContext);    // finally save new data to cache
+        if (this.load(httpContext)) { // try load data from cache
             return httpContext;
         }
+
+        httpContext = this.resign(httpContext, model, configuration);  // ask for data someone else
+        this.save(httpContext);    // finally save new data to cache
         return httpContext;
     }
 
