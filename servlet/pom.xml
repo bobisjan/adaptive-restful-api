@@ -4,21 +4,31 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <properties>
+        <javax.serlvet.version>3.1.0</javax.serlvet.version>
+    </properties>
+
+    <parent>
+        <groupId>cz.cvut.fel</groupId>
+        <artifactId>adaptive-restful-api</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
     <groupId>cz.cvut.fel</groupId>
     <artifactId>adaptive-restful-api-servlet</artifactId>
-    <version>1.0-SNAPSHOT</version>
 
     <dependencies>
         <dependency>
             <groupId>cz.cvut.fel</groupId>
             <artifactId>adaptive-restful-api-core</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>3.1.0</version>
+            <version>${javax.serlvet.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
