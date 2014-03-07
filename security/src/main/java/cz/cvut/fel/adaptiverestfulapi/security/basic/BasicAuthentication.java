@@ -43,7 +43,6 @@ public abstract class BasicAuthentication extends Authentication {
     protected abstract boolean isAuthenticated(String username, String password);
 
     private Map.Entry<String, String> user(HttpContext httpContext) throws AuthenticationException {
-        // TODO Get rid off the string, use constant
         HttpHeaders httpHeaders = httpContext.getRequestHeaders();
         String auth = httpHeaders.get(HttpHeaders.Authorization);
 
