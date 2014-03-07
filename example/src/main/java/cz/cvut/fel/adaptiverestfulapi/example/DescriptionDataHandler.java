@@ -2,6 +2,8 @@
 package cz.cvut.fel.adaptiverestfulapi.example;
 
 import cz.cvut.fel.adaptiverestfulapi.core.HttpContext;
+import cz.cvut.fel.adaptiverestfulapi.core.HttpHeaders;
+import cz.cvut.fel.adaptiverestfulapi.core.HttpStatus;
 import cz.cvut.fel.adaptiverestfulapi.data.GetHandler;
 import cz.cvut.fel.adaptiverestfulapi.meta.configuration.Configuration;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Attribute;
@@ -12,7 +14,7 @@ import cz.cvut.fel.adaptiverestfulapi.meta.model.Relationship;
 public class DescriptionDataHandler implements GetHandler {
 
     @Override
-    public Object get(Entity entity, HttpContext context, Configuration configuration) {
+    public HttpContext get(Entity entity, HttpContext context, Configuration configuration) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("Entity:\n");
@@ -32,7 +34,8 @@ public class DescriptionDataHandler implements GetHandler {
             sb.append("\n");
         }
 
-        return sb.toString();
+        context.response(HttpStatus.S_200, new HttpHeaders(), sb.toString());
+        return context;
     }
 
 }

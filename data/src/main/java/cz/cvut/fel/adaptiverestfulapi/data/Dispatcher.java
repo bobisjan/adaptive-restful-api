@@ -30,30 +30,25 @@ public class Dispatcher extends Filter {
         Entity entity = model.entityForName(name);
         HttpMethod method = httpContext.getMethod();
 
-        Object result = null;
-
         if (HttpMethod.GET.equals(method)) {
             GetHandler handler = configuration.get(GetHandler.Key, entity);
-            result = handler.get(entity, httpContext, configuration);
+            httpContext = handler.get(entity, httpContext, configuration);
 
         } else if (HttpMethod.POST.equals(method)) {
             PostHandler handler = configuration.get(PostHandler.Key, entity);
-            result = handler.post(entity, httpContext, configuration);
+            httpContext = handler.post(entity, httpContext, configuration);
 
         } else if (HttpMethod.PUT.equals(method)) {
             PutHandler handler = configuration.get(PutHandler.Key, entity);
-            result = handler.put(entity, httpContext, configuration);
+            httpContext = handler.put(entity, httpContext, configuration);
 
         } else if (HttpMethod.DELETE.equals(method)) {
             DeleteHandler handler = configuration.get(DeleteHandler.Key, entity);
-            result = handler.delete(entity, httpContext, configuration);
+            httpContext = handler.delete(entity, httpContext, configuration);
 
         } else {
             throw new DataException("Can not dispatch method '" + method + "'.");
         }
-
-        httpContext.setContent(result);
-        httpContext.response(HttpStatus.S_200, new HttpHeaders(), result.toString());
 
         return this.resign(httpContext, model, configuration);
     }

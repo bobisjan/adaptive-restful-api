@@ -10,6 +10,6 @@ public interface PutHandler {
 
     public static final String Key = PutHandler.class.getName();
 
-    public Object put(Entity entity, HttpContext context, Configuration configuration);
+    public HttpContext put(Entity entity, HttpContext context, Configuration configuration);
 
 }

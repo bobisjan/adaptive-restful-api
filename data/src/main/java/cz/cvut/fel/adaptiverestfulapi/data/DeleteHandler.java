@@ -10,6 +10,6 @@ public interface DeleteHandler {
 
     public static final String Key = DeleteHandler.class.getName();
 
-    public Object delete(Entity entity, HttpContext context, Configuration configuration);
+    public HttpContext delete(Entity entity, HttpContext context, Configuration configuration);
 
 }

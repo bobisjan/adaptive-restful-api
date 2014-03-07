@@ -10,6 +10,6 @@ public interface GetHandler {
 
     public static final String Key = GetHandler.class.getName();
 
-    public Object get(Entity entity, HttpContext context, Configuration configuration);
+    public HttpContext get(Entity entity, HttpContext context, Configuration configuration);
 
 }

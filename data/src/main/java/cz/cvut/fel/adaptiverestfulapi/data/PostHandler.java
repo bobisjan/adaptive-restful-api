@@ -10,6 +10,6 @@ public interface PostHandler {
 
     public static final String Key = PostHandler.class.getName();
 
-    public Object post(Entity entity, HttpContext context, Configuration configuration);
+    public HttpContext post(Entity entity, HttpContext context, Configuration configuration);
 
 }
