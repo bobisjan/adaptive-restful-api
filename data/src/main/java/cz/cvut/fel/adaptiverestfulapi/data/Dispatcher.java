@@ -10,6 +10,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 
+/**
+ * Data dispatcher.
+ * Dispatches data processing to the concrete handler based on the HTTP method and entity.
+ */
 public class Dispatcher extends Filter {
 
     public Dispatcher() {
@@ -36,6 +40,14 @@ public class Dispatcher extends Filter {
         return this.resign(httpContext, model, configuration);
     }
 
+    /**
+     * Looks up for data handler for HTTP method and entity in the configuration.
+     * @param method The HTTP method.
+     * @param entity The entity.
+     * @param configuration The configuration.
+     * @return The data handler.
+     * @throws DataException
+     */
     protected Handler handler(HttpMethod method, Entity entity, Configuration configuration) throws DataException {
         if (HttpMethod.GET.equals(method)) {
             return configuration.get(GetHandler.Key, entity);
