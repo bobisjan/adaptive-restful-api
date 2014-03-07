@@ -12,8 +12,6 @@ import java.net.URL;
 
 public class Dispatcher extends Filter {
 
-    public static final String Handler = "cz.cvut.fel.adaptiverestfulapi.data.Handler";
-
     public Dispatcher() {
         this(null);
     }
@@ -30,9 +28,33 @@ public class Dispatcher extends Filter {
         String name = this.entityName(httpContext, model);
 
         Entity entity = model.entityForName(name);
-        Handler handler = configuration.get(Dispatcher.Handler, entity);
+        HttpMethod method = httpContext.getMethod();
 
-        this.dispatch(entity, handler, httpContext, configuration);
+        Object result = null;
+
+        if (HttpMethod.GET.equals(method)) {
+            GetHandler handler = configuration.get(GetHandler.Key, entity);
+            result = handler.get(entity, httpContext, configuration);
+
+        } else if (HttpMethod.POST.equals(method)) {
+            PostHandler handler = configuration.get(PostHandler.Key, entity);
+            result = handler.post(entity, httpContext, configuration);
+
+        } else if (HttpMethod.PUT.equals(method)) {
+            PutHandler handler = configuration.get(PutHandler.Key, entity);
+            result = handler.put(entity, httpContext, configuration);
+
+        } else if (HttpMethod.DELETE.equals(method)) {
+            DeleteHandler handler = configuration.get(DeleteHandler.Key, entity);
+            result = handler.delete(entity, httpContext, configuration);
+
+        } else {
+            throw new DataException("Can not dispatch method '" + method + "'.");
+        }
+
+        httpContext.setContent(result);
+        httpContext.response(HttpStatus.S_200, new HttpHeaders(), result.toString());
+
         return this.resign(httpContext, model, configuration);
     }
 
@@ -65,38 +87,6 @@ public class Dispatcher extends Filter {
         } catch (MalformedURLException e) {
             throw new DataException("Malformed URL: " + e.getLocalizedMessage());
         }
-    }
-
-    /**
-     * Dispatches method to the data handler and stores the result into the context.
-     * @param entity
-     * @param handler
-     * @param httpContext
-     * @param configuration
-     * @throws DataException
-     */
-    protected void dispatch(Entity entity, Handler handler, HttpContext httpContext, Configuration configuration) throws DataException {
-        HttpMethod method = httpContext.getMethod();
-        Object result = null;
-
-        if (HttpMethod.GET.equals(method)) {
-            result = handler.GET(entity, httpContext, configuration);
-
-        } else if (HttpMethod.POST.equals(method)) {
-            result = handler.POST(entity, httpContext, configuration);
-
-        } else if (HttpMethod.PUT.equals(method)) {
-            result = handler.PUT(entity, httpContext, configuration);
-
-        } else if (HttpMethod.DELETE.equals(method)) {
-            result = handler.DELETE(entity, httpContext, configuration);
-
-        } else {
-            throw new DataException("Can not dispatch method '" + method + "'.");
-        }
-
-        httpContext.setContent(result);
-        httpContext.response(HttpStatus.S_200, new HttpHeaders(), result.toString());
     }
 
 }
