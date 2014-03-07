@@ -51,7 +51,7 @@ public class FilteredServlet extends HttpServlet {
     protected void error(FilterException e, HttpServletResponse response) throws IOException {
         response.setStatus(e.getStatus().getCode());
 
-        for (String name : e.getHeaders().keySet()) {
+        for (String name : e.getHeaders()) {
             response.setHeader(name, e.getHeaders().get(name));
         }
 
