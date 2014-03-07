@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.Map;
 
 
 public class FilteredServlet extends HttpServlet {
@@ -48,7 +49,11 @@ public class FilteredServlet extends HttpServlet {
     }
 
     protected void error(FilterException e, HttpServletResponse response) throws IOException {
-        response.setStatus(e.getCode());
+        response.setStatus(e.getStatus().getCode());
+
+        for (String name : e.getHeaders().keySet()) {
+            response.setHeader(name, e.getHeaders().get(name));
+        }
 
         response.getWriter().write(e.getLocalizedMessage());
         response.getWriter().flush();
