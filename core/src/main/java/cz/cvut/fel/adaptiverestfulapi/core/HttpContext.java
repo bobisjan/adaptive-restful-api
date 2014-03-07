@@ -45,7 +45,7 @@ public class HttpContext {
         return this.method;
     }
 
-    public Map<String, String> getRequestHeaders() {
+    public HttpHeaders getRequestHeaders() {
         return this.requestHeaders;
     }
 
@@ -63,7 +63,7 @@ public class HttpContext {
         return this.status;
     }
 
-    public Map<String, String> getResponseHeaders() {
+    public HttpHeaders getResponseHeaders() {
         return this.responseHeaders;
     }
 

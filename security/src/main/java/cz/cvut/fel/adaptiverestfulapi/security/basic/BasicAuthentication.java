@@ -2,6 +2,7 @@ package cz.cvut.fel.adaptiverestfulapi.security.basic;
 
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import cz.cvut.fel.adaptiverestfulapi.core.HttpContext;
+import cz.cvut.fel.adaptiverestfulapi.core.HttpHeaders;
 import cz.cvut.fel.adaptiverestfulapi.security.Authentication;
 import cz.cvut.fel.adaptiverestfulapi.security.AuthenticationException;
 
@@ -43,7 +44,8 @@ public abstract class BasicAuthentication extends Authentication {
 
     private Map.Entry<String, String> user(HttpContext httpContext) throws AuthenticationException {
         // TODO Get rid off the string, use constant
-        String auth = httpContext.getRequestHeaders().get("authorization");
+        HttpHeaders httpHeaders = httpContext.getRequestHeaders();
+        String auth = httpHeaders.get(HttpHeaders.Authorization);
 
         if (auth == null || !auth.startsWith("Basic ")) {
             throw new BasicAuthenticationException(this.realm);

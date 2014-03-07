@@ -9,6 +9,8 @@ import java.util.HashMap;
  */
 public class HttpHeaders extends HashMap<String, String> {
 
-    // TODO Add constants
+    // HTTP header names (alphabetic sort)
+    public static final String Authorization = "authorization";
+    public static final String WWWAuthenticate = "WWW-Authenticate";
 
 }
