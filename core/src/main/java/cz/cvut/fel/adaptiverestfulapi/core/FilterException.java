@@ -4,32 +4,43 @@ package cz.cvut.fel.adaptiverestfulapi.core;
 
 public class FilterException extends Exception {
 
-    protected int code;
+    protected HttpStatus status;
+    protected HttpHeaders headers;
 
     public FilterException() {
         this("Something gets broken during the filter process.");
     }
 
     public FilterException(HttpStatus status) {
-        this(status.getMessage(), status.getCode());
+        this(status, new HttpHeaders());
+    }
+
+    public FilterException(HttpStatus status, HttpHeaders headers) {
+        this(status.getMessage(), status, headers);
     }
 
     public FilterException(String message) {
-        this(message, 500);
+        this(message, HttpStatus.S_500, new HttpHeaders());
     }
 
-    public FilterException(String message, int code) {
+    public FilterException(String message, HttpStatus status, HttpHeaders headers) {
         super(message);
-        this.code = code;
+        this.status = status;
+        this.headers = headers;
     }
 
     public FilterException(Exception e) {
         super(e);
-        this.code = 500;
+        this.status = HttpStatus.S_500;
+        this.headers = new HttpHeaders();
     }
 
-    public int getCode() {
-        return this.code;
+    public HttpStatus getStatus() {
+        return this.status;
+    }
+
+    public HttpHeaders getHeaders() {
+        return this.headers;
     }
 
 }
