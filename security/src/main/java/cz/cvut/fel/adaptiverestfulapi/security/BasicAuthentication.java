@@ -12,12 +12,18 @@ import java.util.Map;
  */
 public abstract class BasicAuthentication extends Authentication {
 
+    private String realm;
+
+    public BasicAuthentication(String realm) {
+        this.realm = realm;
+    }
+
     @Override
     protected final void authenticate(HttpContext httpContext) throws AuthenticationException {
         Map.Entry<String, String> user = this.user(httpContext);
 
         if (!this.isAuthenticated(user.getKey(), user.getValue())) {
-            throw new AuthenticationException();
+            throw new BasicAuthenticationException(this.realm);
         }
     }
 
@@ -31,10 +37,10 @@ public abstract class BasicAuthentication extends Authentication {
 
     private Map.Entry<String, String> user(HttpContext httpContext) throws AuthenticationException {
         // TODO Get rid off the string, use constant
-        String auth = httpContext.getRequestHeaders().get("Authorization");
+        String auth = httpContext.getRequestHeaders().get("authorization");
 
-        if (!auth.startsWith("Basic ")) {
-            throw new AuthenticationException();
+        if (auth == null || !auth.startsWith("Basic ")) {
+            throw new BasicAuthenticationException(this.realm);
         }
 
         auth = auth.substring("Basic ".length());
@@ -43,7 +49,7 @@ public abstract class BasicAuthentication extends Authentication {
         String[] parts = auth.split(":");
 
         if (parts.length != 2) {
-            throw new AuthenticationException();
+            throw new BasicAuthenticationException(this.realm);
         }
         return new AbstractMap.SimpleImmutableEntry<String, String>(parts[0], parts[1]);
     }
