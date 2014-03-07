@@ -1,7 +1,9 @@
-package cz.cvut.fel.adaptiverestfulapi.security;
+package cz.cvut.fel.adaptiverestfulapi.security.basic;
 
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import cz.cvut.fel.adaptiverestfulapi.core.HttpContext;
+import cz.cvut.fel.adaptiverestfulapi.security.Authentication;
+import cz.cvut.fel.adaptiverestfulapi.security.AuthenticationException;
 
 import java.util.AbstractMap;
 import java.util.Map;

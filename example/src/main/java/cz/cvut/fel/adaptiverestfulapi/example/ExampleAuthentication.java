@@ -1,7 +1,7 @@
 
 package cz.cvut.fel.adaptiverestfulapi.example;
 
-import cz.cvut.fel.adaptiverestfulapi.security.BasicAuthentication;
+import cz.cvut.fel.adaptiverestfulapi.security.basic.BasicAuthentication;
 
 import java.util.HashMap;
 import java.util.Map;
