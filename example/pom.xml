@@ -38,6 +38,12 @@
         </dependency>
 
         <dependency>
+            <groupId>cz.cvut.fel</groupId>
+            <artifactId>adaptive-restful-api-security</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>${javax.serlvet.version}</version>
