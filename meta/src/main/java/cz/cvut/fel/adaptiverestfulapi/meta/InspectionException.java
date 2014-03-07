@@ -1,6 +1,7 @@
 
 package cz.cvut.fel.adaptiverestfulapi.meta;
 
+
 /**
  * Exception for inspection process.
  */

@@ -1,3 +1,4 @@
+
 package cz.cvut.fel.adaptiverestfulapi.caching;
 
 import cz.cvut.fel.adaptiverestfulapi.core.HttpContext;

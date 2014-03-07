@@ -1,3 +1,4 @@
+
 package cz.cvut.fel.adaptiverestfulapi.security.basic;
 
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;

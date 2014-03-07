@@ -1,4 +1,6 @@
+
 package cz.cvut.fel.adaptiverestfulapi.core;
+
 
 /**
  * Enum for HTTP status codes.
