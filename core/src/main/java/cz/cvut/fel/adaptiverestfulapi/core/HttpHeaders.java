@@ -12,7 +12,7 @@ import java.util.Map;
 public class HttpHeaders implements Iterable<String> {
 
     // HTTP header names (alphabetic sort)
-    public static final String Authorization = "authorization";
+    public static final String Authorization = "Authorization";
     public static final String WWWAuthenticate = "WWW-Authenticate";
 
     private Map<String, String> data;
@@ -22,15 +22,18 @@ public class HttpHeaders implements Iterable<String> {
     }
 
     public HttpHeaders(Map<String, String> data) {
-        this.data = data;
+        this.data = new HashMap<>();
+        for (Map.Entry<String, String> entry : data.entrySet()) {
+            this.data.put(entry.getKey().toLowerCase(), entry.getValue());
+        }
     }
 
     public void put(String key, String value) {
-        this.data.put(key, value);
+        this.data.put(key.toLowerCase(), value);
     }
 
     public String get(String key) {
-        return this.data.get(key);
+        return this.data.get(key.toLowerCase());
     }
 
     @Override
