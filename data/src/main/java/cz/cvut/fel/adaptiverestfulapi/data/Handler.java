@@ -17,7 +17,8 @@ public interface Handler {
      * @param context The HTTP context.
      * @param configuration The configuration.
      * @return Processed HTTP context.
+     * @throws DataException
      */
-    public HttpContext handle(Entity entity, HttpContext context, Configuration configuration);
+    public HttpContext handle(Entity entity, HttpContext context, Configuration configuration) throws DataException;
 
 }

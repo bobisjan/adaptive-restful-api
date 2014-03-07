@@ -19,11 +19,12 @@ public abstract class PostHandler implements Handler {
      * @param context The HTTP context.
      * @param configuration The configuration.
      * @return Processed HTTP context.
+     * @throws DataException
      */
-    protected abstract HttpContext post(Entity entity, HttpContext context, Configuration configuration);
+    protected abstract HttpContext post(Entity entity, HttpContext context, Configuration configuration) throws DataException;
 
     @Override
-    public final HttpContext handle(Entity entity, HttpContext context, Configuration configuration) {
+    public final HttpContext handle(Entity entity, HttpContext context, Configuration configuration) throws DataException {
         return this.post(entity, context, configuration);
     }
 
