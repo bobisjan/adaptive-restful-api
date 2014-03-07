@@ -11,10 +11,10 @@ import cz.cvut.fel.adaptiverestfulapi.meta.model.Entity;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Relationship;
 
 
-public class DescriptionDataHandler implements GetHandler {
+public class DescriptionDataHandler extends GetHandler {
 
     @Override
-    public HttpContext get(Entity entity, HttpContext context, Configuration configuration) {
+    protected HttpContext get(Entity entity, HttpContext context, Configuration configuration) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("Entity:\n");

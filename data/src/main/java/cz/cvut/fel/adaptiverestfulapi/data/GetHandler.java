@@ -6,10 +6,14 @@ import cz.cvut.fel.adaptiverestfulapi.meta.configuration.Configuration;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Entity;
 
 
-public interface GetHandler {
+public abstract class GetHandler implements Handler {
 
     public static final String Key = GetHandler.class.getName();
 
-    public HttpContext get(Entity entity, HttpContext context, Configuration configuration);
+    protected abstract HttpContext get(Entity entity, HttpContext context, Configuration configuration);
+
+    public final HttpContext handle(Entity entity, HttpContext context, Configuration configuration) {
+        return this.get(entity, context, configuration);
+    }
 
 }

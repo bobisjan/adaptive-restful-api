@@ -6,10 +6,14 @@ import cz.cvut.fel.adaptiverestfulapi.meta.configuration.Configuration;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Entity;
 
 
-public interface DeleteHandler {
+public abstract class DeleteHandler implements Handler {
 
     public static final String Key = DeleteHandler.class.getName();
 
-    public HttpContext delete(Entity entity, HttpContext context, Configuration configuration);
+    protected abstract HttpContext delete(Entity entity, HttpContext context, Configuration configuration);
+
+    public final HttpContext handle(Entity entity, HttpContext context, Configuration configuration) {
+        return this.delete(entity, context, configuration);
+    }
 
 }
