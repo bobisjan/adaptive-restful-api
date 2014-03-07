@@ -14,6 +14,10 @@ public abstract class BasicAuthentication extends Authentication {
 
     private String realm;
 
+    public BasicAuthentication() {
+        this.realm = null;
+    }
+
     public BasicAuthentication(String realm) {
         this.realm = realm;
     }
