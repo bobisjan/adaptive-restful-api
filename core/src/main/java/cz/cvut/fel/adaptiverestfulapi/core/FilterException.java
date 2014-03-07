@@ -10,6 +10,10 @@ public class FilterException extends Exception {
         this("Something gets broken during the filter process.");
     }
 
+    public FilterException(HttpStatus status) {
+        this(status.getMessage(), status.getCode());
+    }
+
     public FilterException(String message) {
         this(message, 500);
     }
