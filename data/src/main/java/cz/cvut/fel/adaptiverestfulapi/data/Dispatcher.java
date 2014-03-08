@@ -29,6 +29,10 @@ public class Dispatcher extends Filter {
         String name = this.entityName(httpContext, model);
 
         Entity entity = model.entityForName(name);
+        if (entity == null) {
+            throw new FilterException("Entity for name " + name + " could not be found.", HttpStatus.S_404, new HttpHeaders());
+        }
+
         HttpMethod method = httpContext.getMethod();
 
         Handler handler = this.handler(method, entity, configuration);
