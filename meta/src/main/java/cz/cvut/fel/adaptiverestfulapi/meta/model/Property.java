@@ -27,4 +27,12 @@ public abstract class Property {
         return this.name;
     }
 
+    public Method getGetter() {
+        return this.getter;
+    }
+
+    public Method getSetter() {
+        return this.setter;
+    }
+
 }

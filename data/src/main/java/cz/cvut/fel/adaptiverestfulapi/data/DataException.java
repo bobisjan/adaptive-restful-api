@@ -14,4 +14,8 @@ public class DataException extends FilterException {
         super(message);
     }
 
+    public DataException(Exception e) {
+        super(e);
+    }
+
 }
