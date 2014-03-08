@@ -9,8 +9,9 @@ public class HttpContext {
 
     private Object content;
 
+    private HttpRouter router;
+
     // request
-    private final String uri;
     private final HttpMethod method;
     private final HttpHeaders requestHeaders;
     private String requestContent;
@@ -21,7 +22,7 @@ public class HttpContext {
     private String responseContent;
 
     public HttpContext(String uri, HttpMethod method, HttpHeaders headers, String content) {
-        this.uri = uri;
+        this.router = HttpRouter.createRouter(uri);
         this.method = method;
         this.requestHeaders = headers;
         this.requestContent = content;
@@ -35,8 +36,8 @@ public class HttpContext {
         this.content = content;
     }
 
-    public String getUri() {
-        return this.uri;
+    public HttpRouter getRouter() {
+        return this.router;
     }
 
     public HttpMethod getMethod() {

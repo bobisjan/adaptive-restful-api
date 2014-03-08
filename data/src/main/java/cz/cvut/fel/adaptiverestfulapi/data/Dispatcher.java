@@ -26,9 +26,6 @@ public class Dispatcher extends Filter {
 
     @Override
     public HttpContext process(HttpContext httpContext, Model model, Configuration configuration) throws FilterException {
-        // TODO consider using a router
-        // Router router = configuration.get("router");
-        // Entity entity = router.entityName(httpContext);
         String name = this.entityName(httpContext, model);
 
         Entity entity = model.entityForName(name);
@@ -66,35 +63,8 @@ public class Dispatcher extends Filter {
         }
     }
 
-    /**
-     * Extracts entity name from request URI.
-     *
-     * Examples
-     *
-     * Model: 'com.app.model'
-     * URI: http://app.com/Project
-     * -> com.app.model.Project
-     *
-     * Model: 'com.app.model'
-     * URI: http://app.com/secured/Project
-     * -> com.app.model.secured.Project
-     *
-     * @param httpContext
-     * @return The name of entity.
-     */
-    protected String entityName(HttpContext httpContext, Model model) throws DataException {
-        try {
-            URL url = new URL(httpContext.getUri());
-            String path = url.getPath();
-
-            // TODO allow to have namespace, eq.: http://app.com/api/v2/package/Entity
-
-            path = path.replaceAll("/", ".");
-            return model.getName() + path;
-
-        } catch (MalformedURLException e) {
-            throw new DataException("Malformed URL: " + e.getLocalizedMessage());
-        }
+    private String entityName(HttpContext httpContext, Model model) {
+        return model.getName() + "." + httpContext.getRouter().getResource();
     }
 
 }
