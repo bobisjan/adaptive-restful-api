@@ -11,6 +11,7 @@ public class HttpRouter {
     private int port;
 
     private String resource;
+    private String identifier;
 
     public static HttpRouter createRouter(String url) {
         try {
@@ -27,13 +28,30 @@ public class HttpRouter {
         this.host = URL.getHost();
         this.port = URL.getPort();
         this.resource = this.resource(URL.getPath());
+        this.identifier = this.identifier(URL.getPath());
     }
 
     protected String resource(String path) {
+        String[] parts = this.pathParts(path);
+        if (parts.length > 0) {
+            return parts[0];
+        }
+        return null;
+    }
+
+    protected String identifier(String path) {
+        String[] parts = this.pathParts(path);
+        if (parts.length == 2) {
+            return parts[1];
+        }
+        return null;
+    }
+
+    private String[] pathParts(String path) {
         if (path.startsWith("/")) {
             path = path.substring(1);
         }
-        return path;
+        return path.split("/");
     }
 
     public String getHost() {
@@ -46,6 +64,10 @@ public class HttpRouter {
 
     public String getResource() {
         return this.resource;
+    }
+
+    public String getIdentifier() {
+        return this.identifier;
     }
 
 }
