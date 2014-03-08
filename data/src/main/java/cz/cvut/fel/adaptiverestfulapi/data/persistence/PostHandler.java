@@ -26,7 +26,9 @@ public class PostHandler extends cz.cvut.fel.adaptiverestfulapi.data.PostHandler
     }
 
     protected Object create(Entity entity, Object object) {
+        this.manager.getTransaction().begin();
         this.manager.persist(object);
+        this.manager.getTransaction().commit();
         return object;
     }
 
