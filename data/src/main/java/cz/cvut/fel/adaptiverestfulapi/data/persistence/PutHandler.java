@@ -1,7 +1,6 @@
 
 package cz.cvut.fel.adaptiverestfulapi.data.persistence;
 
-import cz.cvut.fel.adaptiverestfulapi.core.FilterException;
 import cz.cvut.fel.adaptiverestfulapi.core.HttpContext;
 import cz.cvut.fel.adaptiverestfulapi.data.DataException;
 import cz.cvut.fel.adaptiverestfulapi.meta.configuration.Configuration;
@@ -25,21 +24,22 @@ public class PutHandler extends cz.cvut.fel.adaptiverestfulapi.data.PutHandler {
     protected HttpContext put(Entity entity, HttpContext context, Configuration configuration) throws DataException {
         String identifier = context.getRouter().getIdentifier();
         Object object = context.getContent();
-        Object result = this.update(entity, identifier, object);
-        context.setContent(result);
-        return context;
-    }
 
-    protected Object update(Entity entity, Object identifier, Object object) throws DataException {
         Object current = this.manager.find(entity.getEntityClass(), identifier);
-
         if (current == null) {
             // TODO 404
             throw new DataException("Entity " + entity + " with identifier " + identifier + " could not be found.");
         }
 
+        Object result = this.update(entity, current, object);
+
+        context.setContent(result);
+        return context;
+    }
+
+    protected Object update(Entity entity, Object current, Object updated) throws DataException {
         this.manager.getTransaction().begin();
-        this.merge(entity, current, object);
+        this.merge(entity, current, updated);
         this.manager.merge(current);
         this.manager.getTransaction().commit();
 
@@ -49,6 +49,7 @@ public class PutHandler extends cz.cvut.fel.adaptiverestfulapi.data.PutHandler {
     private void merge(Entity entity, Object current, Object updated) throws DataException {
         for (Attribute attribute : entity.getAttributes().values()) {
             try {
+                // TODO skip primary key
                 Method getter = attribute.getGetter();
                 Method setter = attribute.getGetter();
                 setter.invoke(current, getter.invoke(updated));
