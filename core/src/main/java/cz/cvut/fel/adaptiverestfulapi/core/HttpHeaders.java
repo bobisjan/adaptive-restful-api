@@ -10,7 +10,9 @@ import java.util.*;
 public class HttpHeaders implements Iterable<String> {
 
     // HTTP header names (alphabetic sort)
+    public static final String Accept = "Accept";
     public static final String Authorization = "Authorization";
+    public static final String ContentType = "Content-Type";
     public static final String WWWAuthenticate = "WWW-Authenticate";
 
     private Map<String, List<String>> data;
