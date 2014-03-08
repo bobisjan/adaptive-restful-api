@@ -38,6 +38,19 @@ public class HttpHeaders implements Iterable<String> {
         this.data.put(key.toLowerCase(), value);
     }
 
+    public boolean contains(String value, String key) {
+        if (!this.data.containsKey(this.normalizeKey(key))) {
+            return false;
+        }
+
+        for (String v : this.data.get(this.normalizeKey(key))) {
+            if (v.equalsIgnoreCase(value)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public <T> T get(String key) {
         if (!this.data.containsKey(this.normalizeKey(key))) {
             return null;
