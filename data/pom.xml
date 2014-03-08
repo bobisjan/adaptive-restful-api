@@ -10,6 +10,10 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
+    <!--<properties>
+        <javax.persistence.version>2.0.0</javax.persistence.version>
+    </properties>-->
+
     <groupId>cz.cvut.fel</groupId>
     <artifactId>adaptive-restful-api-data</artifactId>
 
@@ -18,6 +22,19 @@
             <groupId>cz.cvut.fel</groupId>
             <artifactId>adaptive-restful-api-core</artifactId>
             <version>${project.version}</version>
+        </dependency>
+
+        <!--<dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>persistence-api</artifactId>
+            <version>${javax.persistence.version}</version>
+            <scope>provided</scope>
+        </dependency>-->
+
+        <dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.0-api</artifactId>
+            <version>1.0.1.Final</version>
         </dependency>
     </dependencies>
 </project>
