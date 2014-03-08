@@ -13,7 +13,7 @@ public class BasicAuthenticationException extends AuthenticationException {
 
     public BasicAuthenticationException(String realm) {
         super();
-        this.headers.put(HttpHeaders.WWWAuthenticate, "Basic" + (realm != null ? " realm=\"" + realm + "\"" : ""));
+        this.headers.add(HttpHeaders.WWWAuthenticate, "Basic" + (realm != null ? " realm=\"" + realm + "\"" : ""));
     }
 
 }

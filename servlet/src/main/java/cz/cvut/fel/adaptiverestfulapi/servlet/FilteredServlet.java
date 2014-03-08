@@ -52,7 +52,7 @@ public class FilteredServlet extends HttpServlet {
         response.setStatus(e.getStatus().getCode());
 
         for (String name : e.getHeaders()) {
-            response.setHeader(name, e.getHeaders().get(name));
+            response.setHeader(name, e.getHeaders().getString(name));
         }
 
         response.getWriter().write(e.getLocalizedMessage());
@@ -70,7 +70,7 @@ public class FilteredServlet extends HttpServlet {
 
             while (values.hasMoreElements()) {
                 String value = values.nextElement();
-                headers.put(key, value);
+                headers.add(key, value);
             }
         }
         return headers;
