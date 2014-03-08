@@ -64,7 +64,7 @@ public class HttpHeaders implements Iterable<String> {
             return null;
         }
 
-        List<String> values = this.get(this.normalizeKey(key));
+        List<String> values = this.data.get(this.normalizeKey(key));
         Iterator<String> iterator = values.iterator();
 
         while (iterator.hasNext()){
