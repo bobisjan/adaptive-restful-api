@@ -32,12 +32,12 @@ public class FilteredServlet extends HttpServlet {
     }
 
     protected HttpContext read(HttpServletRequest request) throws IOException {
-        String uri = request.getRequestURL().toString();
+        String url = request.getRequestURL().toString();
         HttpMethod httpMethod = HttpMethod.valueOf(request.getMethod());
         HttpHeaders headers = this.headers(request);
         String content = this.content(request);
 
-        return new HttpContext(uri, httpMethod, headers, content);
+        return new HttpContext(url, httpMethod, headers, content);
     }
 
     protected void write(HttpServletResponse response, HttpContext httpContext) throws IOException  {
