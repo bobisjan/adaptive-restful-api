@@ -16,6 +16,7 @@
 
     <groupId>cz.cvut.fel</groupId>
     <artifactId>adaptive-restful-api-example</artifactId>
+    <packaging>war</packaging>
 
     <dependencies>
         <dependency>
@@ -46,6 +47,7 @@
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>${javax.serlvet.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
