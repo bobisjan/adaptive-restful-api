@@ -30,7 +30,14 @@ public class ReflectionTest {
         for (Class<?> clazz : leafs) {
             Set<Triplet<Field, Method, Method>> triplets = reflection.triplets(clazz);
 
-            assert (triplets.size() == 2) : "Class " + clazz.getCanonicalName() + " should have 2 triplets, has " + triplets.size() + ".";
+            int size = 0;
+            if (clazz.getName().endsWith("Issue")) {
+               size = 3;
+
+            } else if (clazz.getName().endsWith("Project")) {
+                size = 5;
+            }
+            assert (triplets.size() == size) : "Class " + clazz.getCanonicalName() + " should have " + size + " triplets, has " + triplets.size() + ".";
         }
     }
 

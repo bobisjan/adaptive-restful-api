@@ -31,13 +31,15 @@ public class Reflection {
     public Reflection(String pack, Class clazz) {
         if (clazz.equals(Object.class)) {
             // @see http://stackoverflow.com/a/9571146
-            List<ClassLoader> classLoadersList = new LinkedList<ClassLoader>();
+            List<ClassLoader> classLoadersList = new LinkedList();
             classLoadersList.add(ClasspathHelper.contextClassLoader());
             classLoadersList.add(ClasspathHelper.staticClassLoader());
 
             this.reflections = new Reflections(new ConfigurationBuilder()
                     .setScanners(new SubTypesScanner(false), new ResourcesScanner())
-                    .setUrls(ClasspathHelper.forClassLoader(classLoadersList.toArray(new ClassLoader[0])))
+                    // commented this out because on OS X does not work well with `mvn test`
+//                    .setUrls(ClasspathHelper.forClassLoader(classLoadersList.toArray(new ClassLoader[0])))
+                    .addUrls(ClasspathHelper.forJavaClassPath())
                     .filterInputsBy(new FilterBuilder().include(FilterBuilder.prefix(pack))));
 
         } else {

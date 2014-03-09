@@ -17,6 +17,8 @@ public class ConfigurationInspectionTest {
         inspector.addConfigurator(configurator);
 
         Model model = inspector.model(pack, baseClass);
+        assert (model != null) : "Model should not be null.";
+
         Configuration configuration = inspector.configuration(model);
 
         assert (configuration != null) : "Configuration should not be null.";
