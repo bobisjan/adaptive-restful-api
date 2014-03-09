@@ -1,14 +1,21 @@
 
 package cz.cvut.fel.adaptiverestfulapi.example.model;
 
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Locale;
 
 
+@Entity
 public class Issue {
 
+    @Id
+    @GeneratedValue
     private long id;
+
+    @Column
     private String description;
+
+    @ManyToOne
     private Project project;
 
     public Issue() {
@@ -20,7 +27,6 @@ public class Issue {
         this.setProject(project);
     }
 
-    @Id
     public long getId() {
         return this.id;
     }

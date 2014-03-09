@@ -1,17 +1,25 @@
 
 package cz.cvut.fel.adaptiverestfulapi.example.model;
 
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 
+@Entity
 public class Project {
 
+    @Id
     private long id;
+
+    @Column
     private String name;
+
+    @Column
     private Date startedAt;
+
+    @OneToMany(mappedBy = "project")
     private List<Issue> issues;
 
     public Project() {
@@ -24,7 +32,6 @@ public class Project {
         this.setIssues(issues);
     }
 
-    @Id
     public long getId() {
         return this.id;
     }
