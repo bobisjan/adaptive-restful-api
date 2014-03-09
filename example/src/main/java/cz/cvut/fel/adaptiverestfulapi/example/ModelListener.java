@@ -235,13 +235,16 @@ public class ModelListener implements ModelInspectionListener {
      * @return True if triplet is primary.
      */
     protected boolean isPrimary(Triplet<Field, Method, Method> triplet, Entity entity) {
-        Annotation annotation = triplet.a.getAnnotation(Id.class);
+        Field field = triplet.a;
+        Method getter = triplet.b;
+        Method setter = triplet.c;
 
+        Annotation annotation = (field != null) ? field.getAnnotation(Id.class) : null;
         if (annotation == null) {
-            annotation = triplet.b.getAnnotation(Id.class);
+            annotation = (getter != null) ? getter.getAnnotation(Id.class) : null;
 
             if (annotation == null) {
-                annotation = triplet.c.getAnnotation(Id.class);
+                annotation = (setter != null) ? setter.getAnnotation(Id.class) : null;
             }
         }
 
