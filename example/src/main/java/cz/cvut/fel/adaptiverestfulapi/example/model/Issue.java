@@ -1,11 +1,13 @@
 
 package cz.cvut.fel.adaptiverestfulapi.example.model;
 
+import javax.persistence.Id;
 import java.util.Locale;
 
 
 public class Issue {
 
+    private long id;
     private String description;
     private Project project;
 
@@ -16,6 +18,15 @@ public class Issue {
     public Issue(String description, Project project) {
         this.setDescription(description);
         this.setProject(project);
+    }
+
+    @Id
+    public long getId() {
+        return this.id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getDescription() {

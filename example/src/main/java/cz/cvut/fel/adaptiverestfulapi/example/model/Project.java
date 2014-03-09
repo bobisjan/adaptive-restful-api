@@ -1,6 +1,7 @@
 
 package cz.cvut.fel.adaptiverestfulapi.example.model;
 
+import javax.persistence.Id;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.List;
 
 public class Project {
 
+    private long id;
     private String name;
     private Date startedAt;
     private List<Issue> issues;
@@ -20,6 +22,15 @@ public class Project {
     public Project(String name, List<Issue> issues) {
         this.setName(name);
         this.setIssues(issues);
+    }
+
+    @Id
+    public long getId() {
+        return this.id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {

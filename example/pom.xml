@@ -12,7 +12,6 @@
 
     <properties>
         <javax.serlvet.version>3.1.0</javax.serlvet.version>
-        <javax.persistence.version>1.0.2</javax.persistence.version>
     </properties>
 
     <groupId>cz.cvut.fel</groupId>
@@ -50,9 +49,9 @@
         </dependency>
 
         <dependency>
-            <groupId>javax.persistence</groupId>
-            <artifactId>persistence-api</artifactId>
-            <version>${javax.persistence.version}</version>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.1-api</artifactId>
+            <version>${org.hibernate.javax.persistence.version}</version>
         </dependency>
     </dependencies>
 </project>

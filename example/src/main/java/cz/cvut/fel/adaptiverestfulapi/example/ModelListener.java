@@ -8,10 +8,7 @@ import cz.cvut.fel.adaptiverestfulapi.meta.model.Property;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Relationship;
 import cz.cvut.fel.adaptiverestfulapi.meta.reflection.Triplet;
 
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -42,7 +39,9 @@ public class ModelListener implements ModelInspectionListener {
         if (targetEntity != null) {
             return new Relationship(name, getter, setter, targetEntity.getName());
         }
-        return new Attribute(name, getter, setter);
+
+        boolean primary = this.isPrimary(triplet, entity);
+        return new Attribute(name, getter, setter, primary);
     }
 
     /**
@@ -224,6 +223,34 @@ public class ModelListener implements ModelInspectionListener {
             }
         }
         return null;
+    }
+
+    /**
+     * Determines if the triplet of the entity is primary attribute.
+     *
+     * Looks up for the JPA's Id annotation or matches property name "id".
+     *
+     * @param triplet
+     * @param entity The entity.
+     * @return True if triplet is primary.
+     */
+    protected boolean isPrimary(Triplet<Field, Method, Method> triplet, Entity entity) {
+        Annotation annotation = triplet.a.getAnnotation(Id.class);
+
+        if (annotation == null) {
+            annotation = triplet.b.getAnnotation(Id.class);
+
+            if (annotation == null) {
+                annotation = triplet.c.getAnnotation(Id.class);
+            }
+        }
+
+        if (annotation != null) {
+            return true;
+        }
+
+        String name = this.propertyName(triplet, entity);
+        return name.equalsIgnoreCase("id");
     }
 
     /**
