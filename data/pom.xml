@@ -10,9 +10,9 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <!--<properties>
-        <javax.persistence.version>2.0.0</javax.persistence.version>
-    </properties>-->
+    <properties>
+        <org.hibernate.javax.persistence.version>1.0.1.Final</org.hibernate.javax.persistence.version>
+    </properties>
 
     <groupId>cz.cvut.fel</groupId>
     <artifactId>adaptive-restful-api-data</artifactId>
@@ -24,17 +24,12 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!--<dependency>
-            <groupId>javax.persistence</groupId>
-            <artifactId>persistence-api</artifactId>
-            <version>${javax.persistence.version}</version>
-            <scope>provided</scope>
-        </dependency>-->
-
+        <!-- Java EE dependency `javax.persistence` 2.0 is not available. -->
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.0-api</artifactId>
-            <version>1.0.1.Final</version>
+            <version>${org.hibernate.javax.persistence.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
