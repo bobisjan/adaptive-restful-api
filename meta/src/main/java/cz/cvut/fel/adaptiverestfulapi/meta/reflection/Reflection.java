@@ -37,8 +37,8 @@ public class Reflection {
 
             this.reflections = new Reflections(new ConfigurationBuilder()
                     .setScanners(new SubTypesScanner(false), new ResourcesScanner())
-                    // commented this out because on OS X does not work well with `mvn test`
-//                    .setUrls(ClasspathHelper.forClassLoader(classLoadersList.toArray(new ClassLoader[0])))
+                    .addUrls(ClasspathHelper.forClassLoader(classLoadersList.toArray(new ClassLoader[0])))
+                    .addUrls(ClasspathHelper.forClassLoader(classLoadersList.toArray(new ClassLoader[1])))
                     .addUrls(ClasspathHelper.forJavaClassPath())
                     .filterInputsBy(new FilterBuilder().include(FilterBuilder.prefix(pack))));
 
