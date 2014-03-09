@@ -12,6 +12,7 @@ public class Entity {
     private final String name;
     private final Class entityClass;
 
+    private Attribute primary;
     private Map<String, Attribute> attributes;
     private Map<String, Relationship> relationships;
 
@@ -39,6 +40,9 @@ public class Entity {
 
         this.attributes = new HashMap<>();
         for (Attribute attribute : attributes) {
+            if (attribute.isPrimary()) {
+                this.primary = attribute;
+            }
             this.attributes.put(attribute.getName(), attribute);
         }
 
@@ -62,6 +66,14 @@ public class Entity {
      */
     public Class getEntityClass() {
         return this.entityClass;
+    }
+
+    /**
+     * Returns primary attribute.
+     * @return primary attribute
+     */
+    public Attribute getPrimary() {
+        return this.primary;
     }
 
     /**
