@@ -5,7 +5,7 @@ import java.util.*;
 
 
 /**
- * Class that provides unified access to HTTP headers
+ * Class that provides unified access to HTTP headers.
  */
 public class HttpHeaders implements Iterable<String> {
 
@@ -15,80 +15,97 @@ public class HttpHeaders implements Iterable<String> {
     public static final String ContentType = "Content-Type";
     public static final String WWWAuthenticate = "WWW-Authenticate";
 
-    private Map<String, List<String>> data;
+    private Map<String, HttpHeader> data;
 
     public HttpHeaders() {
-        this(new HashMap<String, List<String>>());
+        this(new LinkedList<HttpHeader>());
     }
 
-    public HttpHeaders(Map<String, List<String>> data) {
+    public HttpHeaders(List<HttpHeader> headers) {
         this.data = new HashMap<>();
-        for (Map.Entry<String, List<String>> entry : data.entrySet()) {
-            this.data.put(this.normalizeKey(entry.getKey()), entry.getValue());
+        for (HttpHeader entry : headers) {
+            this.data.put(this.normalizeKey(entry.getKey()), entry);
         }
     }
 
+    /**
+     * Adds string value for key.
+     * String should contain value and optional priority like `;q=0.4`.
+     * @see http://en.wikipedia.org/wiki/Content_negotiation
+     *
+     * @param key
+     * @param value
+     */
     public void add(String key, String value) {
-        if (!this.data.containsKey(this.normalizeKey(key))) {
-            List<String> values = new LinkedList<>();
-            this.data.put(this.normalizeKey(key), values);
+        String[] parts = { value };
+        if (value.contains(";q=")) {
+            parts = value.split(";q=");
+
+        } else if (value.contains("; q=")) {
+            parts = value.split("; q=");
         }
-        this.data.get(this.normalizeKey(key)).add(value);
+
+        if (parts.length == 2) {
+            this.add(key, new HttpHeaderValue(parts[0], Double.valueOf(parts[1])));
+
+        } else {
+            this.add(key, new HttpHeaderValue(parts[0]));
+        }
     }
 
-    public void put(String key, List<String> value) {
-        this.data.put(key.toLowerCase(), value);
+    /**
+     * Adds value for key.
+     * @param key
+     * @param value
+     */
+    public void add(String key, HttpHeaderValue value) {
+        if (!this.data.containsKey(this.normalizeKey(key))) {
+            List<HttpHeaderValue> values = new LinkedList<>();
+            values.add(value);
+            HttpHeader header = HttpHeader.create(key, values);
+            this.data.put(this.normalizeKey(key), header);
+
+        } else {
+            this.data.get(this.normalizeKey(key)).add(value);
+        }
     }
 
-    public boolean contains(String value, String key) {
+    /**
+     * Check whether headers contains valiue for specified key.
+     * @param key
+     * @param value
+     * @return
+     */
+    public boolean contains(String key, String value) {
         if (!this.data.containsKey(this.normalizeKey(key))) {
             return false;
         }
-
-        for (String v : this.data.get(this.normalizeKey(key))) {
-            if (v.equalsIgnoreCase(value)) {
-                return true;
-            }
-        }
-        return false;
+        return this.data.get(this.normalizeKey(key)).contains(value);
     }
 
+    /**
+     * Returns the value with the highest priority.
+     * @param key
+     * @param <T>
+     * @return
+     */
     public <T> T get(String key) {
         if (!this.data.containsKey(this.normalizeKey(key))) {
             return null;
         }
-
-        Class type = null;
-        try {
-            type = (Class)this.getClass().getMethod("get", String.class).getReturnType();
-
-        } catch (NoSuchMethodException e) {
-            type = java.util.List.class;
-        }
-
-        if (type.equals(java.util.List.class)) {
-            return (T)this.data.get(this.normalizeKey(key));
-        }
-        return (T)this.data.get(this.normalizeKey(key)).get(0);
+        return this.data.get(this.normalizeKey(key)).get();
     }
 
+    /**
+     * Returns comma-separated string of values for specified key.
+     * @param key
+     * @return
+     */
     public String getString(String key) {
-        StringBuilder sb = new StringBuilder();
-
         if (!this.data.containsKey(this.normalizeKey(key))) {
             return null;
         }
-
-        List<String> values = this.data.get(this.normalizeKey(key));
-        Iterator<String> iterator = values.iterator();
-
-        while (iterator.hasNext()){
-            sb.append(iterator.next());
-            if (iterator.hasNext()) {
-                sb.append(", ");
-            }
-        }
-        return sb.toString();
+        return this.data.get(this.normalizeKey(key)).getString();
     }
 
     @Override

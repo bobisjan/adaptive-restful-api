@@ -9,8 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Enumeration;
-import java.util.Map;
+import java.util.*;
 
 
 public class FilteredServlet extends HttpServlet {
@@ -61,19 +60,24 @@ public class FilteredServlet extends HttpServlet {
     }
 
     private HttpHeaders headers(HttpServletRequest request) {
-        HttpHeaders headers = new HttpHeaders();
+        List<HttpHeader> headers = new LinkedList<>();
         Enumeration<String> keys = request.getHeaderNames();
 
         while (keys.hasMoreElements()) {
             String key = keys.nextElement();
-            Enumeration<String> values = request.getHeaders(key);
+            Enumeration<String> strings = request.getHeaders(key);
 
-            while (values.hasMoreElements()) {
-                String value = values.nextElement();
-                headers.add(key, value);
+            List<HttpHeaderValue> values = new LinkedList<>();
+            while (strings.hasMoreElements()) {
+                values.add(new HttpHeaderValue(strings.nextElement()));
+            }
+
+            HttpHeader header = HttpHeader.create(key, values);
+            if (header != null) {
+                headers.add(header);
             }
         }
-        return headers;
+        return new HttpHeaders(headers);
     }
 
     private String content(HttpServletRequest request) throws IOException {
