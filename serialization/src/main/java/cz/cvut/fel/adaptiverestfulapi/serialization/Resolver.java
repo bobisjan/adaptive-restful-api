@@ -39,7 +39,7 @@ public class Resolver extends Filter {
      * @throws FilterException
      */
     protected Serializer serializer(HttpContext httpContext, Model model, Configuration configuration) throws FilterException {
-        List<String> values = httpContext.getRequestHeaders().get(HttpHeaders.Accept);
+        List<String> values = httpContext.getRequestHeaders().getStringValues(HttpHeaders.Accept);
         Serializer serializer = this.resolve(values, model, configuration);
         if (serializer == null) {
             throw new FilterException("Could not resolve serializer.");
@@ -57,7 +57,7 @@ public class Resolver extends Filter {
      * @throws FilterException
      */
     protected Serializer deserializer(HttpContext httpContext, Model model, Configuration configuration) throws FilterException {
-        List<String> values = httpContext.getRequestHeaders().get(HttpHeaders.ContentType);
+        List<String> values = httpContext.getRequestHeaders().getStringValues(HttpHeaders.ContentType);
         Serializer deserializer = this.resolve(values, model, configuration);
 
         if (deserializer == null) {
@@ -68,6 +68,10 @@ public class Resolver extends Filter {
 
     private Serializer resolve(List<String> values, Model model, Configuration configuration) {
         Serializer serializer = null;
+
+        if (values == null) {
+            return serializer;
+        }
 
         for (String value : values) {
             serializer = configuration.get(value, model);
