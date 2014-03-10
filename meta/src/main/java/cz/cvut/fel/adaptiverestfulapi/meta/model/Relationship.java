@@ -12,7 +12,11 @@ public class Relationship extends Property {
     private final String targetEntity;
 
     public Relationship(String name, Method getter, Method setter, String targetEntity) {
-        super(name, getter, setter);
+        this(name, name, getter, setter, targetEntity);
+    }
+
+    public Relationship(String name, String shortName, Method getter, Method setter, String targetEntity) {
+        super(name, shortName, getter, setter);
         this.targetEntity = targetEntity;
     }
 

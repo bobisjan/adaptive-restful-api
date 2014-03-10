@@ -16,7 +16,11 @@ public class Attribute extends Property {
     }
 
     public Attribute(String name, Method getter, Method setter, boolean primary) {
-        super(name, getter, setter);
+        this(name, name, getter, setter, primary);
+    }
+
+    public Attribute(String name, String shortName, Method getter, Method setter, boolean primary) {
+        super(name, shortName, getter, setter);
         this.primary = primary;
     }
 
