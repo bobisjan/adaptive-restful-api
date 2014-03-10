@@ -31,7 +31,11 @@ public class DescriptionDataHandler extends GetHandler {
         sb.append("Relationships:\n");
         for (Relationship rel : entity.getRelationships().values()) {
             sb.append(rel.getName());
-            sb.append("\n");
+            sb.append("\n- target: ");
+            sb.append(rel.getTargetEntity());
+            sb.append("\n- type: ");
+            sb.append(rel.getRelationshipType());
+            sb.append("\n\n");
         }
 
         context.setContent(sb.toString());

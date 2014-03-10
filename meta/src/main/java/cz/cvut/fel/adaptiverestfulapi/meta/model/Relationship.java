@@ -26,6 +26,10 @@ public class Relationship extends Property {
         return this.targetEntity;
     }
 
+    public RelationshipType getRelationshipType() {
+        return this.relationshipType;
+    }
+
     public boolean isToOne() {
         return RelationshipType.ToOne.equals(this.relationshipType);
     }

@@ -2,10 +2,8 @@
 package cz.cvut.fel.adaptiverestfulapi.example;
 
 import cz.cvut.fel.adaptiverestfulapi.meta.ModelInspectionListener;
-import cz.cvut.fel.adaptiverestfulapi.meta.model.Attribute;
+import cz.cvut.fel.adaptiverestfulapi.meta.model.*;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Entity;
-import cz.cvut.fel.adaptiverestfulapi.meta.model.Property;
-import cz.cvut.fel.adaptiverestfulapi.meta.model.Relationship;
 import cz.cvut.fel.adaptiverestfulapi.meta.reflection.Triplet;
 
 import javax.persistence.*;
@@ -38,7 +36,8 @@ public class ModelListener implements ModelInspectionListener {
         Entity targetEntity = this.targetEntity(triplet, entity, entities);
 
         if (targetEntity != null) {
-            return new Relationship(name, shortName, getter, setter, targetEntity.getName());
+            RelationshipType relationshipType = this.relationshipType(triplet, entity, entities);
+            return new Relationship(name, shortName, getter, setter, targetEntity.getName(), relationshipType);
         }
 
         boolean primary = this.isPrimary(triplet, entity);
@@ -61,9 +60,7 @@ public class ModelListener implements ModelInspectionListener {
     /**
      * Returns property name from triplet of field, getter and setter.
      *
-     * It uses entity name combined with name of the field,
-     * or name of the getter without `get` (`is`) prefix,
-     * or name of the setter without `set` prefix,
+     * It uses entity name combined with short name,
      * eq.: `com.app.model.Project.startedAt`.
      *
      * @param triplet
@@ -74,6 +71,18 @@ public class ModelListener implements ModelInspectionListener {
         return entity.getName() + "." + this.propertyShortName(triplet, entity);
     }
 
+    /**
+     * Returns property short name from triplet of field, getter and setter.
+     *
+     * It uses entity name combined with name of the field,
+     * or name of the getter without `get` (`is`) prefix,
+     * or name of the setter without `set` prefix,
+     * eq.: `startedAt`.
+     *
+     * @param triplet
+     * @param entity The entity of the property.
+     * @return The property short name.
+     */
     protected String propertyShortName(Triplet<Field, Method, Method> triplet, Entity entity) {
         Field field = triplet.a;
         Method getter = triplet.b;
@@ -94,6 +103,130 @@ public class ModelListener implements ModelInspectionListener {
         } else {
             return null;
         }
+    }
+
+    /**
+     * Looks for relationship type from triplet of field, getter and setter.
+     * @param triplet
+     * @param entity The entity of the property.
+     * @param entities The known entities in the model.
+     * @return The relationship type or null if not found.
+     */
+    protected RelationshipType relationshipType(Triplet<Field, Method, Method> triplet, Entity entity, Set<Entity> entities) {
+        RelationshipType relationshipType = null;
+
+        if (triplet.a != null) {
+            relationshipType = this.relationshipTypeFromAnnotations(triplet.a.getAnnotations());
+            if (relationshipType != null) {
+                return relationshipType;
+            }
+        }
+
+        if (triplet.b != null) {
+            relationshipType = this.relationshipTypeFromAnnotations(triplet.b.getAnnotations());
+            if (relationshipType != null) {
+                return relationshipType;
+            }
+        }
+
+        if (triplet.c != null) {
+            relationshipType = this.relationshipTypeFromAnnotations(triplet.c.getAnnotations());
+            if (relationshipType != null) {
+                return relationshipType;
+            }
+        }
+
+        if (triplet.a != null) {
+            relationshipType = this.relationshipTypeFromField(triplet.a);
+            if (relationshipType != null) {
+                return relationshipType;
+            }
+        }
+
+        if (triplet.b != null) {
+            relationshipType = this.relationshipTypeFromGetter(triplet.b);
+            if (relationshipType != null) {
+                return relationshipType;
+            }
+        }
+
+        if (triplet.b != null) {
+            relationshipType = this.relationshipTypeFromSetter(triplet.c);
+            if (relationshipType != null) {
+                return relationshipType;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns relationship type from field.
+     * @param field
+     * @return The relationship type.
+     */
+    protected RelationshipType relationshipTypeFromField(Field field) {
+        Class<?> target = field.getType();
+
+        if (Collection.class.isAssignableFrom(target)) {
+            return RelationshipType.ToMany;
+        }
+        return RelationshipType.ToOne;
+    }
+
+    /**
+     * Returns relationship type from getter method.
+     * @param getter
+     * @return The relationship type.
+     */
+    protected RelationshipType relationshipTypeFromGetter(Method getter) {
+        Class<?> target = getter.getReturnType();
+
+        if (Collection.class.isAssignableFrom(target)) {
+            return RelationshipType.ToMany;
+        }
+        return RelationshipType.ToOne;
+    }
+
+    /**
+     * Returns relationship type from setter method.
+     * @param setter
+     * @return The relationship type.
+     */
+    protected RelationshipType relationshipTypeFromSetter(Method setter) {
+        Class<?> target = setter.getParameterTypes()[0];
+
+        if (Collection.class.isAssignableFrom(target)) {
+            return RelationshipType.ToMany;
+        }
+        return RelationshipType.ToOne;
+    }
+
+    /**
+     * Looks for JPA relationship annotation to find relationship type.
+     * @param annotations
+     * @return The relationship type.
+     */
+    protected RelationshipType relationshipTypeFromAnnotations(Annotation[] annotations) {
+        for (Annotation annotation : annotations) {
+            if (annotation.annotationType().equals(OneToOne.class)) {
+                OneToOne oneToOne = (OneToOne)annotation;
+                return RelationshipType.ToOne;
+
+            } else if (annotation.annotationType().equals(OneToMany.class)) {
+                OneToMany oneToMany = (OneToMany)annotation;
+                return RelationshipType.ToMany;
+
+            }  else if (annotation.annotationType().equals(ManyToOne.class)) {
+                ManyToOne manyToOne = (ManyToOne)annotation;
+                return RelationshipType.ToOne;
+
+            }  else if (annotation.annotationType().equals(ManyToMany.class)) {
+                ManyToMany manyToMany = (ManyToMany)annotation;
+                return RelationshipType.ToMany;
+            }
+        }
+        return null;
     }
 
     /**
