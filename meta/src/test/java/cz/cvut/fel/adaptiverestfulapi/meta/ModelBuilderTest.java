@@ -3,10 +3,7 @@ package cz.cvut.fel.adaptiverestfulapi.meta;
 
 import cz.cvut.fel.adaptiverestfulapi.meta.data.simple.Issue;
 import cz.cvut.fel.adaptiverestfulapi.meta.data.simple.Project;
-import cz.cvut.fel.adaptiverestfulapi.meta.model.Attribute;
-import cz.cvut.fel.adaptiverestfulapi.meta.model.Entity;
-import cz.cvut.fel.adaptiverestfulapi.meta.model.Model;
-import cz.cvut.fel.adaptiverestfulapi.meta.model.Relationship;
+import cz.cvut.fel.adaptiverestfulapi.meta.model.*;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -33,10 +30,10 @@ public class ModelBuilderTest {
         builder.addEntity(project);
 
         builder.addProperty(new Attribute("description", Issue.class.getMethod("getDescription"), Issue.class.getMethod("setDescription", String.class)), issue);
-        builder.addProperty(new Relationship("project", Issue.class.getMethod("getProject"), Issue.class.getMethod("setProject", Project.class), "Project"), issue);
+        builder.addProperty(new Relationship("project", Issue.class.getMethod("getProject"), Issue.class.getMethod("setProject", Project.class), "Project", RelationshipType.ToOne), issue);
 
         builder.addProperty(new Attribute("name", Project.class.getMethod("getName"), Project.class.getMethod("setName", String.class)), project);
-        builder.addProperty(new Relationship("issues", Project.class.getMethod("getIssues"), Project.class.getMethod("setIssues", List.class), "Issue"), project);
+        builder.addProperty(new Relationship("issues", Project.class.getMethod("getIssues"), Project.class.getMethod("setIssues", List.class), "Issue", RelationshipType.ToMany), project);
 
         Model model = builder.build(null);
 
@@ -64,10 +61,10 @@ public class ModelBuilderTest {
         builder.addEntity(project);
 
         builder.addProperty(new Attribute("description", Issue.class.getMethod("getDescription"), Issue.class.getMethod("setDescription", String.class)), issue);
-        builder.addProperty(new Relationship("project", Issue.class.getMethod("getProject"), Issue.class.getMethod("setProject", Project.class), "abc"), issue);
+        builder.addProperty(new Relationship("project", Issue.class.getMethod("getProject"), Issue.class.getMethod("setProject", Project.class), "abc", RelationshipType.ToOne), issue);
 
         builder.addProperty(new Attribute(null, Project.class.getMethod("getName"), Project.class.getMethod("setName", String.class)), project);
-        builder.addProperty(new Relationship("", Project.class.getMethod("getIssues"), Project.class.getMethod("setIssues", List.class), "xyz"), project);
+        builder.addProperty(new Relationship("", Project.class.getMethod("getIssues"), Project.class.getMethod("setIssues", List.class), "xyz", RelationshipType.ToMany), project);
 
         Model model = builder.build(null);
 

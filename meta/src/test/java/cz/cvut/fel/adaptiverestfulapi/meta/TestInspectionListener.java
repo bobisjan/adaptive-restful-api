@@ -32,10 +32,10 @@ public class TestInspectionListener implements ModelInspectionListener, Configur
                 return new Attribute(this.propertyName(field), getter, setter);
 
             } else if (field.getName().equalsIgnoreCase("project")) {
-                return new Relationship(this.propertyName(field), getter, setter, field.getDeclaringClass().getPackage().getName() + ".Project");
+                return new Relationship(this.propertyName(field), getter, setter, field.getDeclaringClass().getPackage().getName() + ".Project", RelationshipType.ToOne);
 
             } else if (field.getName().equalsIgnoreCase("issues")) {
-                return new Relationship(this.propertyName(field), getter, setter, field.getDeclaringClass().getPackage().getName() + ".Issue");
+                return new Relationship(this.propertyName(field), getter, setter, field.getDeclaringClass().getPackage().getName() + ".Issue", RelationshipType.ToMany);
             }
         }
 
