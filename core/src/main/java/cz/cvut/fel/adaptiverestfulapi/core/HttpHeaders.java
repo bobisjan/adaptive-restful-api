@@ -96,6 +96,17 @@ public class HttpHeaders implements Iterable<String> {
         return this.data.get(this.normalizeKey(key)).get();
     }
 
+    public List<String> getStringValues(String key) {
+        List<String> values = new LinkedList<>();
+        if (!this.data.containsKey(this.normalizeKey(key))) {
+            return values;
+        }
+        for (HttpHeaderValue value : this.data.get(this.normalizeKey(key)).getValues()) {
+            values.add(value.getValue());
+        }
+        return values;
+    }
+
     /**
      * Returns comma-separated string of values for specified key.
      * @param key
