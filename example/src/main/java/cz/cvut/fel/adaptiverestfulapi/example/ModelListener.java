@@ -33,15 +33,16 @@ public class ModelListener implements ModelInspectionListener {
         Method getter = triplet.b;
         Method setter = triplet.c;
 
+        String shortName = this.propertyShortName(triplet, entity);
         String name = this.propertyName(triplet, entity);
         Entity targetEntity = this.targetEntity(triplet, entity, entities);
 
         if (targetEntity != null) {
-            return new Relationship(name, getter, setter, targetEntity.getName());
+            return new Relationship(name, shortName, getter, setter, targetEntity.getName());
         }
 
         boolean primary = this.isPrimary(triplet, entity);
-        return new Attribute(name, getter, setter, primary);
+        return new Attribute(name, shortName, getter, setter, primary);
     }
 
     /**
@@ -70,21 +71,25 @@ public class ModelListener implements ModelInspectionListener {
      * @return The property name.
      */
     protected String propertyName(Triplet<Field, Method, Method> triplet, Entity entity) {
+        return entity.getName() + "." + this.propertyShortName(triplet, entity);
+    }
+
+    protected String propertyShortName(Triplet<Field, Method, Method> triplet, Entity entity) {
         Field field = triplet.a;
         Method getter = triplet.b;
         Method setter = triplet.c;
 
         if (field != null) {
-            return entity.getName() + "." + this.toFirstLetterLowerCase(field.getName());
+            return this.toFirstLetterLowerCase(field.getName());
 
         } else if (getter != null && getter.getName().startsWith("get"))  {
-            return entity.getName() + "." + this.toFirstLetterLowerCase(getter.getName().substring("get".length()));
+            return this.toFirstLetterLowerCase(getter.getName().substring("get".length()));
 
         } else if (getter != null && getter.getName().startsWith("is"))  {
-            return entity.getName() + "." + this.toFirstLetterLowerCase(getter.getName().substring("is".length()));
+            return this.toFirstLetterLowerCase(getter.getName().substring("is".length()));
 
         } else if (setter != null && setter.getName().startsWith("set"))  {
-            return entity.getName() + "." + this.toFirstLetterLowerCase(setter.getName().substring("set".length()));
+            return this.toFirstLetterLowerCase(setter.getName().substring("set".length()));
 
         } else {
             return null;
