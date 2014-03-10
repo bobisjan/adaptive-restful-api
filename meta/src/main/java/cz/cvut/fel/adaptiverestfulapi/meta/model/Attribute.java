@@ -2,6 +2,7 @@
 package cz.cvut.fel.adaptiverestfulapi.meta.model;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 
 
 /**
@@ -9,19 +10,25 @@ import java.lang.reflect.Method;
  */
 public class Attribute extends Property {
 
+    private Type attributeType;
     private boolean primary;
 
-    public Attribute(String name, Method getter, Method setter) {
-        this(name, getter, setter, false);
+    public Attribute(String name, Method getter, Method setter, Type attributeType) {
+        this(name, getter, setter, attributeType, false);
     }
 
-    public Attribute(String name, Method getter, Method setter, boolean primary) {
-        this(name, name, getter, setter, primary);
+    public Attribute(String name, Method getter, Method setter, Type attributeType, boolean primary) {
+        this(name, name, getter, setter, attributeType, primary);
     }
 
-    public Attribute(String name, String shortName, Method getter, Method setter, boolean primary) {
+    public Attribute(String name, String shortName, Method getter, Method setter, Type attributeType, boolean primary) {
         super(name, shortName, getter, setter);
+        this.attributeType = attributeType;
         this.primary = primary;
+    }
+
+    public Type getAttributeType() {
+        return this.attributeType;
     }
 
     public boolean isPrimary() {
