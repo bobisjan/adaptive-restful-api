@@ -32,7 +32,7 @@ public class HttpHeaderValue implements Comparable<HttpHeaderValue> {
                 q = 0.0;
             }
         }
-        
+
         this.value = value;
         this.q = q;
     }
