@@ -19,6 +19,7 @@ public class ConfigurationListener implements ConfigurationInspectionListener {
     public List<Variable> configuration() {
         List<Variable> vars = new LinkedList<>();
         vars.add(new Variable(GetHandler.Key, new DescriptionDataHandler()));
+        vars.add(new Variable(ExampleSerializer.MIME, new ExampleSerializer()));
         return vars;
     }
 

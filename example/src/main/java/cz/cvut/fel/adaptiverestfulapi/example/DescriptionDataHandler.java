@@ -34,7 +34,7 @@ public class DescriptionDataHandler extends GetHandler {
             sb.append("\n");
         }
 
-        context.response(HttpStatus.S_200, new HttpHeaders(), sb.toString());
+        context.setContent(sb.toString());
         return context;
     }
 
