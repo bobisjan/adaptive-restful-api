@@ -45,12 +45,10 @@ public class JsonSerializer implements Serializer {
         Entity entity = this.entity(httpContext, model);
         String json = httpContext.getRequestContent();
 
-        Object object = null;
         if (json != null || !json.isEmpty()) {
-            this.gson.fromJson(json, entity.getEntityClass());
+            Object object = this.gson.fromJson(json, entity.getEntityClass());
+            httpContext.setContent(object);
         }
-
-        httpContext.setContent(object);
         return httpContext;
     }
 
@@ -74,6 +72,7 @@ public class JsonSerializer implements Serializer {
 
             for (Entity entity : model.getEntities().values()) {
                 builder.registerTypeAdapter(entity.getEntityClass(), new EntitySerializer(entity, model, configuration));
+                builder.registerTypeAdapter(entity.getEntityClass(), new EntityDeserializer(entity, model, configuration));
             }
             this.gson = builder.create();
         }
