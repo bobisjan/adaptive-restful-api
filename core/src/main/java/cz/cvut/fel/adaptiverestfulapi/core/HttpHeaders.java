@@ -13,6 +13,8 @@ public class HttpHeaders implements Iterable<String> {
     public static final String Accept = "Accept";
     public static final String Authorization = "Authorization";
     public static final String ContentType = "Content-Type";
+    public static final String IfModifiedSince = "If-Modified-Since";
+    public static final String LastModified= "Last-Modified";
     public static final String WWWAuthenticate = "WWW-Authenticate";
 
     private Map<String, HttpHeader> data;
