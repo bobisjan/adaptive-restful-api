@@ -33,9 +33,8 @@ public class JsonSerializer implements Serializer {
         String json = "";
         if (object != null) {
             json = this.gson.toJson(object);
+            httpContext.response(HttpStatus.S_200, this.responseHeaders(), json);
         }
-
-        httpContext.response(HttpStatus.S_200, this.responseHeaders(), json);
         return httpContext;
     }
 
