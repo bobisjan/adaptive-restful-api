@@ -78,10 +78,11 @@ public class IfModifiedSinceCache extends Cache {
 
         if (HttpMethod.GET.equals(httpContext.getMethod())) {
             if (!this.timestamps.containsKey(this.key(httpContext))) {
-                Date lastModified = new Date();
-                this.timestamps.put(this.key(httpContext), lastModified);
-                httpContext.getResponseHeaders().add(HttpHeaders.LastModified, this.dateFormat.format(lastModified));
+                this.timestamps.put(this.key(httpContext), new Date());
             }
+            Date lastModified = this.timestamps.get(this.key(httpContext));
+            httpContext.getResponseHeaders().add(HttpHeaders.LastModified, this.dateFormat.format(lastModified));
+
         } else if (HttpMethod.DELETE.equals(httpContext.getMethod())) {
             if (this.timestamps.containsKey(this.key(httpContext))) {
                 this.timestamps.remove(this.key(httpContext));
