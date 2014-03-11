@@ -10,7 +10,7 @@ public class Issue {
 
     @Id
     @GeneratedValue
-    private long id;
+    private Long id;
 
     @Column
     private String description;
@@ -27,11 +27,11 @@ public class Issue {
         this.setProject(project);
     }
 
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -52,7 +52,23 @@ public class Issue {
     }
 
     public void setProject(Project project) {
+        if (this.same(project)) {
+            return;
+        }
+
+        Project old = this.project;
         this.project = project;
+
+        if (old != null) {
+            old.removeIssue(this);
+        }
+        if (this.project != null) {
+            this.project.addIssue(this);
+        }
+    }
+
+    private boolean same(Project project) {
+        return (this.project == null) ? project == null : this.project.equals(project);
     }
 
 }
