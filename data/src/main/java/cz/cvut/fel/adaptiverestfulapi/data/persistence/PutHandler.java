@@ -36,37 +36,28 @@ public class PutHandler extends cz.cvut.fel.adaptiverestfulapi.data.PutHandler {
             throw new DataException("Object for POST is null.");
         }
 
-        this.compareIdentifiers(entity, current, object);
-        Object result = this.update(entity, current, object);
+        this.ensureIdentifier(entity, identifier, object);
+        Object result = this.update(entity, identifier, object);
 
         context.setContent(result);
         return context;
     }
 
-    protected Object update(Entity entity, Object current, Object updated) throws DataException {
+    protected Object update(Entity entity, Object identifier, Object object) throws DataException {
         this.manager.getTransaction().begin();
-        Object merged = this.manager.merge(updated);
+        this.manager.merge(object);
         this.manager.flush();
         this.manager.clear();
         this.manager.getTransaction().commit();
-        return current;
+        return this.manager.find(entity.getEntityClass(), identifier);
     }
 
-    private void compareIdentifiers(Entity entity, Object current, Object updated) throws DataException {
+    private void ensureIdentifier(Entity entity, Object identifier, Object object) throws DataException {
         Attribute primary = entity.getPrimary();
-        Method getter = primary.getGetter();
+        Method setter = primary.getSetter();
 
         try {
-            Object currentIdentifier = getter.invoke(current);
-            Object updatedIdentifier = getter.invoke(updated);
-
-            if (updatedIdentifier == null) {
-                return;
-            }
-
-            if (!updatedIdentifier.equals(currentIdentifier)) {
-                throw new DataException("PUT: Identifier provided in the JSON is not equal with identifier in the URL.");
-            }
+            setter.invoke(object, identifier);
 
         } catch (IllegalAccessException e) {
             throw new DataException(e);
@@ -74,7 +65,6 @@ public class PutHandler extends cz.cvut.fel.adaptiverestfulapi.data.PutHandler {
         } catch (InvocationTargetException e) {
             throw new DataException(e);
         }
-
     }
 
 }
