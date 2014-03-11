@@ -19,7 +19,7 @@ public class Project {
     @Column
     private Date startedAt;
 
-    @OneToMany(mappedBy = "project")
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<Issue> issues;
 
     public Project() {
