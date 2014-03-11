@@ -50,6 +50,7 @@ public class ExampleData {
         entityManager.merge(project);
         entityManager.merge(project2);
 
+        entityManager.flush();
         entityManager.getTransaction().commit();
     }
 
