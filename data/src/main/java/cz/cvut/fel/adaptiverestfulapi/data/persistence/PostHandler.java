@@ -32,7 +32,7 @@ public class PostHandler extends cz.cvut.fel.adaptiverestfulapi.data.PostHandler
 
     protected Object create(Entity entity, Object object) {
         this.manager.getTransaction().begin();
-        this.manager.merge(object);
+        this.manager.persist(object);
         this.manager.flush();
         this.manager.clear();
         this.manager.getTransaction().commit();
