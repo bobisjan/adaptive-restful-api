@@ -12,6 +12,9 @@
 
     <properties>
         <javax.serlvet.version>3.1.0</javax.serlvet.version>
+        <org.hibernate.hibernate-entitymanager.version>4.3.4.Final</org.hibernate.hibernate-entitymanager.version>
+        <org.hibernate.hibernate-c3p0.version>4.0.1.Final</org.hibernate.hibernate-c3p0.version>
+        <org.apache.derby.version>10.10.1.1</org.apache.derby.version>
     </properties>
 
     <groupId>cz.cvut.fel</groupId>
@@ -56,10 +59,31 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- JPA (via Hibernate) -->
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.1-api</artifactId>
             <version>${org.hibernate.javax.persistence.version}</version>
+        </dependency>
+
+        <!-- Hibernate stuff -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>${org.hibernate.hibernate-entitymanager.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-c3p0</artifactId>
+            <version>${org.hibernate.hibernate-c3p0.version}</version>
+        </dependency>
+
+        <!-- Database -->
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derby</artifactId>
+            <version>${org.apache.derby.version}</version>
         </dependency>
     </dependencies>
 </project>

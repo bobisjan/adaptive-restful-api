@@ -17,6 +17,14 @@ public class ApplicationContextListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         ApplicationContext ctx = ApplicationContext.getInstance();
 
+        try {
+            PersistenceContext.getInstance().init();
+            ExampleData.generate(PersistenceContext.getInstance().getManager());
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
         if (!ctx.isInitialized()) {
             Inspector inspector = new Inspector();
 
@@ -35,6 +43,13 @@ public class ApplicationContextListener implements ServletContextListener {
     }
 
     @Override
-    public void contextDestroyed(ServletContextEvent servletContextEvent) { }
+    public void contextDestroyed(ServletContextEvent servletContextEvent) {
+        try {
+            PersistenceContext.getInstance().destroy();
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }
