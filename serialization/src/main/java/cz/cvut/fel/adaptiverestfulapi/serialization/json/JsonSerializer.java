@@ -15,7 +15,7 @@ import java.util.List;
 
 
 /**
- * JSON serializer.
+ * Default JSON serializer.
  */
 public class JsonSerializer implements Serializer {
 
@@ -28,22 +28,6 @@ public class JsonSerializer implements Serializer {
         this.registerModel(model, configuration);
 
         Entity entity = this.entity(httpContext, model);
-        String json = httpContext.getRequestContent();
-
-        Object object = null;
-        if (json != null || !json.isEmpty()) {
-            this.gson.fromJson(json, entity.getEntityClass());
-        }
-
-        httpContext.setContent(object);
-        return httpContext;
-    }
-
-    @Override
-    public HttpContext deserialize(HttpContext httpContext, Model model, Configuration configuration) throws SerializationException {
-        this.registerModel(model, configuration);
-
-        Entity entity = this.entity(httpContext, model);
         Object object = httpContext.getContent();
 
         String json = "";
@@ -52,6 +36,22 @@ public class JsonSerializer implements Serializer {
         }
 
         httpContext.response(HttpStatus.S_200, this.responseHeaders(), json);
+        return httpContext;
+    }
+
+    @Override
+    public HttpContext deserialize(HttpContext httpContext, Model model, Configuration configuration) throws SerializationException {
+        this.registerModel(model, configuration);
+
+        Entity entity = this.entity(httpContext, model);
+        String json = httpContext.getRequestContent();
+
+        Object object = null;
+        if (json != null || !json.isEmpty()) {
+            this.gson.fromJson(json, entity.getEntityClass());
+        }
+
+        httpContext.setContent(object);
         return httpContext;
     }
 
@@ -74,7 +74,7 @@ public class JsonSerializer implements Serializer {
             builder = builder.serializeNulls();
 
             for (Entity entity : model.getEntities().values()) {
-                builder.registerTypeAdapter(entity.getEntityClass(), new EntityAdapter(entity, model, configuration));
+                builder.registerTypeAdapter(entity.getEntityClass(), new EntitySerializer(entity, model, configuration));
             }
             this.gson = builder.create();
         }

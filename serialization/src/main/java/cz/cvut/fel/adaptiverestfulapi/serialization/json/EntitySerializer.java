@@ -2,6 +2,7 @@
 package cz.cvut.fel.adaptiverestfulapi.serialization.json;
 
 import com.google.gson.*;
+import com.google.gson.JsonSerializer;
 import cz.cvut.fel.adaptiverestfulapi.meta.configuration.Configuration;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Attribute;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Entity;
@@ -14,13 +15,13 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 
 
-public class EntityAdapter implements com.google.gson.JsonSerializer, JsonDeserializer {
+public class EntitySerializer implements JsonSerializer {
 
     private Entity entity;
     private Model model;
     private Configuration configuration;
 
-    public EntityAdapter(Entity entity, Model model, Configuration configuration) {
+    public EntitySerializer(Entity entity, Model model, Configuration configuration) {
         this.entity = entity;
         this.model = model;
         this.configuration = configuration;
@@ -37,13 +38,9 @@ public class EntityAdapter implements com.google.gson.JsonSerializer, JsonDeseri
     }
 
     protected void serializeAttributes(Object object, Type typeOfSrc, JsonObject jsonObject, JsonSerializationContext context) throws JsonParseException {
-        Method getter = null;
-
-        for (Attribute attr : this.entity.getAttributes().values()) {
-            getter = attr.getGetter();
-
-            if (getter != null) {
-                this.serializeAttribute(attr, object, typeOfSrc, jsonObject, context);
+        for (Attribute attribute : this.entity.getAttributes().values()) {
+            if (attribute.getGetter() != null) {
+                this.serializeAttribute(attribute, object, typeOfSrc, jsonObject, context);
             }
         }
     }
@@ -57,55 +54,68 @@ public class EntityAdapter implements com.google.gson.JsonSerializer, JsonDeseri
             jsonObject.add(name, context.serialize(value));
 
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
             throw new JsonParseException(e);
 
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
             throw new JsonParseException(e);
         }
     }
 
     protected void serializeRelationships(Object object, Type typeOfSrc, JsonObject jsonObject, JsonSerializationContext context) throws JsonParseException {
-        Method getter = null;
+        for (Relationship relationship : this.entity.getRelationships().values()) {
+            if (relationship.getGetter() != null) {
+                if (relationship.isToOne()) {
+                    this.serializeToOne(relationship, object, typeOfSrc, jsonObject, context);
 
-        for (Relationship rel : this.entity.getRelationships().values()) {
-            getter = rel.getGetter();
-
-            if (getter == null) {
-                continue;
-            }
-
-            if (rel.isToOne()) {
-                this.serializeToOne(rel, object, typeOfSrc, jsonObject, context);
-
-            } else if (rel.isToMany()) {
-                this.serializeToMany(rel, object, typeOfSrc, jsonObject, context);
+                } else if (relationship.isToMany()) {
+                    this.serializeToMany(relationship, object, typeOfSrc, jsonObject, context);
+                }
             }
         }
     }
 
+    /**
+     * Serializes `toOne` relationship with identifier, eq: "project": 3.
+     * @param relationship
+     * @param object
+     * @param typeOfSrc
+     * @param jsonObject
+     * @param context
+     * @throws JsonParseException
+     */
     protected void serializeToOne(Relationship relationship, Object object, Type typeOfSrc, JsonObject jsonObject, JsonSerializationContext context) throws JsonParseException {
         Method getter = relationship.getGetter();
         String name = relationship.getShortName();
 
         try {
             Object target = getter.invoke(object);
-            getter = this.model.entityForName(relationship.getTargetEntity()).getPrimary().getGetter();
 
-            Object id = getter.invoke(target);
-            jsonObject.add(name, context.serialize(id));
+            if (target != null) {
+                getter = this.model.entityForName(relationship.getTargetEntity()).getPrimary().getGetter();
+                Object id = getter.invoke(target);
+                jsonObject.add(name, context.serialize(id));
+
+            } else {
+                jsonObject.add(name, context.serialize(null));
+            }
 
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
             throw new JsonParseException(e);
 
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
             throw new JsonParseException(e);
         }
     }
 
+    /**
+     * Serializes `toMany` relationship as an array of IDs, eq: "issues": [1, 2, 3].
+     * @param relationship
+     * @param object
+     * @param typeOfSrc
+     * @param jsonObject
+     * @param context
+     * @throws JsonParseException
+     */
     protected void serializeToMany(Relationship relationship, Object object, Type typeOfSrc, JsonObject jsonObject, JsonSerializationContext context) throws JsonParseException {
         Method getter = relationship.getGetter();
         String name = relationship.getShortName();
@@ -115,25 +125,18 @@ public class EntityAdapter implements com.google.gson.JsonSerializer, JsonDeseri
             getter = this.model.entityForName(relationship.getTargetEntity()).getPrimary().getGetter();
 
             JsonArray ids = new JsonArray();
-
             for (Object obj : collection) {
                 Object id = getter.invoke(obj);
+                ids.add(context.serialize(id));
             }
             jsonObject.add(name, ids);
 
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
             throw new JsonParseException(e);
 
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
             throw new JsonParseException(e);
         }
-    }
-
-    @Override
-    public Object deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-        return null;
     }
 
 }
