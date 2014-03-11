@@ -46,9 +46,12 @@ public class FilteredServlet extends HttpServlet {
             response.setHeader(name, httpContext.getResponseHeaders().getString(name));
         }
 
-        response.getWriter().write(httpContext.getResponseContent());
-        response.getWriter().flush();
-        response.getWriter().close();
+        String content = httpContext.getResponseContent();
+        if (content != null && !content.isEmpty()) {
+            response.getWriter().write(httpContext.getResponseContent());
+            response.getWriter().flush();
+            response.getWriter().close();
+        }
     }
 
     protected void error(FilterException e, HttpServletResponse response) throws IOException {
