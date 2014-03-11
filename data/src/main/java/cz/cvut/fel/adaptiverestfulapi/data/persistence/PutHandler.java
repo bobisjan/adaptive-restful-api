@@ -3,6 +3,7 @@ package cz.cvut.fel.adaptiverestfulapi.data.persistence;
 
 import cz.cvut.fel.adaptiverestfulapi.core.HttpContext;
 import cz.cvut.fel.adaptiverestfulapi.data.DataException;
+import cz.cvut.fel.adaptiverestfulapi.data.NotFoundException;
 import cz.cvut.fel.adaptiverestfulapi.meta.configuration.Configuration;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Attribute;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Entity;
@@ -22,15 +23,20 @@ public class PutHandler extends cz.cvut.fel.adaptiverestfulapi.data.PutHandler {
 
     @Override
     protected HttpContext put(Entity entity, HttpContext context, Configuration configuration) throws DataException {
-        String identifier = context.getRouter().getIdentifier();
-        Object object = context.getContent();
+        Attribute primary = entity.getPrimary();
+        Object identifier = context.getRouter().getIdentifier(primary.getAttributeType());
 
         Object current = this.manager.find(entity.getEntityClass(), identifier);
         if (current == null) {
-            // TODO 404
-            throw new DataException("Entity " + entity + " with identifier " + identifier + " could not be found.");
+            throw new NotFoundException(entity.getName(), identifier.toString());
         }
 
+        Object object = context.getContent();
+        if (object == null) {
+            throw new DataException("Object for POST is null.");
+        }
+
+        this.compareIdentifiers(entity, current, object);
         Object result = this.update(entity, current, object);
 
         context.setContent(result);
@@ -39,30 +45,36 @@ public class PutHandler extends cz.cvut.fel.adaptiverestfulapi.data.PutHandler {
 
     protected Object update(Entity entity, Object current, Object updated) throws DataException {
         this.manager.getTransaction().begin();
-        this.merge(entity, current, updated);
-        this.manager.merge(current);
+        Object merged = this.manager.merge(updated);
+        this.manager.flush();
+        this.manager.clear();
         this.manager.getTransaction().commit();
-
         return current;
     }
 
-    private void merge(Entity entity, Object current, Object updated) throws DataException {
-        for (Attribute attribute : entity.getAttributes().values()) {
-            try {
-                // TODO skip primary key
-                Method getter = attribute.getGetter();
-                Method setter = attribute.getGetter();
-                setter.invoke(current, getter.invoke(updated));
+    private void compareIdentifiers(Entity entity, Object current, Object updated) throws DataException {
+        Attribute primary = entity.getPrimary();
+        Method getter = primary.getGetter();
 
-            } catch (IllegalAccessException e) {
-                throw new DataException(e);
+        try {
+            Object currentIdentifier = getter.invoke(current);
+            Object updatedIdentifier = getter.invoke(updated);
 
-            } catch (InvocationTargetException e) {
-                throw new DataException(e);
+            if (updatedIdentifier == null) {
+                return;
             }
+
+            if (!updatedIdentifier.equals(currentIdentifier)) {
+                throw new DataException("PUT: Identifier provided in the JSON is not equal with identifier in the URL.");
+            }
+
+        } catch (IllegalAccessException e) {
+            throw new DataException(e);
+
+        } catch (InvocationTargetException e) {
+            throw new DataException(e);
         }
 
-        // TODO merge relationships
     }
 
 }
