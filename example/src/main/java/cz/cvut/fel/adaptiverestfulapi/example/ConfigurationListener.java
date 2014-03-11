@@ -4,6 +4,7 @@ package cz.cvut.fel.adaptiverestfulapi.example;
 import cz.cvut.fel.adaptiverestfulapi.data.DeleteHandler;
 import cz.cvut.fel.adaptiverestfulapi.data.GetHandler;
 import cz.cvut.fel.adaptiverestfulapi.data.PostHandler;
+import cz.cvut.fel.adaptiverestfulapi.data.PutHandler;
 import cz.cvut.fel.adaptiverestfulapi.meta.ConfigurationInspectionListener;
 import cz.cvut.fel.adaptiverestfulapi.meta.configuration.Variable;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Attribute;
@@ -26,6 +27,7 @@ public class ConfigurationListener implements ConfigurationInspectionListener {
         List<Variable> vars = new LinkedList<>();
         vars.add(new Variable(GetHandler.Key, new cz.cvut.fel.adaptiverestfulapi.data.persistence.GetHandler(entityManager)));
         vars.add(new Variable(PostHandler.Key, new cz.cvut.fel.adaptiverestfulapi.data.persistence.PostHandler(entityManager)));
+        vars.add(new Variable(PutHandler.Key, new cz.cvut.fel.adaptiverestfulapi.data.persistence.PutHandler(entityManager)));
         vars.add(new Variable(DeleteHandler.Key, new cz.cvut.fel.adaptiverestfulapi.data.persistence.DeleteHandler(entityManager)));
         vars.add(new Variable(JsonSerializer.MIME, new JsonSerializer()));
         return vars;
