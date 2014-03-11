@@ -1,6 +1,7 @@
 
 package cz.cvut.fel.adaptiverestfulapi.core;
 
+import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -68,6 +69,25 @@ public class HttpRouter {
 
     public String getIdentifier() {
         return this.identifier;
+    }
+
+    public Object getIdentifier(Type type) {
+        if (this.identifier == null || this.identifier.isEmpty()) {
+            return null;
+        }
+
+        // TODO add support for primitive types
+
+        if (type.equals(Integer.class)) {
+            return Integer.valueOf(this.identifier);
+
+        } else if (type.equals(Long.class)) {
+            return Long.valueOf(this.identifier);
+
+        } else {
+            // String class or default
+            return this.identifier;
+        }
     }
 
 }

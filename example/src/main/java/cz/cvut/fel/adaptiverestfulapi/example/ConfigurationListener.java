@@ -8,7 +8,9 @@ import cz.cvut.fel.adaptiverestfulapi.meta.model.Attribute;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Entity;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Model;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Relationship;
+import cz.cvut.fel.adaptiverestfulapi.serialization.json.JsonSerializer;
 
+import javax.persistence.EntityManager;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,9 +19,11 @@ public class ConfigurationListener implements ConfigurationInspectionListener {
 
     @Override
     public List<Variable> configuration() {
+        EntityManager entityManager = PersistenceContext.getInstance().getManager();
+
         List<Variable> vars = new LinkedList<>();
-        vars.add(new Variable(GetHandler.Key, new DescriptionDataHandler()));
-        vars.add(new Variable(ExampleSerializer.MIME, new ExampleSerializer()));
+        vars.add(new Variable(GetHandler.Key, new cz.cvut.fel.adaptiverestfulapi.data.persistence.GetHandler(entityManager)));
+        vars.add(new Variable(JsonSerializer.MIME, new JsonSerializer()));
         return vars;
     }
 

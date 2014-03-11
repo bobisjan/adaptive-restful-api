@@ -40,8 +40,9 @@ public class ModelListener implements ModelInspectionListener {
             return new Relationship(name, shortName, getter, setter, targetEntity.getName(), relationshipType);
         }
 
+        Type attributeType = this.attributeType(triplet, entity);
         boolean primary = this.isPrimary(triplet, entity);
-        return new Attribute(name, shortName, getter, setter, primary);
+        return new Attribute(name, shortName, getter, setter, attributeType, primary);
     }
 
     /**
@@ -361,6 +362,42 @@ public class ModelListener implements ModelInspectionListener {
             }
         }
         return null;
+    }
+
+    protected Type attributeType(Triplet<Field, Method, Method> triplet, Entity entity) {
+        Type type = null;
+
+        if (triplet.a != null) {
+            type = this.attributeTypeFromField(triplet.a, entity);
+            if (type != null) {
+                return type;
+            }
+
+        } else if (triplet.b != null) {
+            type = this.attributeTypeFromGetter(triplet.b, entity);
+            if (type != null) {
+                return type;
+            }
+
+        } else if (triplet.c != null) {
+            type = this.attributeTypeFromSetter(triplet.c, entity);
+            if (type != null) {
+                return type;
+            }
+        }
+        return type;
+    }
+
+    protected Type attributeTypeFromField(Field field, Entity entity) {
+        return field.getGenericType();
+    }
+
+    protected Type attributeTypeFromGetter(Method getter, Entity entity) {
+        return getter.getGenericReturnType();
+    }
+
+    protected Type attributeTypeFromSetter(Method setter, Entity entity) {
+        return setter.getGenericParameterTypes()[0];
     }
 
     /**

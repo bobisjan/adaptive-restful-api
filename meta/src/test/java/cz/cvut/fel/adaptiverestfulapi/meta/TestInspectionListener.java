@@ -7,6 +7,7 @@ import cz.cvut.fel.adaptiverestfulapi.meta.reflection.Triplet;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -26,10 +27,14 @@ public class TestInspectionListener implements ModelInspectionListener, Configur
         Method setter = triplet.c;
 
         if (field != null) {
-            if (field.getName().equalsIgnoreCase("description")
-                    || field.getName().equalsIgnoreCase("name")
-                    || field.getName().equalsIgnoreCase("startedAt")) {
-                return new Attribute(this.propertyName(field), getter, setter);
+            if (field.getName().equalsIgnoreCase("description")) {
+                return new Attribute(this.propertyName(field), getter, setter, String.class);
+
+            } else if (field.getName().equalsIgnoreCase("name")) {
+                return new Attribute(this.propertyName(field), getter, setter, String.class);
+
+            } else if (field.getName().equalsIgnoreCase("startedAt")) {
+                return new Attribute(this.propertyName(field), getter, setter, Date.class);
 
             } else if (field.getName().equalsIgnoreCase("project")) {
                 return new Relationship(this.propertyName(field), getter, setter, field.getDeclaringClass().getPackage().getName() + ".Project", RelationshipType.ToOne);
@@ -41,19 +46,19 @@ public class TestInspectionListener implements ModelInspectionListener, Configur
 
         if (getter != null && setter != null) {
             if (getter.getName().equalsIgnoreCase("isStarted") && setter.getName().equalsIgnoreCase("setStarted")) {
-                return new Attribute(this.propertyName(getter, "started"), getter, setter);
+                return new Attribute(this.propertyName(getter, "started"), getter, setter, Boolean.class);
             }
             return null;
 
         } else if (getter != null) {
             if (getter.getName().equalsIgnoreCase("getLocalizedDescription")) {
-                return new Attribute(this.propertyName(getter, "localizedDescription"), getter, null);
+                return new Attribute(this.propertyName(getter, "localizedDescription"), getter, null, String.class);
             }
             return null;
 
         } else if (setter != null) {
             if (setter.getName().equalsIgnoreCase("setLowerCasedName")) {
-                return new Attribute(this.propertyName(setter, "lowerCasedName"), null, setter);
+                return new Attribute(this.propertyName(setter, "lowerCasedName"), null, setter, String.class);
             }
             return null;
 

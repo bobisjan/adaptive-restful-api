@@ -11,7 +11,7 @@ import java.util.List;
 public class Project {
 
     @Id
-    private long id;
+    private Long id;
 
     @Column
     private String name;
@@ -32,11 +32,11 @@ public class Project {
         this.setIssues(issues);
     }
 
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -74,6 +74,22 @@ public class Project {
 
     public void setIssues(List<Issue> issues) {
         this.issues = issues;
+    }
+
+    public void addIssue(Issue issue) {
+        if (this.issues.contains(issue)) {
+            return;
+        }
+        this.issues.add(issue);
+        issue.setProject(this);
+    }
+
+    public void removeIssue(Issue issue) {
+        if (!this.issues.contains(issue)) {
+            return;
+        }
+        this.issues.remove(issue);
+        issue.setProject(null);
     }
 
 }

@@ -5,6 +5,7 @@ import cz.cvut.fel.adaptiverestfulapi.core.HttpContext;
 import cz.cvut.fel.adaptiverestfulapi.core.HttpRouter;
 import cz.cvut.fel.adaptiverestfulapi.data.DataException;
 import cz.cvut.fel.adaptiverestfulapi.meta.configuration.Configuration;
+import cz.cvut.fel.adaptiverestfulapi.meta.model.Attribute;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Entity;
 
 import javax.persistence.EntityManager;
@@ -12,6 +13,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.lang.reflect.Type;
 import java.util.List;
 
 
@@ -26,7 +28,7 @@ public class GetHandler extends cz.cvut.fel.adaptiverestfulapi.data.GetHandler {
     @Override
     protected HttpContext get(Entity entity, HttpContext context, Configuration configuration) throws DataException {
         HttpRouter router = context.getRouter();
-        String identifier = router.getIdentifier();
+        Object identifier = router.getIdentifier(entity.getPrimary().getAttributeType());
         Object result = null;
 
         if (identifier != null) {
