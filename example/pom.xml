@@ -24,6 +24,12 @@
     <dependencies>
         <dependency>
             <groupId>cz.cvut.fel</groupId>
+            <artifactId>adaptive-restful-api-caching</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cz.cvut.fel</groupId>
             <artifactId>adaptive-restful-api-core</artifactId>
             <version>${project.version}</version>
         </dependency>
