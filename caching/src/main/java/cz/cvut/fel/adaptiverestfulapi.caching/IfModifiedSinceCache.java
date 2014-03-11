@@ -23,7 +23,7 @@ import java.util.Map;
  * It stores the timestamp on the first GET request. On another looks up for that timestamp
  * and compares it with HTTP header.
  *
- * On POST, PUT and DELETE requests updates the timestamp or removes it.
+ * On POST, PUT and DELETE requests update the timestamp or remove it.
  */
 public class IfModifiedSinceCache extends Cache {
 
