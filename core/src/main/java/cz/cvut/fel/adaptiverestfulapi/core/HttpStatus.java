@@ -21,6 +21,8 @@ public enum HttpStatus {
     S_401(401, "Unauthorized"),
     S_403(403, "Forbidden"),
     S_404(404, "Not Found"),
+    S_405(405, "Method Not Allowed"),
+    S_406(406, "Not Acceptable"),
 
     // 5xx Server Error
     S_500(500, "Internal Server Error");

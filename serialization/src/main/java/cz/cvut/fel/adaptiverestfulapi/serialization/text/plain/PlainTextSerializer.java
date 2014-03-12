@@ -58,7 +58,7 @@ public class PlainTextSerializer implements Serializer {
         if (content == null || content.isEmpty()) {
             return httpContext;
         }
-        throw new SerializationException();
+        throw new SerializationException(HttpStatus.S_406);
     }
 
     private Entity entity(HttpContext httpContext, Model model) throws SerializationException {
