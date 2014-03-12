@@ -5,8 +5,8 @@ import javax.persistence.*;
 import java.util.Locale;
 
 
-@Entity
-public class Issue {
+@MappedSuperclass
+public abstract class Issue {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,9 +14,6 @@ public class Issue {
 
     @Column
     private String description;
-
-    @ManyToOne
-    private Project project;
 
     public Issue() {
         this("New Issue", null);
@@ -47,28 +44,8 @@ public class Issue {
         return Locale.getDefault().toString() + ": " + this.getDescription();
     }
 
-    public Project getProject() {
-        return this.project;
-    }
+    public abstract Project getProject();
 
-    public void setProject(Project project) {
-        if (this.same(project)) {
-            return;
-        }
-
-        Project old = this.project;
-        this.project = project;
-
-        if (old != null) {
-            old.removeIssue(this);
-        }
-        if (this.project != null) {
-            this.project.addIssue(this);
-        }
-    }
-
-    private boolean same(Project project) {
-        return (this.project == null) ? project == null : this.project.equals(project);
-    }
+    public abstract void setProject(Project project);
 
 }

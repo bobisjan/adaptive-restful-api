@@ -21,16 +21,21 @@ public class Project {
     private Date startedAt;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
-    private List<Issue> issues;
+    private List<Bug> bugs;
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    private List<Task> tasks;
 
     public Project() {
         this.setName("New Project");
-        this.setIssues(new LinkedList<Issue>());
+        this.setBugs(new LinkedList<Bug>());
+        this.setTasks(new LinkedList<Task>());
     }
 
-    public Project(String name, List<Issue> issues) {
+    public Project(String name, List<Bug> bugs, List<Task> tasks) {
         this.setName(name);
-        this.setIssues(issues);
+        this.setBugs(bugs);
+        this.setTasks(tasks);
     }
 
     public Long getId() {
@@ -69,28 +74,52 @@ public class Project {
         this.setStartedAt(started ? new Date() : null);
     }
 
-    public List<Issue> getIssues() {
-        return this.issues;
+    public List<Bug> getBugs() {
+        return this.bugs;
     }
 
-    public void setIssues(List<Issue> issues) {
-        this.issues = issues;
+    public void setBugs(List<Bug> bugs) {
+        this.bugs = bugs;
     }
 
-    public void addIssue(Issue issue) {
-        if (this.issues.contains(issue)) {
+    public void addBug(Bug bug) {
+        if (this.bugs.contains(bug)) {
             return;
         }
-        this.issues.add(issue);
-        issue.setProject(this);
+        this.bugs.add(bug);
+        bug.setProject(this);
     }
 
-    public void removeIssue(Issue issue) {
-        if (!this.issues.contains(issue)) {
+    public void removeBug(Bug bug) {
+        if (!this.bugs.contains(bug)) {
             return;
         }
-        this.issues.remove(issue);
-        issue.setProject(null);
+        this.bugs.remove(bug);
+        bug.setProject(null);
+    }
+
+    public List<Task> getTasks() {
+        return this.tasks;
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    public void addTask(Task task) {
+        if (this.tasks.contains(task)) {
+            return;
+        }
+        this.tasks.add(task);
+        task.setProject(this);
+    }
+
+    public void removeTask(Task task) {
+        if (!this.tasks.contains(task)) {
+            return;
+        }
+        this.tasks.remove(task);
+        task.setProject(null);
     }
 
 }

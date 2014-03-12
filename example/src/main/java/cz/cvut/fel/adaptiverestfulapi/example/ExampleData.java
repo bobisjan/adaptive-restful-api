@@ -1,10 +1,13 @@
 
 package cz.cvut.fel.adaptiverestfulapi.example;
 
+import cz.cvut.fel.adaptiverestfulapi.example.model.Bug;
 import cz.cvut.fel.adaptiverestfulapi.example.model.Issue;
 import cz.cvut.fel.adaptiverestfulapi.example.model.Project;
+import cz.cvut.fel.adaptiverestfulapi.example.model.Task;
 
 import javax.persistence.EntityManager;
+import java.util.Date;
 
 
 public class ExampleData {
@@ -17,27 +20,30 @@ public class ExampleData {
         entityManager.getTransaction().begin();
 
         Project project = new Project();
-        project.setName("Octopus");
+        project.setName("Project A");
         entityManager.persist(project);
 
         Project project2 = new Project();
-        project2.setName("Octopus 2");
+        project2.setName("Project B");
         entityManager.persist(project);
 
-        Issue issue = new Issue();
-        issue.setDescription("Issue 1 description");
-        issue.setProject(project);
-        entityManager.persist(issue);
+        Task task = new Task(null, "Task 1", project);
+        entityManager.persist(task);
 
-        Issue issue2 = new Issue();
-        issue2.setDescription("Issue 2 description");
-        issue2.setProject(project);
-        entityManager.persist(issue2);
+        Task task2 = new Task(new Date(), "Task 2", project);
+        entityManager.persist(task2);
 
-        Issue issue3 = new Issue();
-        issue3.setDescription("Issue 3 description");
-        issue3.setProject(project2);
-        entityManager.persist(issue3);
+        Bug bug = new Bug(null, "Bug #1", project);
+        entityManager.persist(bug);
+
+        Task task3 = new Task(null, "Task 3", project2);
+        entityManager.persist(task3);
+
+        Bug bug2 = new Bug("java.lang.NullPointerException: line 32", "Bug #2", project2);
+        entityManager.persist(bug2);
+
+        Bug bug3 = new Bug("java.lang.IndexOutOfBoundsException: line 123", "Bug #3", project2);
+        entityManager.persist(bug3);
 
         entityManager.merge(project);
         entityManager.merge(project2);
