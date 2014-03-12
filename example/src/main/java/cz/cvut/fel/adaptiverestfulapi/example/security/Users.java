@@ -48,7 +48,7 @@ public class Users {
         if (this.authentication == null) {
             this.authentication = new SimpleAuthentication(this.passwords, "example-realm");
         }
-        return authentication;
+        return this.authentication;
     }
 
     public Authorization getMethodAuthorization() {
