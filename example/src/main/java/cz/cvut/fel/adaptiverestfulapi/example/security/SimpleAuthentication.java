@@ -1,5 +1,5 @@
 
-package cz.cvut.fel.adaptiverestfulapi.example;
+package cz.cvut.fel.adaptiverestfulapi.example.security;
 
 import cz.cvut.fel.adaptiverestfulapi.security.basic.BasicAuthentication;
 
@@ -7,15 +7,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class ExampleAuthentication extends BasicAuthentication {
+public class SimpleAuthentication extends BasicAuthentication {
 
     private Map<String, String> users;
 
-    public ExampleAuthentication() {
-        super("example-realm");
+    public SimpleAuthentication(Map<String, String> users, String realm) {
+        super(realm);
 
         this.users = new HashMap<String, String>();
-        users.put("admin", "1234");
+        for (Map.Entry<String, String> user : users.entrySet()) {
+            this.users.put(user.getKey(), user.getValue());
+        }
     }
 
     @Override
