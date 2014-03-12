@@ -11,7 +11,7 @@ import cz.cvut.fel.adaptiverestfulapi.meta.model.Attribute;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Entity;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Model;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Relationship;
-import cz.cvut.fel.adaptiverestfulapi.serialization.json.JsonSerializer;
+import cz.cvut.fel.adaptiverestfulapi.serialization.application.json.JsonSerializer;
 
 import javax.persistence.EntityManager;
 import java.util.LinkedList;

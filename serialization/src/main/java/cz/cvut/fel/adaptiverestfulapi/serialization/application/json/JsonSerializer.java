@@ -1,5 +1,5 @@
 
-package cz.cvut.fel.adaptiverestfulapi.serialization.json;
+package cz.cvut.fel.adaptiverestfulapi.serialization.application.json;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
