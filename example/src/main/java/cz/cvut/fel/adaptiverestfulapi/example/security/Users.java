@@ -3,13 +3,14 @@ package cz.cvut.fel.adaptiverestfulapi.example.security;
 
 
 import cz.cvut.fel.adaptiverestfulapi.core.HttpMethod;
+import cz.cvut.fel.adaptiverestfulapi.meta.model.Attribute;
+import cz.cvut.fel.adaptiverestfulapi.meta.model.Entity;
+import cz.cvut.fel.adaptiverestfulapi.meta.model.Relationship;
 import cz.cvut.fel.adaptiverestfulapi.security.Authentication;
 import cz.cvut.fel.adaptiverestfulapi.security.Authorization;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+
 
 public class Users {
 
@@ -56,6 +57,36 @@ public class Users {
             this.methodAuthorization = new MethodAuthorization(this.methods);
         }
         return this.methodAuthorization;
+    }
+
+    public cz.cvut.fel.adaptiverestfulapi.serialization.Authorization serializationAuthorization(Entity entity) {
+        List<String> users = new LinkedList<>();
+        users.add("admin");
+        users.add("client");
+
+        return new SimpleAuthorization(users);
+    }
+
+    public cz.cvut.fel.adaptiverestfulapi.serialization.Authorization serializationAuthorization(Attribute attribute) {
+        List<String> users = new LinkedList<>();
+
+        if (attribute.getShortName().equalsIgnoreCase("startedAt")) {
+            users.add("admin");
+
+        } else {
+            users.add("client");
+            users.add("admin");
+        }
+
+        return new SimpleAuthorization(users);
+    }
+
+    public cz.cvut.fel.adaptiverestfulapi.serialization.Authorization serializationAuthorization(Relationship relationship) {
+        List<String> users = new LinkedList<>();
+        users.add("admin");
+        users.add("client");
+
+        return new SimpleAuthorization(users);
     }
 
 }

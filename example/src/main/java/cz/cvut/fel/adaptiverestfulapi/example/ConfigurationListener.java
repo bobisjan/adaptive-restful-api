@@ -5,12 +5,14 @@ import cz.cvut.fel.adaptiverestfulapi.data.DeleteHandler;
 import cz.cvut.fel.adaptiverestfulapi.data.GetHandler;
 import cz.cvut.fel.adaptiverestfulapi.data.PostHandler;
 import cz.cvut.fel.adaptiverestfulapi.data.PutHandler;
+import cz.cvut.fel.adaptiverestfulapi.example.security.Users;
 import cz.cvut.fel.adaptiverestfulapi.meta.ConfigurationInspectionListener;
 import cz.cvut.fel.adaptiverestfulapi.meta.configuration.Variable;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Attribute;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Entity;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Model;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Relationship;
+import cz.cvut.fel.adaptiverestfulapi.serialization.Authorization;
 import cz.cvut.fel.adaptiverestfulapi.serialization.application.json.JsonSerializer;
 import cz.cvut.fel.adaptiverestfulapi.serialization.text.plain.PlainTextSerializer;
 
@@ -43,17 +45,35 @@ public class ConfigurationListener implements ConfigurationInspectionListener {
 
     @Override
     public List<Variable> configuration(Entity entity) {
-        return new LinkedList<>();
+        List<Variable> vars = new LinkedList<>();
+
+        Authorization auth = Users.getInstance().serializationAuthorization(entity);
+        if (auth != null) {
+            vars.add(new Variable(Authorization.Key, auth));
+        }
+        return vars;
     }
 
     @Override
     public List<Variable> configuration(Attribute attribute) {
-        return new LinkedList<>();
+        List<Variable> vars = new LinkedList<>();
+
+        Authorization auth = Users.getInstance().serializationAuthorization(attribute);
+        if (auth != null) {
+            vars.add(new Variable(Authorization.Key, auth));
+        }
+        return vars;
     }
 
     @Override
     public List<Variable> configuration(Relationship relationship) {
-        return new LinkedList<>();
+        List<Variable> vars = new LinkedList<>();
+
+        Authorization auth = Users.getInstance().serializationAuthorization(relationship);
+        if (auth != null) {
+            vars.add(new Variable(Authorization.Key, auth));
+        }
+        return vars;
     }
 
 }
