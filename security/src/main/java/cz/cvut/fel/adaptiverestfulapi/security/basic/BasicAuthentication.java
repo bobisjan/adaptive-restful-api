@@ -28,7 +28,7 @@ public abstract class BasicAuthentication extends Authentication {
 
     @Override
     protected final void authenticate(HttpContext httpContext) throws AuthenticationException {
-        Map.Entry<String, String> user = this.user(httpContext);
+        Map.Entry<String, String> user = user(httpContext, this.realm);
 
         if (!this.isAuthenticated(user.getKey(), user.getValue())) {
             throw new BasicAuthenticationException(this.realm);
@@ -43,12 +43,12 @@ public abstract class BasicAuthentication extends Authentication {
      */
     protected abstract boolean isAuthenticated(String username, String password);
 
-    private Map.Entry<String, String> user(HttpContext httpContext) throws AuthenticationException {
+    public static Map.Entry<String, String> user(HttpContext httpContext, String realm) throws AuthenticationException {
         HttpHeaders httpHeaders = httpContext.getRequestHeaders();
         String auth = httpHeaders.get(HttpHeaders.Authorization);
 
         if (auth == null || !auth.startsWith("Basic ")) {
-            throw new BasicAuthenticationException(this.realm);
+            throw new BasicAuthenticationException(realm);
         }
 
         auth = auth.substring("Basic ".length());
@@ -57,7 +57,7 @@ public abstract class BasicAuthentication extends Authentication {
         String[] parts = auth.split(":");
 
         if (parts.length != 2) {
-            throw new BasicAuthenticationException(this.realm);
+            throw new BasicAuthenticationException(realm);
         }
         return new AbstractMap.SimpleImmutableEntry<String, String>(parts[0], parts[1]);
     }
