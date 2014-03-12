@@ -3,11 +3,13 @@ package cz.cvut.fel.adaptiverestfulapi.serialization.application.json;
 
 import com.google.gson.*;
 import com.google.gson.JsonSerializer;
+import cz.cvut.fel.adaptiverestfulapi.core.HttpContext;
 import cz.cvut.fel.adaptiverestfulapi.meta.configuration.Configuration;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Attribute;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Entity;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Model;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Relationship;
+import cz.cvut.fel.adaptiverestfulapi.serialization.Authorization;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -21,14 +23,25 @@ public class EntitySerializer implements JsonSerializer {
     private Model model;
     private Configuration configuration;
 
+    private HttpContext httpContext;
+
     public EntitySerializer(Entity entity, Model model, Configuration configuration) {
         this.entity = entity;
         this.model = model;
         this.configuration = configuration;
     }
 
+    public void setHttpContext(HttpContext httpContext) {
+        this.httpContext = httpContext;
+    }
+
     @Override
     public JsonElement serialize(Object object, Type typeOfSrc, JsonSerializationContext context) throws JsonParseException {
+        Authorization auth = this.configuration.get(Authorization.Key, this.entity);
+        if (auth != null && !auth.isAllowed(this.httpContext)) {
+            return null;
+        }
+
         JsonObject jsonObject = new JsonObject();
 
         this.serializeAttributes(object, typeOfSrc, jsonObject, context);
@@ -39,6 +52,11 @@ public class EntitySerializer implements JsonSerializer {
 
     protected void serializeAttributes(Object object, Type typeOfSrc, JsonObject jsonObject, JsonSerializationContext context) throws JsonParseException {
         for (Attribute attribute : this.entity.getAttributes().values()) {
+            Authorization auth = this.configuration.get(Authorization.Key, attribute);
+            if (auth != null && !auth.isAllowed(this.httpContext)) {
+                continue;
+            }
+
             if (attribute.getGetter() != null) {
                 this.serializeAttribute(attribute, object, typeOfSrc, jsonObject, context);
             }
@@ -63,6 +81,11 @@ public class EntitySerializer implements JsonSerializer {
 
     protected void serializeRelationships(Object object, Type typeOfSrc, JsonObject jsonObject, JsonSerializationContext context) throws JsonParseException {
         for (Relationship relationship : this.entity.getRelationships().values()) {
+            Authorization auth = this.configuration.get(Authorization.Key, relationship);
+            if (auth != null && !auth.isAllowed(this.httpContext)) {
+                continue;
+            }
+
             if (relationship.getGetter() != null) {
                 if (relationship.isToOne()) {
                     this.serializeToOne(relationship, object, typeOfSrc, jsonObject, context);

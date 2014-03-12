@@ -10,8 +10,10 @@ import cz.cvut.fel.adaptiverestfulapi.meta.model.Model;
 import cz.cvut.fel.adaptiverestfulapi.serialization.SerializationException;
 import cz.cvut.fel.adaptiverestfulapi.serialization.Serializer;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -23,6 +25,9 @@ public class JsonSerializer implements Serializer {
 
     private Gson gson;
 
+    private Map<String, EntitySerializer> serializers;
+    private Map<String, EntityDeserializer> deserializers;
+
     @Override
     public HttpContext serialize(HttpContext httpContext, Model model, Configuration configuration) throws SerializationException {
         this.registerModel(model, configuration);
@@ -32,6 +37,7 @@ public class JsonSerializer implements Serializer {
 
         String json = "";
         if (object != null) {
+            this.serializers.get(entity.getName()).setHttpContext(httpContext);
             json = this.gson.toJson(object);
             httpContext.response(HttpStatus.S_200, this.responseHeaders(), json);
         }
@@ -70,9 +76,15 @@ public class JsonSerializer implements Serializer {
             GsonBuilder builder = new GsonBuilder();
             builder = builder.serializeNulls();
 
+            this.serializers = new HashMap<>();
+            this.deserializers = new HashMap<>();
+
             for (Entity entity : model.getEntities().values()) {
-                builder.registerTypeAdapter(entity.getEntityClass(), new EntitySerializer(entity, model, configuration));
-                builder.registerTypeAdapter(entity.getEntityClass(), new EntityDeserializer(entity, model, configuration));
+                this.serializers.put(entity.getName(), new EntitySerializer(entity, model, configuration));
+                this.deserializers.put(entity.getName(), new EntityDeserializer(entity, model, configuration));
+
+                builder.registerTypeAdapter(entity.getEntityClass(), this.serializers.get(entity.getName()));
+                builder.registerTypeAdapter(entity.getEntityClass(), this.deserializers.get(entity.getName()));
             }
             this.gson = builder.create();
         }
