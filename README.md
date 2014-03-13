@@ -59,7 +59,9 @@ This module comes with an [implementation](https://github.com/bobisjan/adaptive-
 
 ### serialization
 
-*TODO*
+The responsibility of this module is to [serialize](https://github.com/bobisjan/adaptive-restful-api/blob/master/serialization/src/main/java/cz/cvut/fel/adaptiverestfulapi/serialization/Serializer.java#L22), resp. [deserialize](https://github.com/bobisjan/adaptive-restful-api/blob/master/serialization/src/main/java/cz/cvut/fel/adaptiverestfulapi/serialization/Serializer.java#L22) the content of the HTTP response, resp. request. The [resolver](https://github.com/bobisjan/adaptive-restful-api/blob/master/serialization/src/main/java/cz/cvut/fel/adaptiverestfulapi/serialization/Resolver.java) loads the concrete serializer from configuration and delegates the (de)serialization process to him.
+
+The `JSON` [(de)serializer](https://github.com/bobisjan/adaptive-restful-api/blob/master/serialization/src/main/java/cz/cvut/fel/adaptiverestfulapi/serialization/application/json/JsonSerializer.java) and `plain text` [serializer](https://github.com/bobisjan/adaptive-restful-api/blob/master/serialization/src/main/java/cz/cvut/fel/adaptiverestfulapi/serialization/text/plain/PlainTextSerializer.java) are provided.
 
 ### servlet
 
