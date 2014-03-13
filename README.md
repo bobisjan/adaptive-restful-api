@@ -91,7 +91,9 @@ The `JSON` [(de)serializer](https://github.com/bobisjan/adaptive-restful-api/blo
 
 ### servlet
 
-*TODO*
+The [FilteredServlet](https://github.com/bobisjan/adaptive-restful-api/blob/master/servlet/src/main/java/cz/cvut/fel/adaptiverestfulapi/servlet/FilteredServlet.java) class implements `service(request, response)` method to handle all HTTP communication. First off all, it asks for the `ApplicationContext` singleton, which provides current `model` and `configuration`. The second step is to create a [HttpContext](https://github.com/bobisjan/adaptive-restful-api/blob/master/core/src/main/java/cz/cvut/fel/adaptiverestfulapi/core/HttpContext.java) from the `HttpServletRequest` object. Then starts the processing through the filter's chain passing the `httpContext`, `model` and `configuration`. Finally, it sets the `HttpServletResponse` from processed `HttpContent` or catched `FilteredException`.
+
+*You use `FilteredServlet` directly by creating an instance or subclassing it and setting the desired filter.*
 
 <hr>
 
