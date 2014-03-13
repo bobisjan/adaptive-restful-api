@@ -6,7 +6,7 @@ An Adaptive RESTful API is a library for automatic HTTP request handling based o
 
 ## Overview
 
-The basic idea behind the library is to process the HTTP request in the chain of the filters represented by the `Filter` class. It's the responsibility of the concrete filter to decide what to do with the request, if it handles completely (that means: creates the response) or makes something useful with the content (eq. converts JSON to POJO) of the request and then resigns the processing to the next filter in the chain.
+The basic idea behind the library is to process the HTTP request in the chain of the filters represented by the `Filter` class. It's responsibility of the concrete filter to decide what to do with the request, if it handles completely (that means: creates the response) or makes something useful with the content (eq. converts JSON to POJO) of the request and then resigns the processing to the next filter in the chain.
 
 You can see the example flow of the request in the picture.
 
@@ -36,7 +36,7 @@ There is no responsibility to create an HTTP context, model, nor configuration, 
 
 ### caching
 
-*TODO*
+
 
 ### data
 
