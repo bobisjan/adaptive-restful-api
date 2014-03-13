@@ -26,16 +26,18 @@ public class Project {
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<Task> tasks;
 
+    @ManyToOne
+    private Employee manager;
+
     public Project() {
-        this.setName("New Project");
-        this.setBugs(new LinkedList<Bug>());
-        this.setTasks(new LinkedList<Task>());
+        this("New Project", new LinkedList<Bug>(), new LinkedList<Task>(), null);
     }
 
-    public Project(String name, List<Bug> bugs, List<Task> tasks) {
+    public Project(String name, List<Bug> bugs, List<Task> tasks, Employee manager) {
         this.setName(name);
         this.setBugs(bugs);
         this.setTasks(tasks);
+        this.setManager(manager);
     }
 
     public Long getId() {
@@ -120,6 +122,30 @@ public class Project {
         }
         this.tasks.remove(task);
         task.setProject(null);
+    }
+
+    public Employee getManager() {
+        return this.manager;
+    }
+
+    public void setManager(Employee manager) {
+        if (this.same(manager)) {
+            return;
+        }
+
+        Employee old = this.manager;
+        this.manager = manager;
+
+        if (old != null) {
+            old.removeManagedProject(this);
+        }
+        if (this.manager != null) {
+            this.manager.addManagedProject(this);
+        }
+    }
+
+    private boolean same(Employee manager) {
+        return (this.manager == null) ? manager == null : this.manager.equals(manager);
     }
 
 }

@@ -1,10 +1,7 @@
 
 package cz.cvut.fel.adaptiverestfulapi.example;
 
-import cz.cvut.fel.adaptiverestfulapi.example.model.Bug;
-import cz.cvut.fel.adaptiverestfulapi.example.model.Issue;
-import cz.cvut.fel.adaptiverestfulapi.example.model.Project;
-import cz.cvut.fel.adaptiverestfulapi.example.model.Task;
+import cz.cvut.fel.adaptiverestfulapi.example.model.*;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
@@ -19,13 +16,27 @@ public class ExampleData {
     public static void generate(EntityManager entityManager) {
         entityManager.getTransaction().begin();
 
+        Employee employee = new Employee("Dominic", "Strother");
+        entityManager.persist(employee);
+
+        Employee employee2 = new Employee("Nataly", "Knowlton");
+        entityManager.persist(employee2);
+
+        Employee employee3 = new Employee("Margarita", "Trumper");
+        entityManager.persist(employee3);
+
+        Employee employee4 = new Employee("Jadyn", "Colby");
+        entityManager.persist(employee4);
+
         Project project = new Project();
         project.setName("Project A");
+        project.setManager(employee2);
         entityManager.persist(project);
 
         Project project2 = new Project();
         project2.setName("Project B");
-        entityManager.persist(project);
+        project2.setManager(employee4);
+        entityManager.persist(project2);
 
         Task task = new Task(null, "Task 1", project);
         entityManager.persist(task);
