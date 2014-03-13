@@ -30,7 +30,7 @@ This module contains probably the most essesential part of the library, a [filte
 2. do something with the request and [resign](https://github.com/bobisjan/adaptive-restful-api/blob/master/core/src/main/java/cz/cvut/fel/adaptiverestfulapi/core/Filter.java#L55) the process to the next filter,
 3. throw an exception if something goes wrong.
 
-There is no responsibility to create an HTTP context, model, nor configuration, it must be done somewhere else.
+*There is no responsibility to create an HTTP context, model, nor configuration, it must be done somewhere else.*
 
 <hr>
 
