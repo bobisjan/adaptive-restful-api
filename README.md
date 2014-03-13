@@ -40,7 +40,9 @@ Adds default implementation for the caching and provides abstract methods to han
 
 ### data
 
-*TODO*
+The purpose of this module is to deal with content of the HTTP context. The dispatcher resolves an HTTP method, and the entity via the [router](https://github.com/bobisjan/adaptive-restful-api/blob/master/core/src/main/java/cz/cvut/fel/adaptiverestfulapi/core/HttpRouter.java), then it loads data handler from the configuration and delegates the process to him. There are available interfaces for GET, POST, PUT and DELETE methods.
+
+The module also provides basic implementation of the data handlers for JPA's entity manager, see [persistence](https://github.com/bobisjan/adaptive-restful-api/tree/master/data/src/main/java/cz/cvut/fel/adaptiverestfulapi/data/persistence) package. *It's not the responsibility of this module to create an entity manager.*
 
 ### security
 
