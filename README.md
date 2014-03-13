@@ -38,6 +38,8 @@ There is no responsibility to create an HTTP context, model, nor configuration, 
 
 Adds default implementation for the caching and provides abstract methods to handle the request. If the `load` method hits the cache, the filter returns the context immediately, otherwise it resigns the process and finally tries to `save` the context.
 
+This module contains simple [implementation](https://github.com/bobisjan/adaptive-restful-api/blob/master/caching/src/main/java/cz/cvut/fel/adaptiverestfulapi.caching/IfModifiedSinceCache.java) of the `If-Modified-Since` caching mechanism.
+
 ### data
 
 The purpose of this module is to deal with content of the HTTP context. The dispatcher resolves an HTTP method, and the entity via the [router](https://github.com/bobisjan/adaptive-restful-api/blob/master/core/src/main/java/cz/cvut/fel/adaptiverestfulapi/core/HttpRouter.java), then it loads data handler from the configuration and delegates the process to him. There are available interfaces for GET, POST, PUT and DELETE methods.
