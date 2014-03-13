@@ -14,6 +14,46 @@ _TODO image_
 
 To be able to process the request through the filters in some manner there are two helpers: `model` and `configuration` of this model. The model consists of entities which contain properties (attributes and relationships with another entities). The configuration allows to add, or modify the default meaning of the model in a hierarchical way.
 
+## Architecture
+
+The library is divided into the seperate modules. On the base level is `core` module which depends on the `meta` module. The rest of the modules add support for more concrete types of the filter. The `example` module shows how to use the library in the `"real world"` application.
+
+### meta
+
+*TODO*
+
+### core
+
+*TODO*
+
+<hr>
+
+### caching
+
+*TODO*
+
+### data
+
+*TODO*
+
+### security
+
+*TODO*
+
+### serialization
+
+*TODO*
+
+### servlet
+
+*TODO*
+
+<hr>
+
+### example
+
+*TODO*
+
 ## Contact
 
 ### Author
