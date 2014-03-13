@@ -1,9 +1,9 @@
 
 package cz.cvut.fel.adaptiverestfulapi.core;
 
-
 import cz.cvut.fel.adaptiverestfulapi.meta.configuration.Configuration;
 import cz.cvut.fel.adaptiverestfulapi.meta.model.Model;
+
 
 /**
  * Abstract filter responsible for processing with context.
