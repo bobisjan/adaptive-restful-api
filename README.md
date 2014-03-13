@@ -30,6 +30,32 @@ This module contains probably the most essesential part of the library, a [filte
 2. do something with the request and [resign](https://github.com/bobisjan/adaptive-restful-api/blob/master/core/src/main/java/cz/cvut/fel/adaptiverestfulapi/core/Filter.java#L55) the process to the next filter,
 3. throw an exception if something goes wrong.
 
+This is an example implementation of the filter:
+
+```java
+public class HelloFilter extends Filter {
+
+    @Override
+    public final HttpContext process(HttpContext httpContext, Model model, Configuration configuration) throws FilterException {
+        String requestContent = httpContext.getRequestContent();
+        
+        if (requestContent.startsWith("Hello,")) {
+            String name = requestContent.substring("Hello,".length());
+            
+            // set the content for next filter
+            httpContext.setContent(new Hello(name));
+            
+            // resign the process to the next filter
+            return this.resign(httpContext, model, configuration);
+            
+        } else {
+            throw new FilterException(HttpStatus.S_400); // bad request
+        }
+    }
+
+}
+```
+
 *There is no responsibility to create an HTTP context, model, nor configuration, it must be done somewhere else.*
 
 <hr>
