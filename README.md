@@ -36,7 +36,7 @@ There is no responsibility to create an HTTP context, model, nor configuration, 
 
 ### caching
 
-
+Adds default implementation for the caching and provides abstract methods to handle the request. If the `load` method hits the cache, the filter returns the context immidiately, otherwise it resigns the process and finally tries to `save` the context.
 
 ### data
 
