@@ -24,7 +24,13 @@ The `meta` module is used to build the [model](https://github.com/bobisjan/adapt
 
 ### core
 
-*TODO*
+This module contains probably the most essesential part of the library, a [filter](https://github.com/bobisjan/adaptive-restful-api/blob/master/core/src/main/java/cz/cvut/fel/adaptiverestfulapi/core/Filter.java). The filter is used to create the chain which defines the flow of the HTTP request goes through. Each filter accepts the HTTP [context](https://github.com/bobisjan/adaptive-restful-api/blob/master/core/src/main/java/cz/cvut/fel/adaptiverestfulapi/core/HttpContext.java), model and configuration via the [process](https://github.com/bobisjan/adaptive-restful-api/blob/master/core/src/main/java/cz/cvut/fel/adaptiverestfulapi/core/Filter.java#L70) method. In this method you decide what to do with the request, there are basically three options:
+
+1. set the response and stop chaining the process,
+2. do something with the request and [resign](https://github.com/bobisjan/adaptive-restful-api/blob/master/core/src/main/java/cz/cvut/fel/adaptiverestfulapi/core/Filter.java#L55) the process to the next filter,
+3. throw an exception if something goes wrong.
+
+There is no responsibility to create an HTTP context, model, nor configuration, it must be done somewhere else.
 
 <hr>
 
