@@ -16,7 +16,7 @@ To be able to process the request through the filters in some manner there are t
 
 ## Architecture
 
-The library is divided into the seperate modules. On the base level is `core` module which depends on the `meta` module. The rest of the modules add support for more concrete types of the filter. The `example` module shows how to use the library in the `"real world"` application.
+The library is divided into the seperate modules. On the base level is `core` module which depends on the `meta` module. The rest of the modules add support for more concrete types of the filter. The `example` module shows how to use the library in a `"real world"` application.
 
 ### meta
 
