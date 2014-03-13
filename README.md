@@ -55,7 +55,7 @@ The security is divided into the two parts:
 
 Both abstract classes provides methods, where the security process should be handled. If the authentication, resp. authorization fails, then the appropriate exception must be thrown.
 
-This module comes with a [implementation](https://github.com/bobisjan/adaptive-restful-api/blob/master/security/src/main/java/cz/cvut/fel/adaptiverestfulapi/security/basic/BasicAuthentication.java) of the HTTP Basic authentication.
+This module comes with an [implementation](https://github.com/bobisjan/adaptive-restful-api/blob/master/security/src/main/java/cz/cvut/fel/adaptiverestfulapi/security/basic/BasicAuthentication.java) of the HTTP Basic authentication.
 
 ### serialization
 
