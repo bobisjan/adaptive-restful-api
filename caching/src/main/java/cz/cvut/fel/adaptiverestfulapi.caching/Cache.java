@@ -28,6 +28,8 @@ public abstract class Cache extends Filter {
     /**
      * Load data from the cache.
      * @param httpContext
+     * @param model
+     * @param configuration
      * @return true if hit was made
      */
     protected abstract boolean load(HttpContext httpContext, Model model, Configuration configuration);
@@ -35,6 +37,8 @@ public abstract class Cache extends Filter {
     /**
      * Save data to the cache.
      * @param httpContext
+     * @param model
+     * @param configuration
      */
     protected abstract void save(HttpContext httpContext, Model model, Configuration configuration);
 
