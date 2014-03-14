@@ -16,7 +16,7 @@ To be able to process the request through the filters in some manner, there are 
 
 *TODO model image*
 
-The configuration allows you to customize a meaning of the model in a hierarchical way.
+The configuration allows you to customize a meaning of the each part in the model in a hierarchical way. It makes possible to use some global configuration applicable to the whole model and to refine each individual part of the model as required.
 
 *TODO configuration image*
 
