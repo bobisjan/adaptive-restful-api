@@ -12,7 +12,7 @@ You can see the example flow of the request in the picture.
 
 *TODO filters flow image*
 
-To be able to process the request through the filters in some manner, there are two basic concepts: `model` and `configuration` of this model. The `model` is used to describe your domain classes which you want to reveal in the API. Model consists of entities which contain properties (attributes and relationships).
+To be able to process the request through the filters in some manner, there are two basic concepts: `model` and `configuration` of this model. The model is used to describe your domain classes which you want to reveal in the API. Model consists of entities which contain properties (attributes and relationships).
 
 *TODO model image*
 
