@@ -10,11 +10,13 @@ The basic idea behind the library is to process the HTTP request in the chain of
 
 You can see the example flow of the request in the picture.
 
-_TODO image_
+*TODO filters flow image*
 
-To be able to process the request through the filters in some manner there are two concepts: `model` and `configuration` of this model. The `model` is used to describe your domain classes. It consists of entities which contain properties (attributes and relationships). The configuration allows to add, or modify the default meaning of the model in a hierarchical way.
+To be able to process the request through the filters in some manner, there are two basic concepts: `model` and `configuration` of this model. The `model` is used to describe your domain classes which you want to reveal in the API. Model consists of entities which contain properties (attributes and relationships).
 
 *TODO model image*
+
+The configuration allows you to customize a meaning of the model in a hierarchical way.
 
 *TODO configuration image*
 
