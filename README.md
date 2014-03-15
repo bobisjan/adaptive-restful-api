@@ -10,11 +10,7 @@ The basic idea behind the library is to process the HTTP request in the chain of
 
 To be able to process the request through the filters in some manner, there are two basic concepts: `model` and `configuration` of this model. The model is used to describe your domain classes which you want to reveal in the API. Model consists of entities which contain properties (attributes and relationships).
 
-*TODO model image*
-
 The configuration allows you to customize a meaning of the each part in the model in a hierarchical way. It makes possible to use some global configuration applicable to the whole model and to refine each individual part of the model as required.
-
-*TODO configuration image*
 
 ## Architecture
 
