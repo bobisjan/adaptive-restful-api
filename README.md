@@ -6,11 +6,7 @@ An Adaptive RESTful API is a library for automatic HTTP request handling based o
 
 ## Overview
 
-The basic idea behind the library is to process the HTTP request in the chain of filters represented by the `Filter` class. It's a responsibility of the concrete filter to decide what to do with the request, if it handles completely (creates a response), or it makes something useful with the content (eq. converts JSON to POJO) of the request and then resigns the processing to the next filter in the chain.
-
-You can see the example flow of the request in the picture.
-
-*TODO filters flow image*
+The basic idea behind the library is to process the HTTP request in the chain of filters represented by the `Filter` class. It's a responsibility of the concrete filter to decide what to do with the request, if it handles completely (creates a response), or it makes something useful with the content (eq. converts JSON to POJO) of the request and then resigns the processing to the next filter in the chain. You can see the example flow of the request in this [picture](https://www.dropbox.com/s/ukekqpa2zx9o0ub/Context%20Flow.png).
 
 To be able to process the request through the filters in some manner, there are two basic concepts: `model` and `configuration` of this model. The model is used to describe your domain classes which you want to reveal in the API. Model consists of entities which contain properties (attributes and relationships).
 
