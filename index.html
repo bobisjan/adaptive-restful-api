@@ -1,0 +1,179 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Adaptive RESTful API by bobisjan</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Adaptive RESTful API</h1>
+        <p>An adaptive RESTful API framework for Java</p>
+
+        <p class="view"><a href="https://github.com/bobisjan/adaptive-restful-api">View the Project on GitHub <small>bobisjan/adaptive-restful-api</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/bobisjan/adaptive-restful-api/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/bobisjan/adaptive-restful-api/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/bobisjan/adaptive-restful-api">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a name="adaptive-restful-api" class="anchor" href="#adaptive-restful-api"><span class="octicon octicon-link"></span></a>Adaptive RESTful API</h1>
+
+<p>An Adaptive RESTful API is a library for automatic HTTP request handling based on the chain of filters. It's written in Java and is dedicated to use within the Java EE applications.</p>
+
+<p><em>NOTICE: This project is a result of the author's work on his diploma thesis.</em></p>
+
+<h2>
+<a name="overview" class="anchor" href="#overview"><span class="octicon octicon-link"></span></a>Overview</h2>
+
+<p>The basic idea behind the library is to process the HTTP request in the chain of filters represented by the <code>Filter</code> class. It's a responsibility of the concrete filter to decide what to do with the request, if it handles completely (creates a response), or it makes something useful with the content (eq. converts JSON to POJO) of the request and then resigns the processing to the next filter in the chain. You can see an example flow of the request in this <a href="https://www.dropbox.com/s/ukekqpa2zx9o0ub/Context%20Flow.png">picture</a>.</p>
+
+<p>To be able to process the request through the filters in some manner, there are two basic concepts: <code>model</code> and <code>configuration</code> of this model. The model is used to describe your domain classes which you want to reveal in the API. Model consists of entities which contain properties (attributes and relationships).</p>
+
+<p>The configuration allows you to customize a meaning of the each part in the model in a hierarchical way. It makes possible to use some global configuration applicable to the whole model and to refine each individual part of the model as required.</p>
+
+<h2>
+<a name="architecture" class="anchor" href="#architecture"><span class="octicon octicon-link"></span></a>Architecture</h2>
+
+<p>The library is divided into seperate modules. On the base level is <code>core</code> module which depends on the <code>meta</code> module. The rest of the modules add support for more concrete types of the filter. The <code>example</code> module shows how to use the library in a "real world" application.</p>
+
+<h3>
+<a name="meta" class="anchor" href="#meta"><span class="octicon octicon-link"></span></a>Meta</h3>
+
+<p>The <code>meta</code> module is used to build the <a href="https://github.com/bobisjan/adaptive-restful-api/blob/master/meta/src/main/java/cz/cvut/fel/adaptiverestfulapi/meta/model/Model.java">model</a> of the <a href="https://github.com/bobisjan/adaptive-restful-api/blob/master/meta/src/main/java/cz/cvut/fel/adaptiverestfulapi/meta/model/Entity.java">entities</a> with properties (<a href="https://github.com/bobisjan/adaptive-restful-api/blob/master/meta/src/main/java/cz/cvut/fel/adaptiverestfulapi/meta/model/Attribute.java">attributes</a> and <a href="https://github.com/bobisjan/adaptive-restful-api/blob/master/meta/src/main/java/cz/cvut/fel/adaptiverestfulapi/meta/model/Relationship.java">relationships</a>) and it's <a href="https://github.com/bobisjan/adaptive-restful-api/blob/master/meta/src/main/java/cz/cvut/fel/adaptiverestfulapi/meta/configuration/Configuration.java">configuration</a>. The inspection process is done by the <a href="https://github.com/bobisjan/adaptive-restful-api/blob/master/meta/src/main/java/cz/cvut/fel/adaptiverestfulapi/meta/Inspector.java">inspector</a>. The first task is to inspect concrete <code>package</code> for classes in it. Then inspects <code>triplets</code> of the field, it's getter (starts with <code>is</code> or <code>get</code>) and setter (starts with <code>set</code>) methods. The inspector is not responsible for creating instances of the entities, nor propeties, but it delegates this work to a model <a href="https://github.com/bobisjan/adaptive-restful-api/blob/master/meta/src/main/java/cz/cvut/fel/adaptiverestfulapi/meta/ModelInspectionListener.java">listener</a>. After the model is built, the configuration is inspected. The inspector goes through the model and asks configuration <a href="https://github.com/bobisjan/adaptive-restful-api/blob/master/meta/src/main/java/cz/cvut/fel/adaptiverestfulapi/meta/ConfigurationInspectionListener.java">listener</a> for the list of variables of the property, entity or model. The configuration respects the hierarchy of the model, so if you ask for some value on the attribute, it will flow through the hierarchy of configurations from the most specific to the most general configuration.</p>
+
+<h3>
+<a name="core" class="anchor" href="#core"><span class="octicon octicon-link"></span></a>Core</h3>
+
+<p>This module contains probably the most essesential part of the library, a <a href="https://github.com/bobisjan/adaptive-restful-api/blob/master/core/src/main/java/cz/cvut/fel/adaptiverestfulapi/core/Filter.java">filter</a>. The filter is used to create the chain which defines the flow of the HTTP request goes through. Each filter accepts the HTTP <a href="https://github.com/bobisjan/adaptive-restful-api/blob/master/core/src/main/java/cz/cvut/fel/adaptiverestfulapi/core/HttpContext.java">context</a>, model and configuration via the <a href="https://github.com/bobisjan/adaptive-restful-api/blob/master/core/src/main/java/cz/cvut/fel/adaptiverestfulapi/core/Filter.java#L70">process</a> method. In this method you decide what to do with the request, there are basically three options:</p>
+
+<ol>
+<li>set the response and stop chaining the process,</li>
+<li>do something with the request and <a href="https://github.com/bobisjan/adaptive-restful-api/blob/master/core/src/main/java/cz/cvut/fel/adaptiverestfulapi/core/Filter.java#L55">resign</a> the process to the next filter,</li>
+<li>throw an exception if something goes wrong.</li>
+</ol><p>This is an example implementation of the filter:</p>
+
+<div class="highlight highlight-java"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloFilter</span> <span class="kd">extends</span> <span class="n">Filter</span> <span class="o">{</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kd">final</span> <span class="n">HttpContext</span> <span class="nf">process</span><span class="o">(</span><span class="n">HttpContext</span> <span class="n">httpContext</span><span class="o">,</span> <span class="n">Model</span> <span class="n">model</span><span class="o">,</span> <span class="n">Configuration</span> <span class="n">configuration</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">FilterException</span> <span class="o">{</span>
+        <span class="n">String</span> <span class="n">requestContent</span> <span class="o">=</span> <span class="n">httpContext</span><span class="o">.</span><span class="na">getRequestContent</span><span class="o">();</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">requestContent</span><span class="o">.</span><span class="na">startsWith</span><span class="o">(</span><span class="s">"Hello,"</span><span class="o">))</span> <span class="o">{</span>
+            <span class="n">String</span> <span class="n">name</span> <span class="o">=</span> <span class="n">requestContent</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="s">"Hello,"</span><span class="o">.</span><span class="na">length</span><span class="o">());</span>
+
+            <span class="c1">// set the content for next filter</span>
+            <span class="n">httpContext</span><span class="o">.</span><span class="na">setContent</span><span class="o">(</span><span class="k">new</span> <span class="n">Hello</span><span class="o">(</span><span class="n">name</span><span class="o">));</span>
+
+            <span class="c1">// resign the process to the next filter</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">resign</span><span class="o">(</span><span class="n">httpContext</span><span class="o">,</span> <span class="n">model</span><span class="o">,</span> <span class="n">configuration</span><span class="o">);</span>
+
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">FilterException</span><span class="o">(</span><span class="n">HttpStatus</span><span class="o">.</span><span class="na">S_400</span><span class="o">);</span> <span class="c1">// bad request</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+<span class="o">}</span>
+</pre></div>
+
+<p><em>There is no responsibility to create an HTTP context, model, nor configuration, it must be done somewhere else.</em></p>
+
+<hr><h3>
+<a name="caching" class="anchor" href="#caching"><span class="octicon octicon-link"></span></a>Caching</h3>
+
+<p>Adds default <a href="https://github.com/bobisjan/adaptive-restful-api/blob/master/caching/src/main/java/cz/cvut/fel/adaptiverestfulapi.caching/Cache.java">implementation</a> of the filter for the caching and provides abstract methods to handle the request. If the <code>load</code> method hits the cache, the filter returns the context immediately, otherwise it resigns the process and finally tries to <code>save</code> the context.</p>
+
+<p>This module contains simple <a href="https://github.com/bobisjan/adaptive-restful-api/blob/master/caching/src/main/java/cz/cvut/fel/adaptiverestfulapi.caching/IfModifiedSinceCache.java">implementation</a> of the <code>If-Modified-Since</code> caching mechanism.</p>
+
+<h3>
+<a name="data" class="anchor" href="#data"><span class="octicon octicon-link"></span></a>Data</h3>
+
+<p>The purpose of this module is to deal with content of the HTTP context. The dispatcher resolves an HTTP method, and the entity via the <a href="https://github.com/bobisjan/adaptive-restful-api/blob/master/core/src/main/java/cz/cvut/fel/adaptiverestfulapi/core/HttpRouter.java">router</a>, then it loads data handler from the configuration and delegates the process to him. There are available interfaces for GET, POST, PUT and DELETE methods.</p>
+
+<p>The module also provides basic implementation of the data handlers for JPA's entity manager, see <a href="https://github.com/bobisjan/adaptive-restful-api/tree/master/data/src/main/java/cz/cvut/fel/adaptiverestfulapi/data/persistence">persistence</a> package. <em>It's not the responsibility of this module to create an entity manager.</em></p>
+
+<h3>
+<a name="security" class="anchor" href="#security"><span class="octicon octicon-link"></span></a>Security</h3>
+
+<p>The security is divided into the two parts:</p>
+
+<ul>
+<li>
+<a href="https://github.com/bobisjan/adaptive-restful-api/blob/master/security/src/main/java/cz/cvut/fel/adaptiverestfulapi/security/Authentication.java">authentication</a>,</li>
+<li>
+<a href="https://github.com/bobisjan/adaptive-restful-api/blob/master/security/src/main/java/cz/cvut/fel/adaptiverestfulapi/security/Authorization.java">authorization</a>.</li>
+</ul><p>Both abstract classes provides methods, where the security process should be handled. If the authentication, resp. authorization fails, then the appropriate exception must be thrown.</p>
+
+<p>This module comes with an <a href="https://github.com/bobisjan/adaptive-restful-api/blob/master/security/src/main/java/cz/cvut/fel/adaptiverestfulapi/security/basic/BasicAuthentication.java">implementation</a> of the HTTP Basic authentication.</p>
+
+<h3>
+<a name="serialization" class="anchor" href="#serialization"><span class="octicon octicon-link"></span></a>Serialization</h3>
+
+<p>The responsibility of this module is to <a href="https://github.com/bobisjan/adaptive-restful-api/blob/master/serialization/src/main/java/cz/cvut/fel/adaptiverestfulapi/serialization/Serializer.java#L22">serialize</a>, resp. <a href="https://github.com/bobisjan/adaptive-restful-api/blob/master/serialization/src/main/java/cz/cvut/fel/adaptiverestfulapi/serialization/Serializer.java#L22">deserialize</a> the content of the HTTP response, resp. request. The <a href="https://github.com/bobisjan/adaptive-restful-api/blob/master/serialization/src/main/java/cz/cvut/fel/adaptiverestfulapi/serialization/Resolver.java">resolver</a> loads the concrete serializer from configuration and delegates the (de)serialization process to him.</p>
+
+<p>The <code>JSON</code> <a href="https://github.com/bobisjan/adaptive-restful-api/blob/master/serialization/src/main/java/cz/cvut/fel/adaptiverestfulapi/serialization/application/json/JsonSerializer.java">(de)serializer</a> and <code>plain text</code> <a href="https://github.com/bobisjan/adaptive-restful-api/blob/master/serialization/src/main/java/cz/cvut/fel/adaptiverestfulapi/serialization/text/plain/PlainTextSerializer.java">serializer</a> are provided.</p>
+
+<h3>
+<a name="servlet" class="anchor" href="#servlet"><span class="octicon octicon-link"></span></a>Servlet</h3>
+
+<p>The <a href="https://github.com/bobisjan/adaptive-restful-api/blob/master/servlet/src/main/java/cz/cvut/fel/adaptiverestfulapi/servlet/FilteredServlet.java">FilteredServlet</a> class implements <code>service(request, response)</code> method to handle all HTTP communication. First off all, it asks for the <code>ApplicationContext</code> singleton, which provides current <code>model</code> and <code>configuration</code>. The second step is to create a <a href="https://github.com/bobisjan/adaptive-restful-api/blob/master/core/src/main/java/cz/cvut/fel/adaptiverestfulapi/core/HttpContext.java">HttpContext</a> from the <code>HttpServletRequest</code> object. Then starts the processing through the filter's chain passing the <code>httpContext</code>, <code>model</code> and <code>configuration</code>. Finally, it sets the <code>HttpServletResponse</code> from processed <code>HttpContent</code> or catched <code>FilteredException</code>.</p>
+
+<p><em>You use <code>FilteredServlet</code> directly by creating an instance or subclassing it and setting the desired filter.</em></p>
+
+<hr><h3>
+<a name="example" class="anchor" href="#example"><span class="octicon octicon-link"></span></a>Example</h3>
+
+<p>An example is built using a servlet <a href="https://github.com/bobisjan/adaptive-restful-api/blob/master/example/src/main/java/cz/cvut/fel/adaptiverestfulapi/example/ExampleServlet.java">implementation</a>, so the <a href="https://github.com/bobisjan/adaptive-restful-api/blob/master/example/src/main/java/cz/cvut/fel/adaptiverestfulapi/example/ApplicationContextListener.java#L28">initialization</a> of the <code>ApplicationContext</code> is done within the <code>contextInitialized</code> method of the <code>ServletContextListener</code>. The inspector uses these <a href="https://github.com/bobisjan/adaptive-restful-api/blob/master/example/src/main/java/cz/cvut/fel/adaptiverestfulapi/example/ModelListener.java">model</a> and <a href="https://github.com/bobisjan/adaptive-restful-api/blob/master/example/src/main/java/cz/cvut/fel/adaptiverestfulapi/example/ConfigurationListener.java">configuration</a> listeners. The model of the application is defined <a href="https://github.com/bobisjan/adaptive-restful-api/tree/master/example/src/main/java/cz/cvut/fel/adaptiverestfulapi/example/model">here</a>, it's a simple project/issue management system. The <code>entity manager</code> is created by the <a href="https://github.com/bobisjan/adaptive-restful-api/blob/master/example/src/main/java/cz/cvut/fel/adaptiverestfulapi/example/PersistenceContext.java">PersistentContext</a>, the usage of persistence handlers is shown in the configuration listener. The API is capable to communicate in the JSON format, and in a read-only mode of the plain text. The application is able to handle HTTP Basic <a href="https://github.com/bobisjan/adaptive-restful-api/blob/master/example/src/main/java/cz/cvut/fel/adaptiverestfulapi/example/security/SimpleAuthentication.java">authentication</a>, <a href="https://github.com/bobisjan/adaptive-restful-api/blob/master/example/src/main/java/cz/cvut/fel/adaptiverestfulapi/example/security/MethodAuthorization.java">method</a> and <a href="https://github.com/bobisjan/adaptive-restful-api/blob/master/example/src/main/java/cz/cvut/fel/adaptiverestfulapi/example/security/SimpleAuthorization.java">serialization</a> authorization (for more details look at the <a href="https://github.com/bobisjan/adaptive-restful-api/blob/master/example/src/main/java/cz/cvut/fel/adaptiverestfulapi/example/security/Users.java">Users</a> class and configuration listener).</p>
+
+<p>So, an example request <code>$ curl -u admin:1234 --header "Accept: application/json;charset=UTF-8" --header "Content-Type: application/json;charset=UTF-8"  http://localhost:8080/Project/2</code> will end up to the response:</p>
+
+<pre><code>{
+    "started": false,
+    "id": 2,
+    "startedAt": null,
+    "name": "Project B",
+    "bugs": [ 2, 3 ],
+    "manager": 4,
+    "tasks": [ 3 ]
+}
+</code></pre>
+
+<h2>
+<a name="contact" class="anchor" href="#contact"><span class="octicon octicon-link"></span></a>Contact</h2>
+
+<h3>
+<a name="author" class="anchor" href="#author"><span class="octicon octicon-link"></span></a>Author</h3>
+
+<p><a href="https://github.com/bobisjan">Jan Bobisud</a></p>
+
+<h3>
+<a name="supervisor" class="anchor" href="#supervisor"><span class="octicon octicon-link"></span></a>Supervisor</h3>
+
+<p><a href="https://github.com/KarelCemus">Karel Čemus</a></p>
+
+<h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>Adaptive RESTful API is available under the LGPL license. See the LICENSE file for more info.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/bobisjan">bobisjan</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
