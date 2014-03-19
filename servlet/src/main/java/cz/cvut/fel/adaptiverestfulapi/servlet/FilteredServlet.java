@@ -16,6 +16,18 @@ public class FilteredServlet extends HttpServlet {
 
     protected Filter filter;
 
+    public FilteredServlet() {
+        this(null);
+    }
+
+    public FilteredServlet(Filter filter) {
+        this.setFilter(filter);
+    }
+
+    public void setFilter(Filter filter) {
+        this.filter = filter;
+    }
+
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ApplicationContext applicationContext = ApplicationContext.getInstance();
