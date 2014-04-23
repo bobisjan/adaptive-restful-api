@@ -9,14 +9,12 @@ public class ApplicationContext {
 
     private static ApplicationContext instance;
 
-    private boolean initialized;
     private Model model;
     private Configuration configuration;
 
     public static void initialize(Model model, Configuration configuration) {
         ApplicationContext.getInstance().model = model;
         ApplicationContext.getInstance().configuration = configuration;
-        ApplicationContext.getInstance().initialized = true;
     }
 
     public static ApplicationContext getInstance() {
@@ -27,12 +25,10 @@ public class ApplicationContext {
         return instance;
     }
 
-    private ApplicationContext() {
-        this.initialized = false;
-    }
+    private ApplicationContext() { }
 
     public boolean isInitialized() {
-        return this.initialized;
+        return (this.model != null && this.configuration != null);
     }
 
     public Model getModel() {
